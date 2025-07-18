@@ -22,8 +22,8 @@
   # };
 
   home = {
-    username = ${username};
-    homeDirectory = ${home};
+    username = "${username}";
+    homeDirectory = "${home}";
   };
 
   home.packages = with pkgs; [
