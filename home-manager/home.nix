@@ -4,7 +4,6 @@
   config,
   pkgs,
   username,
-  home,
   ...
 }:
 {
@@ -23,7 +22,7 @@
 
   home = {
     username = "${username}";
-    homeDirectory = "${home}";
+    homeDirectory = "/home/${username}";
   };
 
   home.packages = with pkgs; [
