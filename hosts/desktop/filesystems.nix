@@ -1,39 +1,44 @@
 { lib, username, ... }:
 {
-  #fileSystems."/" = {
-  #  fsType = "tmpfs";
-  #  options = [
-  #    "defaults"
-  #    "mode=755"
-  #  ];
-  #};
+  fileSystems."/" = {
+    fsType = "tmpfs";
+    options = [
+      "defaults"
+      "mode=755"
+    ];
+  };
 
-  #fileSystems."/home" = {
-  #  device = "/dev/disk/by-uuid/57cc3a36-e0f8-414e-b40a-d1424de35b01";
-  #  fsType = "btrfs";
-  #  options = [
-  #    "compress=zstd:1"
-  #    "subvol=home"
-  #  ];
-  #};
+  fileSystems."/boot" = {
+    fsType = "vfat";
+    options = [
+      "fmask=0077"
+      "umask=0077"
+    ];
+  };
 
-  #fileSystems."/nix" = {
-  #  device = "/dev/disk/by-uuid/57cc3a36-e0f8-414e-b40a-d1424de35b01";
-  #  fsType = "btrfs";
-  #  options = [
-  #    "compress=zstd:1"
-  #    "subvol=nix"
-  #  ];
-  #};
+  fileSystems."/home" = {
+    fsType = "btrfs";
+    options = [
+      "compress=zstd:1"
+      "subvol=home"
+    ];
+  };
 
-  #   fileSystems."/persist" = {
-  #  device = "/dev/disk/by-uuid/57cc3a36-e0f8-414e-b40a-d1424de35b01";
-  #     neededForBoot = true;
-  #     options = [
-  #       "compress=zstd:1"
-  #       "subvol=persist"
-  #     ];
-  #   };
+  fileSystems."/nix" = {
+    fsType = "btrfs";
+    options = [
+      "compress=zstd:1"
+      "subvol=nix"
+    ];
+  };
+
+  fileSystems."/persist" = {
+    neededForBoot = true;
+    options = [
+      "compress=zstd:1"
+      "subvol=persist"
+    ];
+  };
 
   #   fileSystems."/home/${username}/Games" = {
   #     depends = [ "/home" ];
@@ -95,20 +100,20 @@
   #   neededForBoot = false;
   # };
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/57cc3a36-e0f8-414e-b40a-d1424de35b01";
-    fsType = "btrfs";
-    options = [ "subvol=@" ];
-  };
+  # fileSystems."/" = {
+  #   device = "/dev/disk/by-uuid/57cc3a36-e0f8-414e-b40a-d1424de35b01";
+  #   fsType = "btrfs";
+  #   options = [ "subvol=@" ];
+  # };
 
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/A22A-187B";
-    fsType = "vfat";
-    options = [
-      "fmask=0077"
-      "dmask=0077"
-    ];
-  };
+  # fileSystems."/boot" = {
+  #   device = "/dev/disk/by-uuid/A22A-187B";
+  #   fsType = "vfat";
+  #   options = [
+  #     "fmask=0077"
+  #     "dmask=0077"
+  #   ];
+  # };
   # Disable swap
   swapDevices = lib.mkForce [ ];
 }
