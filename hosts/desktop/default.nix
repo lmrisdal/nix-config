@@ -7,7 +7,7 @@
 {
   imports = [
     # System
-    # ./disko.nix
+    ./disko.nix
     ./filesystems.nix
     # ./impermanence.nix
     # Profiles

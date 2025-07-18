@@ -52,8 +52,8 @@
             modules = [
               ./hosts/desktop
               inputs.chaotic.nixosModules.default
-              # inputs.disko.nixosModules.disko
-              # ./hosts/desktop/disko.nix
+              inputs.disko.nixosModules.disko
+              ./hosts/desktop/disko.nix
               inputs.nix-flatpak.nixosModules.nix-flatpak
               inputs.ucodenix.nixosModules.default
               home-manager.nixosModules.home-manager
