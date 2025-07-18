@@ -10,5 +10,14 @@
     ./bottles
     ./fastfetch
     ./spotify
+    ./gamemode
+    ./gamescope
+    ./heroic
+    ./lutris
+    ./steam
+    ./mangohud
+    ./obs
+    ./steam
+    ./vkbasalt
   ];
 }

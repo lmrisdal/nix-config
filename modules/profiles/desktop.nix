@@ -103,20 +103,20 @@ in
       gdm = {
         enable = false;
       };
-      # sessionPackages = [
-      #   (
-      #     (pkgs.writeTextDir "share/wayland-sessions/steam.desktop" ''
-      #       [Desktop Entry]
-      #       Name=Steam (gamescope)
-      #       Comment=A digital distribution platform
-      #       Exec=gamescope-session
-      #       Type=Application
-      #     '').overrideAttrs
-      #     (_: {
-      #       passthru.providedSessions = [ "steam" ];
-      #     })
-      #   )
-      # ];
+      sessionPackages = [
+        (
+          (pkgs.writeTextDir "share/wayland-sessions/steam.desktop" ''
+            [Desktop Entry]
+            Name=Steam (gamescope)
+            Comment=A digital distribution platform
+            Exec=gamescope-session
+            Type=Application
+          '').overrideAttrs
+          (_: {
+            passthru.providedSessions = [ "steam" ];
+          })
+        )
+      ];
     };
     environment.plasma6.excludePackages = with pkgs.kdePackages; [
       elisa

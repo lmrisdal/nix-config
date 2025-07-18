@@ -8,6 +8,7 @@
 }:
 let
   cfg = config.gaming;
+  scripts = pkgs.callPackage ../modules/scripts { };
 in
 {
   options = {
@@ -19,22 +20,15 @@ in
   config = lib.mkIf cfg.enable {
     # Custom modules
     bottles.enable = true;
-    # cdemu.enable = true;
-    # coolercontrol.enable = true;
-    # fluidsynth.enable = true;
-    # gamemode.enable = false;
-    # gamescope.enable = true;
-    # gsr.enable = true;
-    # heroic.enable = true;
-    # lutris.enable = true;
-    # mangohud.enable = true;
-    # nero-umu.enable = true;
-    # nonfree.enable = true;
-    # obs.enable = true;
-    # steam.enable = true;
+    gamemode.enable = false;
+    gamescope.enable = true;
+    heroic.enable = true;
+    lutris.enable = true;
+    mangohud.enable = true;
+    obs.enable = true;
+    steam.enable = true;
+    vkbasalt.enable = true;
     # sunshine.enable = true;
-    # vkbasalt.enable = true;
-    # zerotier.enable = true;
 
     boot = {
       kernelModules = [

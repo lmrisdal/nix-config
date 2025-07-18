@@ -32,6 +32,58 @@
     };
     nix-gaming.url = "github:fufexan/nix-gaming";
     nix-proton-cachyos.url = "github:jbgi/nix-proton-cachyos";
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Theming
+    catppuccin = {
+      url = "github:catppuccin/nix";
+    };
+    catppuccin-ghostwriter = {
+      url = "github:catppuccin/ghostwriter";
+      flake = false;
+    };
+    catppuccin-halloy = {
+      url = "github:catppuccin/halloy";
+      flake = false;
+    };
+    catppuccin-heroic = {
+      url = "github:catppuccin/heroic";
+      flake = false;
+    };
+    catppuccin-konsole = {
+      url = "github:catppuccin/konsole";
+      flake = false;
+    };
+    catppuccin-obs = {
+      url = "github:catppuccin/obs";
+      flake = false;
+    };
+    catppuccin-powershell = {
+      url = "github:catppuccin/powershell";
+      flake = false;
+    };
+    catppuccin-xresources = {
+      url = "github:catppuccin/xresources";
+      flake = false;
+    };
+    catppuccin-zen = {
+      url = "github:IAmJafeth/zen-browser";
+      flake = false;
+    };
+    lightly.url = "github:Bali10050/Darkly";
+
+    # KDE
+    kwin-effects-forceblur = {
+      url = "github:taj-ny/kwin-effects-forceblur";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    kwin-effects-kinetic = {
+      url = "github:gurrgur/kwin-effects-kinetic";
+      flake = false;
+    };
   };
   outputs =
     {
@@ -62,11 +114,13 @@
             };
             modules = [
               ./hosts/desktop
+              inputs.catppuccin.nixosModules.catppuccin
               inputs.chaotic.nixosModules.default
               inputs.disko.nixosModules.disko
               ./hosts/desktop/disko.nix
               inputs.just-one-more-repo.nixosModules.default
               inputs.nix-flatpak.nixosModules.nix-flatpak
+              inputs.nur.modules.nixos.default
               inputs.impermanence.nixosModules.impermanence
               inputs.ucodenix.nixosModules.default
               home-manager.nixosModules.home-manager
@@ -84,11 +138,11 @@
                     };
                   };
                   sharedModules = with inputs; [
-                    #catppuccin.homeModules.catppuccin
+                    catppuccin.homeModules.catppuccin
                     impermanence.homeManagerModules.impermanence
                     nix-flatpak.homeManagerModules.nix-flatpak
                     #nix-index-database.homeModules.nix-index
-                    #nur.modules.homeManager.default
+                    nur.modules.homeManager.default
                     #nvf.homeManagerModules.default
                     #plasma-manager.homeManagerModules.plasma-manager
                     #sops-nix.homeManagerModules.sops
