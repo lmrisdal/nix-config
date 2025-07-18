@@ -55,6 +55,7 @@
               inputs.disko.nixosModules.disko
               ./hosts/desktop/disko.nix
               inputs.nix-flatpak.nixosModules.nix-flatpak
+              inputs.impermanence.nixosModules.impermanence
               inputs.ucodenix.nixosModules.default
               home-manager.nixosModules.home-manager
               {
@@ -72,7 +73,7 @@
                   };
                   sharedModules = with inputs; [
                     #catppuccin.homeModules.catppuccin
-                    #impermanence.homeManagerModules.impermanence
+                    impermanence.homeManagerModules.impermanence
                     nix-flatpak.homeManagerModules.nix-flatpak
                     #nix-index-database.homeModules.nix-index
                     #nur.modules.homeManager.default
