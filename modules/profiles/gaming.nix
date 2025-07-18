@@ -8,7 +8,6 @@
 }:
 let
   cfg = config.gaming;
-  scripts = pkgs.callPackage ../modules/scripts { };
 in
 {
   options = {

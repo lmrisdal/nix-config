@@ -101,10 +101,6 @@ in
         wofi
         wmctrl
         firefox
-        # scripts.gamescope-session
-        # scripts.steamos-session-select
-        # scripts.steamos-select-branch
-        # scripts.jupiter-biosupdate
       ];
     };
 

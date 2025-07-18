@@ -35,6 +35,31 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = with pkgs; [
+      (pkgs.writeShellScriptBin "gamescope-session" ''
+        #!/bin/bash
+        gamescope -r 120 --mangoapp -e -- steam -steamdeck -steamos3
+      '')
+      (pkgs.writeShellScriptBin "jupiter-biosupdate" ''
+        #!/bin/bash
+        exit 0;
+      '')
+      (pkgs.writeShellScriptBin "steamos-select-branch" ''
+        #!/bin/bash
+        echo "Not applicable for this OS"
+      '')
+      (pkgs.writeShellScriptBin "steamos-session-select" ''
+        #!/bin/bash
+        GAMESCOPE_SESSION_SCRIPT="/usr/lib/os-session-select"
+        if [ -f $GAMESCOPE_SESSION_SCRIPT ] ; then
+        	# Call session script from the OS
+        	${GAMESCOPE_SESSION_SCRIPT} $@
+        else
+        	# Simply call shutdown on the client
+        	steam -shutdown
+        fi
+      '')
+    ];
     programs.steam = {
       enable = cfg.enableNative;
       package = pkgs.steam.override {
@@ -58,6 +83,7 @@ in
         # inputs.nix-proton-cachyos.packages.${system}.proton-cachyos
         proton-ge-bin
       ];
+      gamescopeSession.enable = true;
       localNetworkGameTransfers.openFirewall = true;
       protontricks.enable = true;
       remotePlay.openFirewall = true;
@@ -110,6 +136,24 @@ in
                 X-KDE-RunOnDiscreteGpu=true
               '';
               target = "${config.xdg.configHome}/autostart/steam.desktop";
+            };
+            "${config.xdg.configHome}/deckify/steam-gaming-return.png" = {
+              source = pkgs.fetchurl {
+                url = "https://raw.githubusercontent.com/unlbslk/arch-deckify/refs/heads/main/icons/steam-gaming-return.png";
+                sha256 = "sha256-Lc5y6jzhrtQAicXnyrr+LrsE7Is/Xbg5UeO0Blisz8I=";
+              };
+            };
+            return-to-gaming-mode = {
+              text = ''
+                [Desktop Entry]
+                Name=Gaming Mode
+                Exec=steamos-session-select gamescope
+                Icon="${config.xdg.configHome}/deckify/steam-gaming-return.png"
+                Terminal=false
+                Type=Application
+                StartupNotify=false"
+              '';
+              target = "${config.home.homeDirectory}/Desktop/Return_to_Gaming_Mode.desktop";
             };
           };
           packages = with pkgs; [
