@@ -4,7 +4,6 @@
       "/persist" = {
         hideMounts = true;
         directories = [
-          "/etc/mullvad-vpn"
           "/etc/NetworkManager/system-connections"
           "/etc/opensnitchd"
           "/etc/secureboot"
@@ -21,8 +20,8 @@
           "/var/lib/systemd/coredump"
           "/var/lib/tailscale"
           "/var/lib/upower"
-          "/var/lib/zerotier-one"
           "/var/log"
+          "/var/lib/boltd"
         ];
         files = [
           "/etc/machine-id"

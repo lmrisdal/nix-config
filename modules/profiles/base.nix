@@ -26,9 +26,9 @@ in
     # btop.enable = true;
     direnv.enable = true;
     # distrobox.enable = true;
-    # fastfetch.enable = true;
+    fastfetch.enable = true;
     # fd.enable = true;
-    # fzf.enable = true;
+    fzf.enable = true;
     git.enable = true;
     # gpg.enable = true;
     # helix.enable = true;
@@ -59,6 +59,7 @@ in
     # yt-dlp.enable = true;
     # zoxide.enable = true;
     zsh.enable = true;
+    spotify.enable = true;
 
     # System
     flatpak.enable = true;

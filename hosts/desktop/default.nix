@@ -18,7 +18,7 @@
 
   # Custom modules
   desktop.enable = true;
-  # gaming.enable = true;
+  gaming.enable = true;
   # streamcontroller.enable = true;
   # vhs-decode.enable = true;
 

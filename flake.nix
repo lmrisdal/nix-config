@@ -13,6 +13,15 @@
     nix-flatpak.url = "github:gmodena/nix-flatpak";
     impermanence.url = "github:nix-community/impermanence";
     ucodenix.url = "github:e-tho/ucodenix";
+    just-one-more-repo = {
+      url = "github:ProverbialPennance/just-one-more-repo";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-citizen = {
+      url = "github:LovingMelody/nix-citizen";
+      inputs.nix-gaming.follows = "nix-gaming";
+    };
+    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     wayland-pipewire-idle-inhibit = {
       url = "github:rafaelrc7/wayland-pipewire-idle-inhibit";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -21,6 +30,8 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-gaming.url = "github:fufexan/nix-gaming";
+    nix-proton-cachyos.url = "github:jbgi/nix-proton-cachyos";
   };
   outputs =
     {
@@ -54,6 +65,7 @@
               inputs.chaotic.nixosModules.default
               inputs.disko.nixosModules.disko
               ./hosts/desktop/disko.nix
+              inputs.just-one-more-repo.nixosModules.default
               inputs.nix-flatpak.nixosModules.nix-flatpak
               inputs.impermanence.nixosModules.impermanence
               inputs.ucodenix.nixosModules.default
@@ -80,7 +92,7 @@
                     #nvf.homeManagerModules.default
                     #plasma-manager.homeManagerModules.plasma-manager
                     #sops-nix.homeManagerModules.sops
-                    # wayland-pipewire-idle-inhibit.homeModules.default
+                    wayland-pipewire-idle-inhibit.homeModules.default
                   ];
                 };
               }

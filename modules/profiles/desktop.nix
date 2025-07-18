@@ -49,9 +49,6 @@ in
     };
     services.hardware.bolt.enable = true; # Thunderbolt
     hardware = {
-      uinput.enable = true;
-      xpadneo.enable = true;
-      xone.enable = true; # Xbox controller dongle
       bluetooth = {
         enable = true;
         powerOnBoot = true;
@@ -96,7 +93,7 @@ in
       };
     };
     services.displayManager = {
-      autoLogin.enable = true;
+      autoLogin.enable = false;
       autoLogin.user = "lars";
       defaultSession = "plasma"; # hyprland
       sddm = {
