@@ -35,7 +35,7 @@ in
 [│](bold green)$all
 [└─>](bold green)";
           os = {
-            disabled = false;
+            disabled = true;
             format = "$symbol";
           };
           shell = {

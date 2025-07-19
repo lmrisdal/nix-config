@@ -93,12 +93,18 @@ in
       };
     };
     services.displayManager = {
-      autoLogin.enable = false;
+      # autoLogin.enable = true;
       autoLogin.user = "lars";
       defaultSession = "plasma"; # hyprland
       sddm = {
         enable = true;
         wayland.enable = true;
+        autoLogin.relogin = true;
+        settings = {
+          Autologin = {
+            Session = "plasma.desktop";
+          };
+        };
       };
       gdm = {
         enable = false;
@@ -120,7 +126,6 @@ in
     };
     environment.plasma6.excludePackages = with pkgs.kdePackages; [
       elisa
-      krunner
     ];
     # programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.kdePackages.ksshaskpass.out}/bin/ksshaskpass";
     services.gnome.gnome-keyring.enable = true;
@@ -140,6 +145,7 @@ in
           #spotify
           discord
           gearlever
+          warp-terminal
         ];
         # mimeApps =
         #   let

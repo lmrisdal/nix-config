@@ -33,12 +33,16 @@ in
       type = lib.types.bool;
       default = true;
     };
+    session-select = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+    };
   };
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       (pkgs.writeShellScriptBin "gamescope-session" ''
         #!/bin/bash
-        gamescope -r 120 --mangoapp -e -- steam -steamdeck -steamos3
+        gamescope -r 230 -w 3840 -W 3840 -h 2160 -H 2160 -O HDMI-1 xwayland-count 2 --hdr-enabled --adaptive-sync --mangoapp -e -- steam -steamdeck -steamos3
       '')
       (pkgs.writeShellScriptBin "jupiter-biosupdate" ''
         #!/bin/bash
@@ -50,16 +54,73 @@ in
       '')
       (pkgs.writeShellScriptBin "steamos-session-select" ''
         #!/bin/bash
-        GAMESCOPE_SESSION_SCRIPT="/usr/lib/os-session-select"
-        if [ -f $GAMESCOPE_SESSION_SCRIPT ] ; then
-        	# Call session script from the OS
-        	${GAMESCOPE_SESSION_SCRIPT} $@
+        # check if parameter = plasma
+        if [ "$1" = "plasma" ]; then
+          echo "Switching to Plasma session"
+          # sudo mv /etc/sddm.conf /etc/sddm.d/10-nixos.conf
+          #steam -shutdown
+          
+          sudo bash -c 'echo -e "[Autologin]\nSession=plasma.desktop" > /etc/sddm.conf'
+          sudo runuser -l lars -c "steam -shutdown"
         else
-        	# Simply call shutdown on the client
-        	steam -shutdown
+          echo "Switching to Steam session"
+          # sudo mv /etc/sddm.conf /etc/sddm.d/10-nixos.conf
+          # sudo bash -c 'echo -e "[Autologin]\nSession=steam.desktop" > /etc/sddm.conf'
+          bash -c 'echo -e "[Autologin]\nSession=steam.desktop" > /etc/sddm.conf'
+          # log user out
+          qdbus org.kde.Shutdown /Shutdown logout
         fi
+
       '')
+      (lib.mkIf cfg.session-select (
+        pkgs.writeShellScriptBin "nixbuild" ''
+          #!/bin/bash
+          # Check if no arguments are passed
+          if [ "$#" -eq 0 ]; then
+            echo "Usage: nixbuild <args>"
+            exit 1
+          fi
+          # Run the NixOS rebuild command with the provided arguments
+          sudo nixos-rebuild "$@"
+          sudo mv /etc/sddm.conf /etc/sddm.d/10-nixos.conf
+          sudo bash -c 'echo -e "[Autologin]\nSession=plasma.desktop" > /etc/sddm.conf'
+        ''
+      ))
     ];
+    security.sudo.extraRules = [
+      {
+        users = [
+          "lars"
+        ];
+        commands = [
+          {
+            command = "/run/current-system/sw/bin/steamos-session-select";
+            options = [
+              "NOPASSWD"
+            ];
+          }
+          {
+            command = "/run/current-system/sw/bin/bash";
+            options = [
+              "NOPASSWD"
+            ];
+          }
+          {
+            command = "/run/current-system/sw/sbin/runuser";
+            options = [
+              "NOPASSWD"
+            ];
+          }
+        ];
+      }
+    ];
+    systemd.user.services.sddm-steamos = {
+      script = ''
+        sudo mv /etc/sddm.conf /etc/sddm.d/10-nixos.conf
+        sudo bash -c 'echo -e "[Autologin]\nSession=steam.desktop" > /etc/sddm.conf'
+      '';
+      wantedBy = [ "multi-user.target" ]; # starts after login
+    };
     programs.steam = {
       enable = cfg.enableNative;
       package = pkgs.steam.override {
@@ -146,9 +207,9 @@ in
             return-to-gaming-mode = {
               text = ''
                 [Desktop Entry]
-                Name=Gaming Mode
-                Exec=steamos-session-select gamescope
-                Icon="${config.xdg.configHome}/deckify/steam-gaming-return.png"
+                Name=Return to Gaming Mode
+                Exec=pkexec steamos-session-select gamescope
+                Icon="/home/lars/.config/deckify/steam-gaming-return.png"
                 Terminal=false
                 Type=Application
                 StartupNotify=false"

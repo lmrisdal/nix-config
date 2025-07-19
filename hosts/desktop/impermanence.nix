@@ -9,6 +9,7 @@
           "/etc/secureboot"
           "/etc/wireguard"
           "/etc/1password"
+          "/etc/sddm.d"
           "/var/db/sudo/lectured"
           "/var/lib/AccountsService"
           "/var/lib/bluetooth"
