@@ -101,6 +101,16 @@ in
         wofi
         wmctrl
         firefox
+        (pkgs.writeShellScriptBin "nixswitch" ''
+          #!/bin/bash
+          # Run the NixOS rebuild switch command with the provided arguments
+          sudo nixos-rebuild switch --flake ~/.config/nix-config/
+        '')
+        (pkgs.writeShellScriptBin "nixtest" ''
+          #!/bin/bash
+          # Run the NixOS rebuild test command with the provided arguments
+          sudo nixos-rebuild test --flake ~/.config/nix-config/
+        '')
       ];
     };
 

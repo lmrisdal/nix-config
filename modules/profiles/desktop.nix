@@ -93,18 +93,10 @@ in
       };
     };
     services.displayManager = {
-      # autoLogin.enable = true;
-      autoLogin.user = "lars";
       defaultSession = "plasma"; # hyprland
       sddm = {
         enable = true;
         wayland.enable = true;
-        autoLogin.relogin = true;
-        settings = {
-          Autologin = {
-            Session = "plasma.desktop";
-          };
-        };
       };
       gdm = {
         enable = false;

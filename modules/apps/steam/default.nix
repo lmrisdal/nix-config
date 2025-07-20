@@ -33,7 +33,7 @@ in
       type = lib.types.bool;
       default = true;
     };
-    session-select = lib.mkOption {
+    steamos-session = lib.mkOption {
       type = lib.types.bool;
       default = true;
     };
@@ -42,6 +42,10 @@ in
     environment.systemPackages = with pkgs; [
       (pkgs.writeShellScriptBin "gamescope-session" ''
         #!/bin/bash
+        # set autologin session back to plasma so that "Switch to Desktop Mode" works
+        cp /etc/sddm.conf /tmp/sddm.conf
+        sed -i 's/^Session=.*/Session=plasma.desktop/' /tmp/sddm.conf
+        cat /tmp/sddm.conf > /etc/sddm.conf
         gamescope -w 3840 -h 2160 -W 3840 -H 2160 -O HDMI-A-1 --hdr-enabled --adaptive-sync -e -- steam -steamdeck -steamos3
       '')
       (pkgs.writeShellScriptBin "jupiter-biosupdate" ''
@@ -54,40 +58,39 @@ in
       '')
       (pkgs.writeShellScriptBin "steamos-session-select" ''
         #!/bin/bash
-        # check if parameter = plasma
+        # This is my extremely hacky way of switching between the SteamOS session and the Desktop session
+        # NixOS keeps the sddm.conf file in the Nix store, so we can't just edit it directly
+        # Instead, we make a copy of it and sets the current user as the owner of the file.
+        # This allows us to edit in the Autologin section with relogin=true and the Session set to steam.desktop
+        # The SteamOS session then sets the Session back to plasma.desktop when it starts so that we can use the "Switch to Desktop Mode" button in the SteamOS session.
+        # This works, but if you see this and you know a better way to do this, please let me know! 🥲
+
+        # TODO: parameterize the user, and the session name if we don't want to use Plasma
+
+        # check if parameter = steamos
         if [ "$1" = "steamos" ]; then
           echo "Switching to Steam session"
           cp /etc/sddm.conf /tmp/sddm.conf
-          sed -i 's/^Session=.*/Session=steam.desktop/' /tmp/sddm.conf
+          echo -e "\n[Autologin]\nRelogin=true\nSession=steam.desktop\nUser=lars" >> /tmp/sddm.conf
           cat /tmp/sddm.conf > /etc/sddm.conf
           rm -f /tmp/sddm.conf
           qdbus org.kde.Shutdown /Shutdown logout
         else
-          echo "Switching to Plasma session"
-          cp /etc/sddm.conf /tmp/sddm.conf
-          sed -i 's/^Session=.*/Session=plasma.desktop/' /tmp/sddm.conf
-          cat /tmp/sddm.conf > /etc/sddm.conf
-          rm -f /tmp/sddm.conf
+          echo "Switching to Desktop session"
           steam -shutdown
         fi
 
       '')
-      (lib.mkIf cfg.session-select (
-        pkgs.writeShellScriptBin "nixswitch" ''
+      (lib.mkIf cfg.steamos-session (
+        pkgs.writeShellScriptBin "steamos-cleanup" ''
           #!/bin/bash
           # Run the NixOS rebuild switch command with the provided arguments
-          sudo nixos-rebuild switch --flake ~/.config/nix-config/
-        ''
-      ))
-      (lib.mkIf cfg.session-select (
-        pkgs.writeShellScriptBin "nixtest" ''
-          #!/bin/bash
-          # Run the NixOS rebuild test command with the provided arguments
-          sudo nixos-rebuild test --flake ~/.config/nix-config/
+          cat /etc/sddm.d/10-nixos.conf > /etc/sddm.conf
         ''
       ))
     ];
-    systemd.services.preparesteamos = {
+    # only run if steamos-session is enabled
+    systemd.services.preparesteamos = lib.mkIf cfg.steamos-session {
       wantedBy = [ "multi-user.target" ];
       enable = true;
       serviceConfig = {
@@ -95,30 +98,12 @@ in
         Group = "root";
       };
       script = ''
-        # check if /etc/sddm.d/10-nixos.conf already exists
-        if [ -f /etc/sddm.d/10-nixos.conf ]; then
-          echo "File /etc/sddm.d/10-nixos.conf already exists, skipping creation"
-          sed -i 's/^Session=.*/Session=plasma.desktop/' /etc/sddm.conf
-        else
-          echo "Creating /etc/sddm.d/10-nixos.conf"
-          mv /etc/sddm.conf /etc/sddm.d/10-nixos.conf
-          cat /etc/sddm.d/10-nixos.conf > /etc/sddm.conf
-          sed -i 's/^Session=.*/Session=plasma.desktop/' /etc/sddm.conf
-          chown lars:users /etc/sddm.conf
-          chmod 644 /etc/sddm.conf
-        fi
+        mv /etc/sddm.conf /etc/sddm.d/10-nixos.conf
+        cat /etc/sddm.d/10-nixos.conf > /etc/sddm.conf
+        chown lars:users /etc/sddm.conf
+        chmod 644 /etc/sddm.conf
       '';
     };
-    # system.activationScripts.script.text = ''
-    #   #!/bin/bash
-    #   # check if /etc/sddm.conf exists
-    #   if [ -f /etc/sddm.conf ]; then
-    #     echo "Moving /etc/sddm.conf to /etc/sddm.d/10
-    #     mv /etc/sddm.conf /etc/sddm.d/10-nixos.conf
-    #   fi
-    #   # create /etc/sddm.conf with autologin to plasma
-    #   bash -c 'echo -e "[Autologin]\nSession=steam.desktop" > /etc/sddm.conf'
-    # '';
     programs.steam = {
       enable = cfg.enableNative;
       package = pkgs.steam.override {
@@ -180,6 +165,17 @@ in
               '';
               target = "${config.xdg.dataHome}/Steam/steam_dev.cfg";
             };
+            steamos-cleanup = {
+              enable = cfg.steamos-session;
+              text = ''
+                [Desktop Entry]
+                Name=SteamOS Cleanup
+                Exec=steamos-cleanup
+                Terminal=false
+                Type=Application
+              '';
+              target = "${config.xdg.configHome}/autostart/steamos-cleanup.desktop";
+            };
             steam-autostart = {
               enable = cfg.autostart;
               text = ''
@@ -202,18 +198,18 @@ in
                 sha256 = "sha256-Lc5y6jzhrtQAicXnyrr+LrsE7Is/Xbg5UeO0Blisz8I=";
               };
             };
-            # return-to-gaming-mode = {
-            #   text = ''
-            #     [Desktop Entry]
-            #     Name=Return to Gaming Mode
-            #     Exec=steamos-session-select steamos
-            #     Icon="${config.xdg.configHome}/deckify/steam-gaming-return.png"
-            #     Terminal=false
-            #     Type=Application
-            #     StartupNotify=false"
-            #   '';
-            #   target = "/home/lars/Desktop/Return_to_Gaming_Mode.desktop";
-            # };
+            return-to-gaming-mode = {
+              text = ''
+                [Desktop Entry]
+                Name=Return to Gaming Mode
+                Exec=steamos-session-select steamos
+                Icon="${config.xdg.configHome}/deckify/steam-gaming-return.png" # why won't icon work??
+                Terminal=false
+                Type=Application
+                StartupNotify=false"
+              '';
+              target = "/home/lars/Desktop/Return_to_Gaming_Mode.desktop";
+            };
           };
           packages = with pkgs; [
             steamcmd

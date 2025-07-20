@@ -95,14 +95,14 @@ in
             value = "2097152";
           }
         ];
-        # services = {
-        #   ${username} = {
-        #     kwallet = {
-        #       enable = true;
-        #       package = pkgs.kdePackages.kwallet-pam;
-        #     };
-        #   };
-        # };
+        services = {
+          ${username} = {
+            kwallet = {
+              enable = true;
+              package = pkgs.kdePackages.kwallet-pam;
+            };
+          };
+        };
       };
     };
 
