@@ -60,16 +60,14 @@ in
           cp /etc/sddm.conf /tmp/sddm.conf
           sed -i 's/^Session=.*/Session=steam.desktop/' /tmp/sddm.conf
           cat /tmp/sddm.conf > /etc/sddm.conf
+          rm -f /tmp/sddm.conf
           qdbus org.kde.Shutdown /Shutdown logout
         else
           echo "Switching to Plasma session"
-          # sudo mv /etc/sddm.conf /etc/sddm.d/10-nixos.conf
-          # steam -shutdown
-          #bash -c 'echo -e "[Autologin]\nSession=plasma.desktop" > /etc/sddm.conf'
-          #echo -e "[Autologin]\nSession=plasma.desktop" > /etc/sddm.conf
           cp /etc/sddm.conf /tmp/sddm.conf
           sed -i 's/^Session=.*/Session=plasma.desktop/' /tmp/sddm.conf
           cat /tmp/sddm.conf > /etc/sddm.conf
+          rm -f /tmp/sddm.conf
           steam -shutdown
         fi
 
@@ -97,15 +95,18 @@ in
         Group = "root";
       };
       script = ''
-        mv /etc/sddm.conf /etc/sddm.d/10-nixos.conf
-        # Copy contents of /etc/sddm.d/10-nixos.conf into new /etc/sddm.conf file
-        cat /etc/sddm.d/10-nixos.conf > /etc/sddm.conf
-        chown lars:users /etc/sddm.conf
-        chmod 644 /etc/sddm.conf
-        # sed -i 's/^Session=.*/Session=steam.desktop/' /etc/sddm.conf
-        #echo -e "[Autologin]\nSession=plasma.desktop" > /etc/sddm.conf
-        #chown lars:users /etc/sddm.conf
-        #chmod 644 /etc/sddm.conf
+        # check if /etc/sddm.d/10-nixos.conf already exists
+        if [ -f /etc/sddm.d/10-nixos.conf ]; then
+          echo "File /etc/sddm.d/10-nixos.conf already exists, skipping creation"
+          sed -i 's/^Session=.*/Session=plasma.desktop/' /etc/sddm.conf
+        else
+          echo "Creating /etc/sddm.d/10-nixos.conf"
+          mv /etc/sddm.conf /etc/sddm.d/10-nixos.conf
+          cat /etc/sddm.d/10-nixos.conf > /etc/sddm.conf
+          sed -i 's/^Session=.*/Session=plasma.desktop/' /etc/sddm.conf
+          chown lars:users /etc/sddm.conf
+          chmod 644 /etc/sddm.conf
+        fi
       '';
     };
     # system.activationScripts.script.text = ''
@@ -138,7 +139,7 @@ in
       dedicatedServer.openFirewall = true;
       extraCompatPackages = with pkgs; [
         luxtorpeda
-        # inputs.nix-proton-cachyos.packages.${system}.proton-cachyos
+        inputs.chaotic.packages.${pkgs.system}.proton-cachyos
         proton-ge-bin
       ];
       gamescopeSession.enable = true;
@@ -201,18 +202,18 @@ in
                 sha256 = "sha256-Lc5y6jzhrtQAicXnyrr+LrsE7Is/Xbg5UeO0Blisz8I=";
               };
             };
-            return-to-gaming-mode = {
-              text = ''
-                [Desktop Entry]
-                Name=Return to Gaming Mode
-                Exec=steamos-session-select steamos
-                Icon="${config.xdg.configHome}/deckify/steam-gaming-return.png"
-                Terminal=false
-                Type=Application
-                StartupNotify=false"
-              '';
-              target = "/home/lars/Desktop/Return_to_Gaming_Mode.desktop";
-            };
+            # return-to-gaming-mode = {
+            #   text = ''
+            #     [Desktop Entry]
+            #     Name=Return to Gaming Mode
+            #     Exec=steamos-session-select steamos
+            #     Icon="${config.xdg.configHome}/deckify/steam-gaming-return.png"
+            #     Terminal=false
+            #     Type=Application
+            #     StartupNotify=false"
+            #   '';
+            #   target = "/home/lars/Desktop/Return_to_Gaming_Mode.desktop";
+            # };
           };
           packages = with pkgs; [
             steamcmd
@@ -220,8 +221,8 @@ in
         };
         xdg.desktopEntries = {
           gamingmode = {
-            name = "Return to Gaming Mode";
-            genericName = "Return to Gaming Mode";
+            name = "Gaming Mode";
+            genericName = "Gaming Mode";
             exec = "steamos-session-select steamos";
             terminal = false;
             categories = [

@@ -20,5 +20,6 @@
     ./steam
     ./vkbasalt
     ./starship
+    ./ssh
   ];
 }

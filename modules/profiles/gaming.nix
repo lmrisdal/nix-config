@@ -54,6 +54,7 @@ in
           "vm.dirty_bytes" = 268435456;
           "vm.dirty_writeback_centisecs" = 1500;
           "vm.page-cluster" = 0;
+          "vm.swappiness" = 100;
           "vm.vfs_cache_pressure" = 50;
         };
       };
@@ -94,14 +95,14 @@ in
             value = "2097152";
           }
         ];
-        services = {
-          ${username} = {
-            kwallet = {
-              enable = true;
-              package = pkgs.kdePackages.kwallet-pam;
-            };
-          };
-        };
+        # services = {
+        #   ${username} = {
+        #     kwallet = {
+        #       enable = true;
+        #       package = pkgs.kdePackages.kwallet-pam;
+        #     };
+        #   };
+        # };
       };
     };
 
@@ -109,11 +110,151 @@ in
       input-remapper = {
         enable = true;
       };
-      # scx = {
-      #   enable = true;
-      #   package = pkgs.scx.rustscheds;
-      #   scheduler = "scx_lavd";
-      # };
+      scx = {
+        enable = true;
+        package = pkgs.scx.rustscheds;
+        scheduler = "scx_lavd";
+      };
+      udev = {
+        packages = with pkgs; [
+          game-devices-udev-rules
+          # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/udev/rules.d/30-zram.rules
+          (writeTextFile {
+            name = "30-zram.rules";
+            text = ''
+              ACTION=="change", KERNEL=="zram0", ATTR{initstate}=="1", SYSCTL{vm.swappiness}="150", RUN+="${pkgs.bash}/bin/bash -c 'echo N > /sys/module/zswap/parameters/enabled'"
+            '';
+            destination = "/etc/udev/rules.d/30-zram.rules";
+          })
+          (writeTextFile {
+            name = "40-logitech-g920.rules";
+            text = ''
+              ATTR{idVendor}=="046d", ATTR{idProduct}=="c261", RUN+="${usb-modeswitch}/bin/usb_modeswitch -c '/etc/usb_modeswitch.d/046d:c261'"
+            '';
+            destination = "/etc/udev/rules.d/40-logitech-g920.rules";
+          })
+          # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/udev/rules.d/50-sata.rules
+          (writeTextFile {
+            name = "50-sata.rules";
+            text = ''
+              ACTION=="add", SUBSYSTEM=="scsi_host", KERNEL=="host*", ATTR{link_power_management_policy}="*", ATTR{link_power_management_policy}="max_performance"
+            '';
+            destination = "/etc/udev/rules.d/50-sata.rules";
+          })
+          # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/udev/rules.d/60-ioschedulers.rules
+          (writeTextFile {
+            name = "60-ioschedulers.rules";
+            text = ''
+              # HDD
+              ACTION=="add|change", KERNEL=="sd[a-z]*", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="bfq"
+              # SSD
+              ACTION=="add|change", KERNEL=="sd[a-z]*|mmcblk[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="mq-deadline"
+              # NVMe SSD
+              ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="none"
+            '';
+            destination = "/etc/udev/rules.d/60-ioschedulers.rules";
+          })
+          # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/udev/rules.d/69-hdparm.rules
+          (writeTextFile {
+            name = "69-hdparm.rules";
+            text = ''
+              ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", RUN+="${hdparm}/bin/hdparm -B 254 -S 0 /dev/%k"
+            '';
+            destination = "/etc/udev/rules.d/69-hdparm.rules";
+          })
+          (writeTextFile {
+            name = "70-easysmx.rules";
+            text = ''
+              # EasySMX X05
+              SUBSYSTEM=="usb", ATTR{idProduct}=="0091", ATTR{idVendor}=="2f24", ENV{ID_INPUT_JOYSTICK}="1", TAG+="uaccess"
+            '';
+            destination = "/etc/udev/rules.d/70-easysmx.rules";
+          })
+          (writeTextFile {
+            name = "70-gamesir.rules";
+            text = ''
+              # GameSir Cyclone 2 Wireless Controller; USB
+              ## Nintendo Switch
+              SUBSYSTEM=="usb", ATTR{idProduct}=="2009", ATTR{idVendor}=="057e", ENV{ID_INPUT_JOYSTICK}="1", TAG+="uaccess"
+              ## D-input/Sony
+              SUBSYSTEM=="usb", ATTR{idProduct}=="09cc", ATTR{idVendor}=="054c", ENV{ID_INPUT_JOYSTICK}="1", TAG+="uaccess"
+              ## X-input/XBOX
+              SUBSYSTEM=="usb", ATTR{idProduct}=="1053", ATTR{idVendor}=="3537", ENV{ID_INPUT_JOYSTICK}="1", TAG+="uaccess"
+              # GameSir Cyclone 2 Wireless Controller; 2.4GHz
+              ## X-input/XBOX
+              SUBSYSTEM=="usb", ATTR{idProduct}=="100b", ATTR{idVendor}=="3537", ENV{ID_INPUT_JOYSTICK}="1", TAG+="uaccess"
+              # GameSir Cyclone 2 Wireless Controller; Bluetooth
+              SUBSYSTEM=="input", ATTR{idProduct}=="8100", ATTR{idVendor}=="054c", ENV{ID_INPUT_JOYSTICK}="1", TAG+="uaccess"
+            '';
+            destination = "/etc/udev/rules.d/70-gamesir.rules";
+          })
+          (writeTextFile {
+            name = "70-8bitdo.rules";
+            text = ''
+              # 8BitDo Arcade Stick; Bluetooth (X-mode)
+              SUBSYSTEM=="input", ATTRS{name}=="8BitDo Arcade Stick", ENV{ID_INPUT_JOYSTICK}="1", TAG+="uaccess"
+              # 8BitDo Ultimate 2.4G Wireless  Controller; USB/2.4Ghz
+              ## X-mode
+              SUBSYSTEM=="usb", ATTR{idProduct}=="3106", ATTR{idVendor}=="2dc8", ENV{ID_INPUT_JOYSTICK}="1", TAG+="uaccess"
+              ## D-mode
+              SUBSYSTEM=="usb", ATTR{idProduct}=="3012", ATTR{idVendor}=="2dc8", ENV{ID_INPUT_JOYSTICK}="1", TAG+="uaccess"
+              # 8BitDo Ultimate 2C Wireless Controller; USB/2.4GHz
+              SUBSYSTEM=="usb", ATTR{idProduct}=="310a", ATTR{idVendor}=="2dc8", ENV{ID_INPUT_JOYSTICK}="1", TAG+="uaccess"
+            '';
+            destination = "/etc/udev/rules.d/70-8bitdo.rules";
+          })
+          # https://github.com/starcitizen-lug/knowledge-base/wiki/Sticks,-Throttles,-&-Pedals
+          (writeTextFile {
+            name = "70-flight-stick.rules";
+            text = ''
+              # Virpil
+              KERNEL=="hidraw*", ATTRS{idVendor}=="3344", ATTRS{idProduct}=="*", MODE="0660", TAG+="uaccess"
+              ## Virpil Rudder Pedals
+              ACTION=="add", SUBSYSTEM=="input", KERNEL=="event*", \
+                ENV{ID_VENDOR_ID}=="3344", ENV{ID_MODEL_ID}=="01f8", \
+                RUN+="${linuxConsoleTools}/bin/evdev-joystick --e %E{DEVNAME} --d 0"
+              # VKB
+              KERNEL=="hidraw*", ATTRS{idVendor}=="231d", ATTRS{idProduct}=="*", MODE="0660", TAG+="uaccess"
+              ## VKB SEM
+              ACTION=="add", SUBSYSTEM=="input", KERNEL=="event*", \
+                ENV{ID_VENDOR_ID}=="231d", ENV{ID_MODEL_ID}=="2204", \
+                RUN+="${linuxConsoleTools}/bin/evdev-joystick --e %E{DEVNAME} --d 0" 
+              ## VKB Gunfighter L
+              ACTION=="add", SUBSYSTEM=="input", KERNEL=="event*", \
+                ENV{ID_VENDOR_ID}=="231d", ENV{ID_MODEL_ID}=="0127", \
+                RUN+="${linuxConsoleTools}/bin/evdev-joystick --e %E{DEVNAME} --d 0" 
+              ## VKB Gunfighter R
+              ACTION=="add", SUBSYSTEM=="input", KERNEL=="event*", \
+                ENV{ID_VENDOR_ID}=="231d", ENV{ID_MODEL_ID}=="0126", \
+                RUN+="${linuxConsoleTools}/bin/evdev-joystick --e %E{DEVNAME} --d 0" 
+            '';
+            destination = "/etc/udev/rules.d/70-vkb.rules";
+          })
+          (writeTextFile {
+            name = "ntsync-udev-rules";
+            text = ''KERNEL=="ntsync", MODE="0660", TAG+="uaccess"'';
+            destination = "/etc/udev/rules.d/70-ntsync.rules";
+          })
+          # https://wiki.archlinux.org/title/Gamepad#Motion_controls_taking_over_joypad_controls_and/or_causing_unintended_input_with_joypad_controls
+          (writeTextFile {
+            name = "51-disable-DS3-and-DS4-motion-controls.rules";
+            text = ''
+              SUBSYSTEM=="input", ATTRS{name}=="*Controller Motion Sensors", RUN+="${coreutils}/bin/rm %E{DEVNAME}", ENV{ID_INPUT_JOYSTICK}=""
+            '';
+            destination = "/etc/udev/rules.d/51-disable-DS3-and-DS4-motion-controls.rules";
+          })
+          # https://reddit.com/r/linux_gaming/comments/1fu4ggk/can_someone_explain_dualsense_to_me/lpwxv12/?context=3#lpwxv12
+          (writeTextFile {
+            name = "51-disable-dualsense-sound-and-vibration.rules";
+            text = ''
+              KERNEL=="hidraw*", ATTRS{idVendor}=="054c", ATTRS{idProduct}=="0ce6", MODE="0660", TAG+="uaccess"
+              KERNEL=="hidraw*", KERNELS=="*054C:0CE6*", MODE="0660", TAG+="uaccess"
+              ATTRS{idVendor}=="054c", ATTRS{idProduct}=="0ce6", ENV{PULSE_IGNORE}="1", ENV{ACP_IGNORE}="1"
+            '';
+            destination = "/etc/udev/rules.d/51-disable-dualsense-sound-and-vibration.rules";
+          })
+        ];
+      };
     };
 
     systemd = {
@@ -126,19 +267,21 @@ in
           # https://wiki.cachyos.org/configuration/general_system_tweaks/#amd-3d-v-cache-optimizer
           # "w /sys/bus/platform/drivers/amd_x3d_vcache/AMDI0101:00/amd_x3d_mode - - - - cache"
           # https://wiki.archlinux.org/title/Gaming#Make_the_changes_permanent
-          "w /proc/sys/vm/compaction_proactiveness - - - - 0"
-          "w /proc/sys/vm/watermark_boost_factor - - - - 1"
-          "w /proc/sys/vm/min_free_kbytes - - - - 1048576"
-          "w /proc/sys/vm/watermark_scale_factor - - - - 500"
-          "w /sys/kernel/mm/lru_gen/enabled - - - - 5"
-          "w /proc/sys/vm/zone_reclaim_mode - - - - 0"
-          "w /proc/sys/vm/page_lock_unfairness - - - - 1"
-          "w /proc/sys/kernel/sched_child_runs_first - - - - 0"
-          "w /proc/sys/kernel/sched_autogroup_enabled - - - - 1"
-          "w /proc/sys/kernel/sched_cfs_bandwidth_slice_us - - - - 3000"
-          "w /sys/kernel/debug/sched/base_slice_ns  - - - - 3000000"
-          "w /sys/kernel/debug/sched/migration_cost_ns - - - - 500000"
-          "w /sys/kernel/debug/sched/nr_migrate - - - - 8"
+          /*
+            "w /proc/sys/vm/compaction_proactiveness - - - - 0"
+            "w /proc/sys/vm/watermark_boost_factor - - - - 1"
+            "w /proc/sys/vm/min_free_kbytes - - - - 1048576"
+            "w /proc/sys/vm/watermark_scale_factor - - - - 500"
+            "w /sys/kernel/mm/lru_gen/enabled - - - - 5"
+            "w /proc/sys/vm/zone_reclaim_mode - - - - 0"
+            "w /proc/sys/vm/page_lock_unfairness - - - - 1"
+            "w /proc/sys/kernel/sched_child_runs_first - - - - 0"
+            "w /proc/sys/kernel/sched_autogroup_enabled - - - - 1"
+            "w /proc/sys/kernel/sched_cfs_bandwidth_slice_us - - - - 3000"
+            "w /sys/kernel/debug/sched/base_slice_ns  - - - - 3000000"
+            "w /sys/kernel/debug/sched/migration_cost_ns - - - - 500000"
+            "w /sys/kernel/debug/sched/nr_migrate - - - - 8"
+          */
         ];
       };
     };

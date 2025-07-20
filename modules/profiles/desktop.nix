@@ -128,7 +128,7 @@ in
       elisa
     ];
     # programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.kdePackages.ksshaskpass.out}/bin/ksshaskpass";
-    services.gnome.gnome-keyring.enable = true;
+    # services.gnome.gnome-keyring.enable = true;
     services.libinput.enable = true;
 
     home-manager.users.${username} =

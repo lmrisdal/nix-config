@@ -49,7 +49,7 @@ in
     # pay-respects.enable = true;
     # rclone.enable = true;
     # ripgrep.enable = true;
-    # ssh.enable = true;
+    ssh.enable = true;
     starship.enable = true;
     # tailscale.enable = true;
     # tealdeer.enable = true;
