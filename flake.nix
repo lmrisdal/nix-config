@@ -35,54 +35,6 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # Theming
-    catppuccin = {
-      url = "github:catppuccin/nix";
-    };
-    catppuccin-ghostwriter = {
-      url = "github:catppuccin/ghostwriter";
-      flake = false;
-    };
-    catppuccin-halloy = {
-      url = "github:catppuccin/halloy";
-      flake = false;
-    };
-    catppuccin-heroic = {
-      url = "github:catppuccin/heroic";
-      flake = false;
-    };
-    catppuccin-konsole = {
-      url = "github:catppuccin/konsole";
-      flake = false;
-    };
-    catppuccin-obs = {
-      url = "github:catppuccin/obs";
-      flake = false;
-    };
-    catppuccin-powershell = {
-      url = "github:catppuccin/powershell";
-      flake = false;
-    };
-    catppuccin-xresources = {
-      url = "github:catppuccin/xresources";
-      flake = false;
-    };
-    catppuccin-zen = {
-      url = "github:IAmJafeth/zen-browser";
-      flake = false;
-    };
-    lightly.url = "github:Bali10050/Darkly";
-
-    # KDE
-    kwin-effects-forceblur = {
-      url = "github:taj-ny/kwin-effects-forceblur";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    kwin-effects-kinetic = {
-      url = "github:gurrgur/kwin-effects-kinetic";
-      flake = false;
-    };
   };
   outputs =
     {
@@ -99,13 +51,14 @@
         let
           fullname = "Lars Risdal";
           username = "lars";
+          defaultSession = "plasma";
         in
         {
           nixos = nixpkgs.lib.nixosSystem {
             system = "x86_64-linux";
             specialArgs = {
               inherit inputs outputs;
-              inherit fullname username;
+              inherit fullname username defaultSession;
               vars = {
                 desktop = true;
                 gaming = true;
@@ -113,7 +66,6 @@
             };
             modules = [
               ./hosts/desktop
-              inputs.catppuccin.nixosModules.catppuccin
               inputs.chaotic.nixosModules.default
               inputs.disko.nixosModules.disko
               ./hosts/desktop/disko.nix
@@ -130,21 +82,16 @@
                   useUserPackages = true;
                   extraSpecialArgs = {
                     inherit inputs; # Experiment with config and other attributes
-                    inherit fullname username;
+                    inherit fullname username defaultSession;
                     vars = {
                       desktop = true;
                       gaming = true;
                     };
                   };
                   sharedModules = with inputs; [
-                    catppuccin.homeModules.catppuccin
                     impermanence.homeManagerModules.impermanence
                     nix-flatpak.homeManagerModules.nix-flatpak
-                    #nix-index-database.homeModules.nix-index
                     nur.modules.homeManager.default
-                    #nvf.homeManagerModules.default
-                    #plasma-manager.homeManagerModules.plasma-manager
-                    #sops-nix.homeManagerModules.sops
                     wayland-pipewire-idle-inhibit.homeModules.default
                   ];
                 };

@@ -2,6 +2,7 @@
   lib,
   config,
   username,
+  defaultSession,
   services,
   pkgs,
   ...
@@ -18,21 +19,15 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    # Custom modules
-    # Apps
-    # easyeffects.enable = true;
-    # mumble.enable = true;
-    # rmpc.enable = true;
-    # vesktop.enable = true;
     # vscode.enable = true;
-    # wezterm.enable = true;
-    # wireshark.enable = true;
+    # kitty.enable = true;
     zen-browser.enable = true;
+    walker.enable = true;
 
     # System
     base.enable = true;
-    # catppuccinTheming.enable = true;
-    # kde.enable = true;
+    sddm.enable = true;
+    plasma.enable = true;
     # office.enable = true;
 
     boot = {
@@ -87,40 +82,6 @@ in
     };
 
     services.xserver.enable = true;
-    services.desktopManager = {
-      plasma6 = {
-        enable = true;
-      };
-    };
-    services.displayManager = {
-      defaultSession = "plasma"; # hyprland
-      sddm = {
-        enable = true;
-        wayland.enable = true;
-      };
-      gdm = {
-        enable = false;
-      };
-      sessionPackages = [
-        (
-          (pkgs.writeTextDir "share/wayland-sessions/steam.desktop" ''
-            [Desktop Entry]
-            Name=Steam (gamescope)
-            Comment=A digital distribution platform
-            Exec=gamescope-session
-            Type=Application
-          '').overrideAttrs
-          (_: {
-            passthru.providedSessions = [ "steam" ];
-          })
-        )
-      ];
-    };
-    environment.plasma6.excludePackages = with pkgs.kdePackages; [
-      elisa
-    ];
-    # programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.kdePackages.ksshaskpass.out}/bin/ksshaskpass";
-    # services.gnome.gnome-keyring.enable = true;
     services.libinput.enable = true;
 
     home-manager.users.${username} =
@@ -133,63 +94,11 @@ in
         home.packages = with pkgs; [
           vscode.fhs
           dotnetCorePackages.sdk_8_0_3xx
-          nodejs
-          #spotify
+          nodejs_24
           discord
           gearlever
-          warp-terminal
+          libreoffice-qt
         ];
-        # mimeApps =
-        #   let
-        #     audioPlayer = "org.fooyin.fooyin.desktop";
-        #     browser = "app.zen_browser.zen.desktop";
-        #     editor = "org.kde.kate.desktop";
-        #     imageViewer = "org.kde.gwenview.desktop";
-        #     pdfViewer = "org.kde.okular.desktop";
-        #     videoPlayer = "org.kde.haruna.desktop";
-        #   in
-        #   {
-        #     enable = true;
-        #     defaultApplications =
-        #       {
-        #         "audio/*" = audioPlayer;
-        #         "image/*" = imageViewer;
-        #         "video/*" = videoPlayer;
-        #         "text/*" = editor;
-        #         "text/html" = browser;
-        #         "text/plain" = editor;
-        #         "application/json" = editor;
-        #         "application/pdf" = pdfViewer;
-        #         "application/toml" = editor;
-        #         "application/x-bat" = editor;
-        #         "application/xhtml+xml" = browser;
-        #         "application/xml" = editor;
-        #         "application/x-shellscript" = editor;
-        #         "application/x-yaml" = editor;
-        #         "inode/directory" = "org.kde.dolphin.desktop";
-        #         "x-scheme-handler/bottles" = "com.usebottles.bottles.desktop";
-        #         "x-scheme-handler/http" = browser;
-        #         "x-scheme-handler/https" = browser;
-        #         "x-scheme-handler/sgnl" = "signal.desktop";
-        #         "x-scheme-handler/signalcaptcha" = "signal.desktop";
-        #         "x-scheme-handler/terminal" = "org.wezfurlong.wezterm.desktop";
-        #       }
-        #       // lib.optionalAttrs vars.gaming {
-        #         "application/x-alcohol" = "cdemu-client.desktop";
-        #         "application/x-cue" = "cdemu-client.desktop";
-        #         "application/x-gd-rom-cue" = "cdemu-client.desktop";
-        #         "application/x-msdownload" = "wine.desktop";
-        #         "x-scheme-handler/ror2mm" = "r2modman.desktop";
-        #       };
-        #   };
-        # portal = {
-        #   config.common.default = "*";
-        #   enable = true;
-        #   extraPortals = with pkgs; [
-        #     kdePackages.xdg-desktop-portal-kde
-        #     xdg-desktop-portal-gtk
-        #   ];
-        # };
       };
   };
 }

@@ -40,6 +40,22 @@ in
       pulse.enable = true;
       extraConfig = {
         pipewire = {
+          "10-clock-rate" = {
+            "context.properties" = {
+              # To make DAC properly work
+              "default.clock.allowed-rates" = [
+                44100
+                48000
+                88200
+                96000
+                176400
+                192000
+              ];
+              "default.clock.quantum" = 512;
+              "default.clock.min-quantum" = 512;
+              "default.clock.max-quantum" = 512;
+            };
+          };
           "11-virtual-devices" = {
             "context.modules" =
               [ { } ]

@@ -2,6 +2,7 @@
   lib,
   config,
   username,
+  defaultSession,
   pkgs,
   inputs,
   ...
@@ -33,7 +34,7 @@ in
       type = lib.types.bool;
       default = true;
     };
-    steamos-session = lib.mkOption {
+    use-steamos-session = lib.mkOption {
       type = lib.types.bool;
       default = true;
     };
@@ -42,9 +43,9 @@ in
     environment.systemPackages = with pkgs; [
       (pkgs.writeShellScriptBin "gamescope-session" ''
         #!/bin/bash
-        # set autologin session back to plasma so that "Switch to Desktop Mode" works
+        # set autologin session back to default session so that "Switch to Desktop Mode" works
         cp /etc/sddm.conf /tmp/sddm.conf
-        sed -i 's/^Session=.*/Session=plasma.desktop/' /tmp/sddm.conf
+        sed -i 's/^Session=.*/Session=${defaultSession}/' /tmp/sddm.conf
         cat /tmp/sddm.conf > /etc/sddm.conf
         gamescope -w 3840 -h 2160 -W 3840 -H 2160 -O HDMI-A-1 --hdr-enabled --adaptive-sync -e -- steam -steamdeck -steamos3
       '')
@@ -81,14 +82,14 @@ in
         fi
 
       '')
-      (lib.mkIf cfg.steamos-session (
+      (lib.mkIf cfg.use-steamos-session (
         pkgs.writeShellScriptBin "steamos-cleanup" ''
           #!/bin/bash
           cat /etc/sddm.d/10-nixos.conf > /etc/sddm.conf
         ''
       ))
     ];
-    systemd.services.preparesteamos = lib.mkIf cfg.steamos-session {
+    systemd.services.preparesteamos = lib.mkIf cfg.use-steamos-session {
       wantedBy = [ "multi-user.target" ];
       enable = true;
       serviceConfig = {
@@ -167,7 +168,7 @@ in
               target = "${config.xdg.dataHome}/Steam/steam_dev.cfg";
             };
             steamos-cleanup = {
-              enable = cfg.steamos-session;
+              enable = cfg.use-steamos-session;
               text = ''
                 [Desktop Entry]
                 Name=SteamOS Cleanup
@@ -199,18 +200,18 @@ in
                 sha256 = "sha256-Lc5y6jzhrtQAicXnyrr+LrsE7Is/Xbg5UeO0Blisz8I=";
               };
             };
-            return-to-gaming-mode = {
-              text = ''
-                [Desktop Entry]
-                Name=Return to Gaming Mode
-                Exec=steamos-session-select steamos
-                Icon="${config.xdg.configHome}/deckify/steam-gaming-return.png" # why won't icon work??
-                Terminal=false
-                Type=Application
-                StartupNotify=false"
-              '';
-              target = "/home/${username}/Desktop/Return_to_Gaming_Mode.desktop";
-            };
+            # return-to-gaming-mode = {
+            #   text = ''
+            #     [Desktop Entry]
+            #     Name=Return to Gaming Mode
+            #     Exec=steamos-session-select steamos
+            #     Icon="${config.xdg.configHome}/deckify/steam-gaming-return.png" # why won't icon work??
+            #     Terminal=false
+            #     Type=Application
+            #     StartupNotify=false"
+            #   '';
+            #   target = "/home/${username}/Desktop/Return_to_Gaming_Mode.desktop";
+            # };
           };
           packages = with pkgs; [
             steamcmd

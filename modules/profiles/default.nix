@@ -6,6 +6,6 @@
     #./hardening.nix
     #./nonfree.nix
     #./office.nix
-    #./packages.nix
+    # ./packages.nix
   ];
 }

@@ -61,9 +61,9 @@ in
         allowBroken = false;
         allowUnfree = true;
       };
-      # overlays = [
-      #   (import ../../../packages/overlay.nix)
-      # ];
+      overlays = [
+        (import ../../../overlays/overlay.nix)
+      ];
     };
     system = {
       autoUpgrade = {
@@ -117,9 +117,9 @@ in
             allowBroken = false;
             allowUnfree = true;
           };
-          # overlays = [
-          #   (import ../../../packages/overlay.nix)
-          # ];
+          overlays = [
+            (import ../../../overlays/overlay.nix)
+          ];
         };
         xdg = {
           enable = true;

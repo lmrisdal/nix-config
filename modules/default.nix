@@ -5,7 +5,7 @@
 
     # System
     ./core
-    # ./desktop-environments
+    ./desktop-environments
 
     # Profiles
     ./profiles
