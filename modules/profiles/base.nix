@@ -65,7 +65,7 @@ in
     flatpak.enable = true;
     # fonts.enable = true;
     # hardening.enable = true;
-    # mounts.enable = true;
+    mounts.enable = true;
     networking.enable = true;
     nixConfig.enable = true;
     # packages.enable = true;

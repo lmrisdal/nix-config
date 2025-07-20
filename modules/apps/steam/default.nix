@@ -42,7 +42,7 @@ in
     environment.systemPackages = with pkgs; [
       (pkgs.writeShellScriptBin "gamescope-session" ''
         #!/bin/bash
-        gamescope -r 230 -w 3840 -W 3840 -h 2160 -H 2160 -O HDMI-1 xwayland-count 2 --hdr-enabled --adaptive-sync --mangoapp -e -- steam -steamdeck -steamos3
+        gamescope -w 3840 -h 2160 -W 3840 -H 2160 -O HDMI-A-1 --hdr-enabled --adaptive-sync -e -- steam -steamdeck -steamos3
       '')
       (pkgs.writeShellScriptBin "jupiter-biosupdate" ''
         #!/bin/bash
@@ -55,72 +55,69 @@ in
       (pkgs.writeShellScriptBin "steamos-session-select" ''
         #!/bin/bash
         # check if parameter = plasma
-        if [ "$1" = "plasma" ]; then
+        if [ "$1" = "steamos" ]; then
+          echo "Switching to Steam session"
+          cp /etc/sddm.conf /tmp/sddm.conf
+          sed -i 's/^Session=.*/Session=steam.desktop/' /tmp/sddm.conf
+          cat /tmp/sddm.conf > /etc/sddm.conf
+          qdbus org.kde.Shutdown /Shutdown logout
+        else
           echo "Switching to Plasma session"
           # sudo mv /etc/sddm.conf /etc/sddm.d/10-nixos.conf
-          #steam -shutdown
-          
-          sudo bash -c 'echo -e "[Autologin]\nSession=plasma.desktop" > /etc/sddm.conf'
-          sudo runuser -l lars -c "steam -shutdown"
-        else
-          echo "Switching to Steam session"
-          # sudo mv /etc/sddm.conf /etc/sddm.d/10-nixos.conf
-          # sudo bash -c 'echo -e "[Autologin]\nSession=steam.desktop" > /etc/sddm.conf'
-          bash -c 'echo -e "[Autologin]\nSession=steam.desktop" > /etc/sddm.conf'
-          # log user out
-          qdbus org.kde.Shutdown /Shutdown logout
+          # steam -shutdown
+          #bash -c 'echo -e "[Autologin]\nSession=plasma.desktop" > /etc/sddm.conf'
+          #echo -e "[Autologin]\nSession=plasma.desktop" > /etc/sddm.conf
+          cp /etc/sddm.conf /tmp/sddm.conf
+          sed -i 's/^Session=.*/Session=plasma.desktop/' /tmp/sddm.conf
+          cat /tmp/sddm.conf > /etc/sddm.conf
+          steam -shutdown
         fi
 
       '')
       (lib.mkIf cfg.session-select (
-        pkgs.writeShellScriptBin "nixbuild" ''
+        pkgs.writeShellScriptBin "nixswitch" ''
           #!/bin/bash
-          # Check if no arguments are passed
-          if [ "$#" -eq 0 ]; then
-            echo "Usage: nixbuild <args>"
-            exit 1
-          fi
-          # Run the NixOS rebuild command with the provided arguments
-          sudo nixos-rebuild "$@"
-          sudo mv /etc/sddm.conf /etc/sddm.d/10-nixos.conf
-          sudo bash -c 'echo -e "[Autologin]\nSession=plasma.desktop" > /etc/sddm.conf'
+          # Run the NixOS rebuild switch command with the provided arguments
+          sudo nixos-rebuild switch --flake ~/.config/nix-config/
+        ''
+      ))
+      (lib.mkIf cfg.session-select (
+        pkgs.writeShellScriptBin "nixtest" ''
+          #!/bin/bash
+          # Run the NixOS rebuild test command with the provided arguments
+          sudo nixos-rebuild test --flake ~/.config/nix-config/
         ''
       ))
     ];
-    security.sudo.extraRules = [
-      {
-        users = [
-          "lars"
-        ];
-        commands = [
-          {
-            command = "/run/current-system/sw/bin/steamos-session-select";
-            options = [
-              "NOPASSWD"
-            ];
-          }
-          {
-            command = "/run/current-system/sw/bin/bash";
-            options = [
-              "NOPASSWD"
-            ];
-          }
-          {
-            command = "/run/current-system/sw/sbin/runuser";
-            options = [
-              "NOPASSWD"
-            ];
-          }
-        ];
-      }
-    ];
-    systemd.user.services.sddm-steamos = {
+    systemd.services.preparesteamos = {
+      wantedBy = [ "multi-user.target" ];
+      enable = true;
+      serviceConfig = {
+        User = "root";
+        Group = "root";
+      };
       script = ''
-        sudo mv /etc/sddm.conf /etc/sddm.d/10-nixos.conf
-        sudo bash -c 'echo -e "[Autologin]\nSession=steam.desktop" > /etc/sddm.conf'
+        mv /etc/sddm.conf /etc/sddm.d/10-nixos.conf
+        # Copy contents of /etc/sddm.d/10-nixos.conf into new /etc/sddm.conf file
+        cat /etc/sddm.d/10-nixos.conf > /etc/sddm.conf
+        chown lars:users /etc/sddm.conf
+        chmod 644 /etc/sddm.conf
+        # sed -i 's/^Session=.*/Session=steam.desktop/' /etc/sddm.conf
+        #echo -e "[Autologin]\nSession=plasma.desktop" > /etc/sddm.conf
+        #chown lars:users /etc/sddm.conf
+        #chmod 644 /etc/sddm.conf
       '';
-      wantedBy = [ "multi-user.target" ]; # starts after login
     };
+    # system.activationScripts.script.text = ''
+    #   #!/bin/bash
+    #   # check if /etc/sddm.conf exists
+    #   if [ -f /etc/sddm.conf ]; then
+    #     echo "Moving /etc/sddm.conf to /etc/sddm.d/10
+    #     mv /etc/sddm.conf /etc/sddm.d/10-nixos.conf
+    #   fi
+    #   # create /etc/sddm.conf with autologin to plasma
+    #   bash -c 'echo -e "[Autologin]\nSession=steam.desktop" > /etc/sddm.conf'
+    # '';
     programs.steam = {
       enable = cfg.enableNative;
       package = pkgs.steam.override {
@@ -153,7 +150,7 @@ in
       (
         (pkgs.writeTextDir "share/wayland-sessions/steam.desktop" ''
           [Desktop Entry]
-          Name=Steam (gamescope)
+          Name=SteamOS (gamescope)
           Comment=A digital distribution platform
           Exec=gamescope-session
           Type=Application
@@ -208,18 +205,31 @@ in
               text = ''
                 [Desktop Entry]
                 Name=Return to Gaming Mode
-                Exec=pkexec steamos-session-select gamescope
-                Icon="/home/lars/.config/deckify/steam-gaming-return.png"
+                Exec=steamos-session-select steamos
+                Icon="${config.xdg.configHome}/deckify/steam-gaming-return.png"
                 Terminal=false
                 Type=Application
                 StartupNotify=false"
               '';
-              target = "${config.home.homeDirectory}/Desktop/Return_to_Gaming_Mode.desktop";
+              target = "/home/lars/Desktop/Return_to_Gaming_Mode.desktop";
             };
           };
           packages = with pkgs; [
             steamcmd
           ];
+        };
+        xdg.desktopEntries = {
+          gamingmode = {
+            name = "Return to Gaming Mode";
+            genericName = "Return to Gaming Mode";
+            exec = "steamos-session-select steamos";
+            terminal = false;
+            categories = [
+              "Application"
+              "Network"
+            ];
+            icon = "${config.xdg.configHome}/deckify/steam-gaming-return.png";
+          };
         };
         services.flatpak = lib.mkIf cfg.enableFlatpak {
           overrides = {

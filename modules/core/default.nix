@@ -3,7 +3,7 @@
     ./boot
     ./flatpak
     # ./fonts
-    # ./mounts
+    ./mounts
     ./networking
     ./nix
     ./pipewire

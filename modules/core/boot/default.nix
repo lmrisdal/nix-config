@@ -52,6 +52,7 @@
       "ext4"
       "fat"
       "ntfs"
+      "nfs"
     ];
     extraModulePackages = with config.boot.kernelPackages; [ xpadneo ];
     extraModprobeConfig = ''
