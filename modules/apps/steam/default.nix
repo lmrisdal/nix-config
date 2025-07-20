@@ -65,13 +65,13 @@ in
         # The SteamOS session then sets the Session back to plasma.desktop when it starts so that we can use the "Switch to Desktop Mode" button in the SteamOS session.
         # This works, but if you see this and you know a better way to do this, please let me know! 🥲
 
-        # TODO: parameterize the user, and the session name if we don't want to use Plasma
+        # TODO: parameterize the session name if we don't want to use Plasma
 
         # check if parameter = steamos
         if [ "$1" = "steamos" ]; then
           echo "Switching to Steam session"
           cp /etc/sddm.conf /tmp/sddm.conf
-          echo -e "\n[Autologin]\nRelogin=true\nSession=steam.desktop\nUser=lars" >> /tmp/sddm.conf
+          echo -e "\n[Autologin]\nRelogin=true\nSession=steam.desktop\nUser=${username}" >> /tmp/sddm.conf
           cat /tmp/sddm.conf > /etc/sddm.conf
           rm -f /tmp/sddm.conf
           qdbus org.kde.Shutdown /Shutdown logout
@@ -84,12 +84,10 @@ in
       (lib.mkIf cfg.steamos-session (
         pkgs.writeShellScriptBin "steamos-cleanup" ''
           #!/bin/bash
-          # Run the NixOS rebuild switch command with the provided arguments
           cat /etc/sddm.d/10-nixos.conf > /etc/sddm.conf
         ''
       ))
     ];
-    # only run if steamos-session is enabled
     systemd.services.preparesteamos = lib.mkIf cfg.steamos-session {
       wantedBy = [ "multi-user.target" ];
       enable = true;
@@ -98,9 +96,12 @@ in
         Group = "root";
       };
       script = ''
+        #!/bin/sh
+        # Part of the hacky way to switch between the SteamOS session and the Desktop session
+        # This service runs at boot and prepares the sddm.conf file so that we can edit it without root permissions
         mv /etc/sddm.conf /etc/sddm.d/10-nixos.conf
         cat /etc/sddm.d/10-nixos.conf > /etc/sddm.conf
-        chown lars:users /etc/sddm.conf
+        chown ${username}:users /etc/sddm.conf
         chmod 644 /etc/sddm.conf
       '';
     };
@@ -208,7 +209,7 @@ in
                 Type=Application
                 StartupNotify=false"
               '';
-              target = "/home/lars/Desktop/Return_to_Gaming_Mode.desktop";
+              target = "/home/${username}/Desktop/Return_to_Gaming_Mode.desktop";
             };
           };
           packages = with pkgs; [
