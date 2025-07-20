@@ -15,6 +15,13 @@ in
   };
   config = lib.mkIf cfg.enable {
     services.flatpak = {
+      overrides = {
+        "com.spotify.Client" = {
+          Environment = {
+            PULSE_SINK = "Music";
+          };
+        };
+      };
       packages = [
         "com.spotify.Client"
       ];

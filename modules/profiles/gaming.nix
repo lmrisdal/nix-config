@@ -447,95 +447,112 @@ in
         };
 
         services = {
-          # flatpak = {
-          #   overrides = {
-          #     global = {
-          #       Environment = {
-          #         PULSE_SINK = "Game";
-          #       };
-          #     };
-          #     "info.cemu.Cemu" = {
-          #       Context = {
-          #         filesystems = [
-          #           "!home"
-          #           # "${config.home.homeDirectory}/Games/Emulator/cemu"
-          #         ];
-          #       };
-          #     };
-          #     "io.github.ryubing.Ryujinx" = {
-          #       Context = {
-          #         filesystems = [
-          #           "!home"
-          #           # "${config.home.homeDirectory}/Games/Emulator/switch"
-          #         ];
-          #       };
-          #     };
-          #     "net.kuribo64.melonDS" = {
-          #       Context = {
-          #         filesystems = [
-          #           "!home"
-          #           # "/mnt/crusader/Games/Backups/Myrient/No-Intro"
-          #         ];
-          #       };
-          #     };
-          #     "net.pcsx2.PCSX2" = {
-          #       Context = {
-          #         filesystems = [
-          #           "!home"
-          #           # "/mnt/crusader/Games/Rom/CHD/Sony Playstation 2"
-          #         ];
-          #       };
-          #     };
-          #     "net.rpcs3.RPCS3" = {
-          #       Context = {
-          #         filesystems = [
-          #           "!home"
-          #           # "${config.home.homeDirectory}/Games/Emulator/rpcs3"
-          #         ];
-          #       };
-          #     };
-          #     "org.duckstation.DuckStation" = {
-          #       Context = {
-          #         filesystems = [
-          #           "!home"
-          #           # "${config.home.homeDirectory}/Games/Emulator/Sony PlayStation"
-          #         ];
-          #       };
-          #     };
-          #     "org.DolphinEmu.dolphin-emu" = {
-          #       Context = {
-          #         filesystems = [
-          #           "!home"
-          #           # "${config.home.homeDirectory}/Games/Emulator/dolphin"
-          #         ];
-          #       };
-          #     };
-          #     "org.easyrpg.player" = {
-          #       Context = {
-          #         filesystems = [
-          #           # "${config.home.homeDirectory}/Games/Emulator/rpg-maker"
-          #           "!home"
-          #           "!host"
-          #         ];
-          #         shared = "network"; # obs-gamecapture
-          #       };
-          #       Environment = {
-          #         RPG2K_RTP_PATH = "${config.home.homeDirectory}/Games/Emulator/rpg-maker/RTP/2000";
-          #         RPG2K3_RTP_PATH = "${config.home.homeDirectory}/Games/Emulator/rpg-maker/RTP/2003";
-          #       };
-          #     };
-          #   };
-          #   packages = [
-          #     "app.xemu.xemu"
-          #     "info.cemu.Cemu"
-          #     "io.github.ryubing.Ryujinx"
-          #     "net.kuribo64.melonDS"
-          #     "net.rpcs3.RPCS3"
-          #     "org.DolphinEmu.dolphin-emu"
-          #     "org.duckstation.DuckStation"
-          #     "org.easyrpg.player"
-          #   ];
-          # };
+          flatpak = {
+            overrides = {
+              global = {
+                Environment = {
+                  PULSE_SINK = "Game";
+                };
+              };
+              "info.cemu.Cemu" = {
+                Context = {
+                  filesystems = [
+                    "!home"
+                    "${config.home.homeDirectory}/Games/Emulation/Games/Nintendo Wii U"
+                  ];
+                };
+              };
+              "io.github.ryubing.Ryujinx" = {
+                Context = {
+                  filesystems = [
+                    "!home"
+                    "${config.home.homeDirectory}/Games/Emulation/Games/Nintendo Switch/"
+                  ];
+                };
+              };
+              "net.kuribo64.melonDS" = {
+                Context = {
+                  filesystems = [
+                    "!home"
+                    "${config.home.homeDirectory}/Games/Emulation/Games/Nintendo DS/"
+                  ];
+                };
+              };
+              "net.pcsx2.PCSX2" = {
+                Context = {
+                  filesystems = [
+                    "!home"
+                    "/mnt/vault101/data/Games/Emulation/PlayStation 2"
+                  ];
+                };
+              };
+              "net.rpcs3.RPCS3" = {
+                Context = {
+                  filesystems = [
+                    "!home"
+                    "/mnt/vault101/data/Games/Emulation/PlayStation 3"
+                  ];
+                };
+              };
+              "org.duckstation.DuckStation" = {
+                Context = {
+                  filesystems = [
+                    "!home"
+                    "/mnt/vault101/data/Games/Emulation/PlayStation"
+                  ];
+                };
+              };
+              "org.DolphinEmu.dolphin-emu" = {
+                Context = {
+                  filesystems = [
+                    "!home"
+                    "/mnt/vault101/data/Games/Emulation/Nintendo GameCube"
+                    "/mnt/vault101/data/Games/Emulation/Nintendo Wii"
+                  ];
+                };
+              };
+              "io.github.Faugus.faugus-launcher" = {
+                Context = {
+                  filesystems = [
+                    "!home"
+                    "${config.home.homeDirectory}/Games"
+                    "xdg-data/Steam"
+                    "/mnt/vault101/data/Games"
+                  ];
+                };
+              };
+              "org.easyrpg.player" = {
+                Context = {
+                  filesystems = [
+                    "/mnt/vault101/data/Games/Emulation/RPG Maker"
+                    "!home"
+                    "!host"
+                  ];
+                  shared = "network"; # obs-gamecapture
+                };
+                Environment = {
+                  RPG2K_RTP_PATH = "${config.home.homeDirectory}/Games/Emulator/rpg-maker/RTP/2000";
+                  RPG2K3_RTP_PATH = "${config.home.homeDirectory}/Games/Emulator/rpg-maker/RTP/2003";
+                };
+              };
+            };
+            packages = [
+              "app.xemu.xemu"
+              "info.cemu.Cemu"
+              "io.github.ryubing.Ryujinx"
+              "net.kuribo64.melonDS"
+              "net.rpcs3.RPCS3"
+              "org.DolphinEmu.dolphin-emu"
+              "org.duckstation.DuckStation"
+              "org.easyrpg.player"
+              "io.github.Faugus.faugus-launcher"
+              {
+                appId = "io.github.hedge_dev.unleashedrecomp";
+                bundle = "file://${config.home.homeDirectory}/Games/io.github.hedge_dev.unleashedrecomp.flatpak";
+                sha256 = "13wca95yngfwl1y0c05y0b2w7aa8k3nkhvk46wsrxjvw3shb35im";
+              }
+            ];
+          };
           # ludusavi = {
           #   enable = true;
           #   backupNotification = true;
