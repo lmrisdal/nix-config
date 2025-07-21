@@ -22,7 +22,7 @@ in
     # vscode.enable = true;
     # kitty.enable = true;
     zen-browser.enable = true;
-    walker.enable = true;
+    ulauncher.enable = true;
 
     # System
     base.enable = true;
@@ -99,6 +99,51 @@ in
           gearlever
           libreoffice-qt
         ];
+        xdg = {
+          mimeApps =
+            let
+              audioPlayer = "org.fooyin.fooyin.desktop";
+              browser = "app.zen_browser.zen.desktop";
+              editor = "org.kde.kate.desktop";
+              imageViewer = "org.kde.gwenview.desktop";
+              pdfViewer = "org.kde.okular.desktop";
+              videoPlayer = "org.kde.haruna.desktop";
+            in
+            {
+              enable = true;
+              defaultApplications =
+                {
+                  "audio/*" = audioPlayer;
+                  "image/*" = imageViewer;
+                  "video/*" = videoPlayer;
+                  "text/*" = editor;
+                  "text/html" = browser;
+                  "text/plain" = editor;
+                  "application/json" = editor;
+                  "application/pdf" = pdfViewer;
+                  "application/toml" = editor;
+                  "application/x-bat" = editor;
+                  "application/xhtml+xml" = browser;
+                  "application/xml" = editor;
+                  "application/x-shellscript" = editor;
+                  "application/x-yaml" = editor;
+                  "inode/directory" = "org.kde.dolphin.desktop";
+                  "x-scheme-handler/bottles" = "com.usebottles.bottles.desktop";
+                  "x-scheme-handler/http" = browser;
+                  "x-scheme-handler/https" = browser;
+                  "x-scheme-handler/sgnl" = "signal.desktop";
+                  "x-scheme-handler/signalcaptcha" = "signal.desktop";
+                  "x-scheme-handler/terminal" = "org.wezfurlong.wezterm.desktop";
+                }
+                // lib.optionalAttrs vars.gaming {
+                  "application/x-alcohol" = "cdemu-client.desktop";
+                  "application/x-cue" = "cdemu-client.desktop";
+                  "application/x-gd-rom-cue" = "cdemu-client.desktop";
+                  "application/x-msdownload" = "wine.desktop";
+                  "x-scheme-handler/ror2mm" = "r2modman.desktop";
+                };
+            };
+        };
       };
   };
 }

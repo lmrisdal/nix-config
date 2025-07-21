@@ -21,6 +21,6 @@
     ./vkbasalt
     ./starship
     ./ssh
-    ./walker
+    ./ulauncher
   ];
 }

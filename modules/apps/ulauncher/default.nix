@@ -5,12 +5,12 @@
   ...
 }:
 let
-  cfg = config.walker;
+  cfg = config.ulauncher;
 in
 {
   options = {
-    walker = {
-      enable = lib.mkEnableOption "Enable walker in NixOS & home-manager";
+    ulauncher = {
+      enable = lib.mkEnableOption "Enable ulauncher in NixOS & home-manager";
     };
   };
   config = lib.mkIf cfg.enable {
@@ -18,21 +18,21 @@ in
       { pkgs, config, ... }:
       {
         home.packages = with pkgs; [
-          walker
+          ulauncher
         ];
         home.file = {
-          walker-autostart = {
+          ulauncher-autostart = {
             enable = true;
             text = ''
               [Desktop Entry]
-              Name=Walker
-              Comment=Walker Service
-              Exec=walker --gapplication-service
+              Name=ulauncher
+              Comment=ulauncher Service
+              Exec=ulauncher
               StartupNotify=false
               Terminal=false
               Type=Application
             '';
-            target = "${config.xdg.configHome}/autostart/walker.desktop";
+            target = "${config.xdg.configHome}/autostart/ulauncher.desktop";
           };
         };
       };
