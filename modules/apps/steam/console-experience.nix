@@ -104,17 +104,6 @@ in
         touch $XDG_RUNTIME_DIR/switch-to-desktop
         steam -shutdown
       '')
-      # (pkgs.writeTextFile {
-      #   name = "plasma-custom.desktop";
-      #   text = ''
-      #     [Desktop Entry]
-      #     Exec=load-session
-      #     DesktopNames=KDE
-      #     Name=Plasma Custom (Wayland)
-      #     X-KDE-PluginInfo-Version=6.4.3
-      #   '';
-      #   destination = "${config.xdg.configHome}/wayland-sessions/plasma-custom.desktop";
-      # })
     ];
     programs.steam = {
       gamescopeSession.enable = true;
