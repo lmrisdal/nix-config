@@ -27,7 +27,7 @@ in
     # https://reddit.com/r/linux_gaming/comments/16e1l4h/slow_steam_downloads_try_this/
     fixDownloadSpeed = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
     };
     autostart = lib.mkOption {
       type = lib.types.bool;
@@ -55,7 +55,7 @@ in
       dedicatedServer.openFirewall = true;
       extraCompatPackages = with pkgs; [
         luxtorpeda
-        inputs.chaotic.packages.${pkgs.system}.proton-cachyos
+        inputs.chaotic.packages.${system}.proton-cachyos
         proton-ge-bin
       ];
       localNetworkGameTransfers.openFirewall = true;
