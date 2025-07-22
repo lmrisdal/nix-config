@@ -4,8 +4,6 @@
     ./desktop.nix
     ./gaming.nix
     #./hardening.nix
-    #./nonfree.nix
-    #./office.nix
     # ./packages.nix
   ];
 }

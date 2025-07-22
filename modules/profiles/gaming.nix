@@ -26,6 +26,7 @@ in
     mangohud.enable = true;
     obs.enable = true;
     steam.enable = true;
+    consoleExperience.enable = true;
     vkbasalt.enable = true;
     # sunshine.enable = true;
 

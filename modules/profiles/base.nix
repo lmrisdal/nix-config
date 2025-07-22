@@ -72,7 +72,7 @@ in
     pipewire.enable = true;
     # secrets.enable = true;
     users.enable = true;
-    # virtualization.enable = true;
+    virtualization.enable = true;
 
     console = {
       earlySetup = true;

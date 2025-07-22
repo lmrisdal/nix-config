@@ -2,6 +2,7 @@
   lib,
   config,
   defaultSession,
+  username,
   services,
   ...
 }:
@@ -17,10 +18,15 @@ in
 
   config = lib.mkIf cfg.enable {
     services.displayManager = {
-      defaultSession = "${defaultSession}"; # hyprland
+      defaultSession = "${defaultSession}";
+      autoLogin = {
+        enable = true;
+        user = username;
+      };
       sddm = {
         enable = true;
         wayland.enable = true;
+        autoLogin.relogin = true;
       };
     };
   };

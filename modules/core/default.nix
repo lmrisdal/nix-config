@@ -8,6 +8,6 @@
     ./nix
     ./pipewire
     ./users
-    # ./virtualization
+    ./virtualization
   ];
 }

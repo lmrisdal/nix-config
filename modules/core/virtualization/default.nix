@@ -20,17 +20,7 @@ in
       systemPackages = with pkgs; [
         docker-compose
         podlet
-        quickemu
-        spice
-        spice-protocol
-        virt-manager
-        virtiofsd
-        virtio-win
-        win-spice
       ];
-    };
-    services = {
-      spice-vdagentd.enable = vars.desktop;
     };
     virtualisation = {
       podman = {
@@ -43,22 +33,6 @@ in
         #dockerCompat = true;
         #dockerSocket.enable = true;
       };
-      libvirtd = {
-        # Make sure you run this once: "sudo virsh net-autostart default"
-        enable = vars.desktop;
-        qemu = {
-          swtpm.enable = true;
-          ovmf.enable = true;
-          ovmf.packages = [ pkgs.OVMFFull.fd ];
-        };
-      };
-      spiceUSBRedirection.enable = true;
-      vmVariant = {
-        virtualisation = {
-          memorySize = 4096;
-          cores = 3;
-        };
-      };
     };
 
     users = {
@@ -66,27 +40,8 @@ in
         ${username} = {
           extraGroups = [
             "docker"
-            "libvirtd"
             "podman"
           ];
-        };
-
-        nixosvmtest = {
-          isSystemUser = true;
-          initialHashedPassword = "$y$j9T$cLVPJpZrtzdgCM732gQ3g/$4qBIUCoDSJ1frFNcvqYSL6ykQSOdjQyDVqRIANx.SRD";
-          group = "nixosvmtest";
-        };
-      };
-      groups = {
-        nixosvmtest = { };
-      };
-    };
-
-    home-manager.users.${username} = {
-      dconf.settings = {
-        "org/virt-manager/virt-manager/connections" = {
-          autoconnect = [ "qemu:///system" ];
-          uris = [ "qemu:///system" ];
         };
       };
     };
