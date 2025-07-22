@@ -57,20 +57,19 @@ in
     # topgrade.enable = true;
     # yazi.enable = true;
     # yt-dlp.enable = true;
-    # zoxide.enable = true;
+    zoxide.enable = true;
     zsh.enable = true;
     spotify.enable = true;
 
     # System
     flatpak.enable = true;
-    # fonts.enable = true;
+    fonts.enable = true;
     # hardening.enable = true;
     mounts.enable = true;
     networking.enable = true;
     nixConfig.enable = true;
-    # packages.enable = true;
+    packages.enable = true;
     pipewire.enable = true;
-    # secrets.enable = true;
     users.enable = true;
     virtualization.enable = true;
 
@@ -91,26 +90,10 @@ in
         pciutils
         xdg-dbus-proxy
         xdg-user-dirs
-        wget
-        unzip
-        unrar
-        jq
         ntfs3g
         nixfmt-rfc-style
         libdbusmenu
-        wofi
-        wmctrl
         firefox
-        (pkgs.writeShellScriptBin "nixswitch" ''
-          #!/bin/bash
-          # Run the NixOS rebuild switch command with the provided arguments
-          sudo nixos-rebuild switch --flake ~/.config/nix-config/
-        '')
-        (pkgs.writeShellScriptBin "nixtest" ''
-          #!/bin/bash
-          # Run the NixOS rebuild test command with the provided arguments
-          sudo nixos-rebuild test --flake ~/.config/nix-config/
-        '')
       ];
     };
 

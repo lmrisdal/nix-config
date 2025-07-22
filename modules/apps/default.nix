@@ -22,5 +22,7 @@
     ./starship
     ./ssh
     ./ulauncher
+    ./zoxide
+    ./nero-umu
   ];
 }

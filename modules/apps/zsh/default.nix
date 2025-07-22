@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   username,
   ...
 }:
@@ -15,7 +16,7 @@ in
   };
   config = lib.mkIf cfg.enable {
     environment.pathsToLink = [ "/share/zsh" ];
-    programs.zsh = {
+    programs.zsh = rec {
       enable = true;
     };
     home-manager.users.${username} =
@@ -36,6 +37,13 @@ in
             extended = true;
             ignoreSpace = true;
           };
+          shellAliases = {
+            nrs = "sudo nixos-rebuild switch --flake ~/.config/nix-config";
+            nrt = "sudo nixos-rebuild test --flake ~/.config/nix-config";
+            cd = "z";
+            ls = "eza -l --icons --no-user --no-time --no-filesize --no-permissions";
+            lg = "eza";
+          };
           oh-my-zsh = {
             enable = true;
             custom = "${config.xdg.configHome}/zsh/.zsh_custom";
@@ -48,11 +56,21 @@ in
             ];
           };
           plugins = [
-            # {
-            #   name = "cd-ls";
-            #   src = inputs.cd-ls;
-            #   file = "cd-ls.plugin.zsh";
-            # }
+            {
+              name = "cd-ls";
+              src = inputs.cd-ls;
+              file = "cd-ls.plugin.zsh";
+            }
+            {
+              name = "zsh-fast-syntax-highlighting";
+              src = pkgs.zsh-fast-syntax-highlighting;
+              file = "share/zsh/site-functions/fast-syntax-highlighting.plugin.zsh";
+            }
+            {
+              name = "nix-zsh-completions";
+              src = pkgs.nix-zsh-completions;
+              file = "share/zsh/site-functions/nix-zsh-completions.plugin.zsh";
+            }
           ];
           syntaxHighlighting = {
             enable = true;

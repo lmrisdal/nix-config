@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "cd-ls": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1683132048,
+        "narHash": "sha256-QUnZBb0X6F42FcvNxq65zq2oB8cn1Ym4SuU8MXpIfN4=",
+        "owner": "zshzoo",
+        "repo": "cd-ls",
+        "rev": "f26c86baf50ca0e92b454753dc6f1d25228e67bf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zshzoo",
+        "repo": "cd-ls",
+        "type": "github"
+      }
+    },
     "chaotic": {
       "inputs": {
         "flake-schemas": "flake-schemas",
@@ -541,6 +557,7 @@
     },
     "root": {
       "inputs": {
+        "cd-ls": "cd-ls",
         "chaotic": "chaotic",
         "disko": "disko",
         "home-manager": "home-manager_2",

@@ -35,6 +35,10 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    cd-ls = {
+      url = "github:zshzoo/cd-ls";
+      flake = false;
+    };
   };
   outputs =
     {

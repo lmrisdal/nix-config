@@ -2,7 +2,7 @@
   imports = [
     ./boot
     ./flatpak
-    # ./fonts
+    ./fonts
     ./mounts
     ./networking
     ./nix

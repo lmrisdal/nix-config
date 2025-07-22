@@ -24,6 +24,7 @@ in
     heroic.enable = true;
     lutris.enable = true;
     mangohud.enable = true;
+    nero-umu.enable = true;
     obs.enable = true;
     steam.enable = true;
     consoleExperience.enable = true;
