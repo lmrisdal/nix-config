@@ -28,8 +28,8 @@ in
         '';
       };
 
-      # hosts/global/core/ssh.nix handles this
       gnome.gcr-ssh-agent.enable = false;
+      gnome.gnome-keyring.enable = true;
 
       # displayManager = {
       #   gdm = {
@@ -55,16 +55,13 @@ in
         };
       };
 
-      # Configure keyboard layout for Wayland
-      # xserver = {
-      #   enable = false;
-      #   xkb = {
-      #     layout = "us";
-      #     variant = "";
-      #   };
-      # };
-
       udev.packages = with pkgs; [ gnome-settings-daemon ];
+    };
+
+    security.pam.services = {
+      greetd.enableGnomeKeyring = true;
+      login.enableGnomeKeyring = true;
+      sddm.enableGnomeKeyring = true;
     };
 
     boot.kernelModules = [ "i2c-dev" ];
