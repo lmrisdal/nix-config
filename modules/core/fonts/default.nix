@@ -46,7 +46,7 @@ in
             "Liberation Serif"
           ];
         };
-        subpixel.rgba = "rgb";
+        # subpixel.rgba = "rgb";
       };
     };
     environment = {

@@ -1,7 +1,6 @@
 {
   imports = [
-    ./sddm
     ./plasma
-    #./hyprland
+    ./gnome
   ];
 }

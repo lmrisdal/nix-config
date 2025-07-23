@@ -21,13 +21,12 @@ in
     # vscode.enable = true;
     # kitty.enable = true;
     zen-browser.enable = true;
-    ulauncher.enable = true;
+    ulauncher.enable = false;
 
     # System
     base.enable = true;
-    sddm.enable = true;
-    #greetd.enable = true;
-    plasma.enable = true;
+    plasma.enable = false;
+    gnome.enable = true;
     # office.enable = true;
 
     boot = {

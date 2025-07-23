@@ -15,12 +15,12 @@ in
     enable = lib.mkEnableOption "Enable Steam Console Experience in NixOS";
     desktopSession = lib.mkOption {
       type = lib.types.str;
-      default = "startplasma-wayland";
+      default = "gnome-session";
       description = "Command to start the desktop session, e.g., 'startplasma-wayland', 'gnome-session' or 'gamescope-session'.";
     };
     logoutCommand = lib.mkOption {
       type = lib.types.str;
-      default = "qdbus org.kde.Shutdown /Shutdown logout";
+      default = "gnome-session-quit --logout --no-prompt"; # "qdbus org.kde.Shutdown /Shutdown logout";
       description = "Command to log out of the desktop session, e.g., 'qdbus org.kde.Shutdown /Shutdown logout'.";
     };
     enableHDR = lib.mkOption {
@@ -71,14 +71,16 @@ in
             ]
             ++ lib.optionals cfg.enableHDR [
               "--hdr-enabled"
-              #"--hdr-itm-enable"
+              "--hdr-itm-enable"
             ]
             ++ lib.optionals cfg.enableVRR [ "--adaptive-sync" ]
             ++ [
               "--"
               "steam"
               "-steamos3"
-              "-tenfoot"
+              "-steamdeck"
+              # "-tenfoot"
+              # "-gamepadui"
               "-pipewire-dmabuf"
             ]
           )}
@@ -123,7 +125,7 @@ in
           })
       )
       (
-        # Override the steam.desktop file to use the gamescope-session script
+        # Override the plasma.desktop file to use the gamescope-session script
         (pkgs.writeTextDir "share/wayland-sessions/plasma.desktop" ''
           [Desktop Entry]
           Name=Plasma
@@ -132,6 +134,18 @@ in
         '').overrideAttrs
           (_: {
             passthru.providedSessions = [ "plasma" ];
+          })
+      )
+      (
+        # Override the gnome.desktop file to use the gamescope-session script
+        (pkgs.writeTextDir "share/wayland-sessions/gnome.desktop" ''
+          [Desktop Entry]
+          Name=Gnome
+          Exec=load-session
+          Type=Application
+        '').overrideAttrs
+          (_: {
+            passthru.providedSessions = [ "gnome" ];
           })
       )
     ];
