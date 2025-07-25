@@ -27,7 +27,7 @@ in
     # https://reddit.com/r/linux_gaming/comments/16e1l4h/slow_steam_downloads_try_this/
     fixDownloadSpeed = lib.mkOption {
       type = lib.types.bool;
-      default = false;
+      default = true;
     };
     autostart = lib.mkOption {
       type = lib.types.bool;

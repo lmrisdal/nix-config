@@ -86,7 +86,6 @@ in
       gnomeExtensions.desktop-icons-ng-ding
       gnomeExtensions.quick-settings-audio-devices-hider
       gnomeExtensions.quick-settings-audio-devices-renamer
-      gnomeExtensions.undecorate
       gnomeExtensions.vitals
     ];
 

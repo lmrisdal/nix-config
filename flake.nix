@@ -39,18 +39,41 @@
       url = "github:zshzoo/cd-ls";
       flake = false;
     };
+    darwin = {
+      url = "github:lnl7/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     {
       self,
       nixpkgs,
       home-manager,
+      darwin,
       ...
     }@inputs:
     let
       inherit (self) outputs;
     in
     {
+      darwinConfigurations =
+        let
+          fullname = "Lars Risdal";
+          username = "lars";
+        in
+        {
+          apollo = nix-darwin.lib.darwinSystem {
+            system = "aarch64-darwin";
+            specialArgs = {
+              inherit inputs outputs username;
+              userConfig = users.${username};
+            };
+            modules = [
+              ./hosts/macbook
+              home-manager.darwinModules.home-manager
+            ];
+          };
+        };
       nixosConfigurations =
         let
           fullname = "Lars Risdal";

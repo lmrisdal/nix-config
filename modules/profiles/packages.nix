@@ -65,6 +65,7 @@ in
           (_7zz.override { enableUnfree = true; })
           p7zip
           libnotify
+          dig
           ### Ansible ###
           # ansible
           # ansible-language-server
