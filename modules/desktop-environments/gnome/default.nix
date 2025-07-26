@@ -139,10 +139,6 @@ in
         dconf.enable = true;
         dconf.settings = {
           "org/gnome/desktop/interface" = {
-            accent-color = "blue";
-          };
-          "org/gnome/desktop/interface" = {
-            color-scheme = "prefer-dark";
             enable-hot-corners = false;
             clock-show-weekday = true;
           };
