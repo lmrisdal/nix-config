@@ -22,10 +22,6 @@ in
       desktopManager.gnome = {
         enable = true;
         extraGSettingsOverridePackages = [ pkgs.mutter ];
-        extraGSettingsOverrides = ''
-          [org.gnome.mutter]
-          experimental-features=['scale-monitor-framebuffer']
-        '';
       };
 
       gnome.gcr-ssh-agent.enable = false;
@@ -122,5 +118,49 @@ in
         yelp
       ]
     );
+
+    programs.dconf.profiles.user.databases = [
+      {
+        settings = {
+          "org/gnome/mutter" = {
+            experimental-features = [
+              "scale-monitor-framebuffer" # Enables fractional scaling (125% 150% 175%)
+              "variable-refresh-rate" # Enables Variable Refresh Rate (VRR) on compatible displays
+              "xwayland-native-scaling" # Scales Xwayland applications to look crisp on HiDPI screens
+            ];
+          };
+        };
+      }
+    ];
+
+    home-manager.users.${username} =
+      { pkgs, config, ... }:
+      {
+        dconf.enable = true;
+        dconf.settings = {
+          "org/gnome/desktop/interface" = {
+            accent-color = "blue";
+          };
+          "org/gnome/desktop/interface" = {
+            color-scheme = "prefer-dark";
+            enable-hot-corners = false;
+            clock-show-weekday = true;
+          };
+          "org/gnome/desktop/wm/preferences" = {
+            mouse-button-modifier = "<Alt>";
+            resize-with-right-button = true;
+          };
+          "org/gnome/settings-daemon/plugins/media-keys" = {
+            custom-keybindings = [
+              "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/1password/"
+            ];
+          };
+          "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/1password" = {
+            name = "1Password";
+            command = "1password --quick-access";
+            binding = "<Ctrl><Shift>space";
+          };
+        };
+      };
   };
 }
