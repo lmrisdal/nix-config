@@ -51,6 +51,7 @@ in
               cd = "z";
               ls = "eza -l --icons --no-user --no-time --no-filesize --no-permissions";
               lg = "eza";
+              azl = "az login --use-device-code";
             }
           ];
           oh-my-zsh = {

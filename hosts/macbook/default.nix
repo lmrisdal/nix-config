@@ -30,6 +30,7 @@
       monitorcontrol
       rectangle
       spotify
+      azure-functions-core-tools
     ];
   };
 
@@ -45,6 +46,7 @@
       "1password"
       "zen"
       "pearcleaner"
+      "redis-insight"
     ];
     masApps = {
       "1Password for Safari" = 1569813296;
@@ -52,8 +54,7 @@
       "Wireguard" = 1451685025;
     };
     brews = [
-      # "wireguard-tools"
-      # "wireguard-go"
+      "azure-cli"
     ];
   };
 
