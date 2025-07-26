@@ -24,36 +24,70 @@
               ];
             };
           };
-          root = {
+          luks = {
             size = "100%";
             content = {
-              type = "btrfs";
-              extraArgs = [ "-f" ];
-              subvolumes = {
-                "/home" = {
-                  mountOptions = [
-                    "compress=zstd"
-                    "noatime"
-                  ];
-                  mountpoint = "/home";
-                };
-                "/nix" = {
-                  mountOptions = [
-                    "compress=zstd"
-                    "noatime"
-                  ];
-                  mountpoint = "/nix";
-                };
-                "/persist" = {
-                  mountOptions = [
-                    "compress=zstd"
-                    "noatime"
-                  ];
-                  mountpoint = "/persist";
+              type = "luks";
+              name = "crypted";
+              settings = {
+                allowDiscards = true;
+              };
+              content = {
+                type = "btrfs";
+                extraArgs = [ "-f" ];
+                subvolumes = {
+                  "/home" = {
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                    ];
+                    mountpoint = "/home";
+                  };
+                  "/nix" = {
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                    ];
+                    mountpoint = "/nix";
+                  };
+                  "/persist" = {
+                    mountOptions = [ "compress=zstd" ];
+                    mountpoint = "/persist";
+                  };
                 };
               };
             };
           };
+          # root = {
+          #   size = "100%";
+          #   content = {
+          #     type = "btrfs";
+          #     extraArgs = [ "-f" ];
+          #     subvolumes = {
+          #       "/home" = {
+          #         mountOptions = [
+          #           "compress=zstd"
+          #           "noatime"
+          #         ];
+          #         mountpoint = "/home";
+          #       };
+          #       "/nix" = {
+          #         mountOptions = [
+          #           "compress=zstd"
+          #           "noatime"
+          #         ];
+          #         mountpoint = "/nix";
+          #       };
+          #       "/persist" = {
+          #         mountOptions = [
+          #           "compress=zstd"
+          #           "noatime"
+          #         ];
+          #         mountpoint = "/persist";
+          #       };
+          #     };
+          #   };
+          # };
         };
       };
     };
