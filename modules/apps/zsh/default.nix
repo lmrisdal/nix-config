@@ -37,13 +37,22 @@ in
             extended = true;
             ignoreSpace = true;
           };
-          shellAliases = {
-            nrs = "sudo nixos-rebuild switch --flake ~/.config/nix-config";
-            nrt = "sudo nixos-rebuild test --flake ~/.config/nix-config";
-            cd = "z";
-            ls = "eza -l --icons --no-user --no-time --no-filesize --no-permissions";
-            lg = "eza";
-          };
+          shellAliases = lib.mkMerge [
+            (lib.mkIf (pkgs.stdenv.isLinux) {
+              nrs = "sudo nixos-rebuild switch --flake ~/.config/nix-config";
+              nrt = "sudo nixos-rebuild test --flake ~/.config/nix-config";
+            })
+            (lib.mkIf (pkgs.stdenv.isDarwin) {
+              drs = "sudo darwin-rebuild switch --flake ~/.config/nix-config";
+              nixfmt = "fmt";
+            })
+            {
+              c = "clear";
+              cd = "z";
+              ls = "eza -l --icons --no-user --no-time --no-filesize --no-permissions";
+              lg = "eza";
+            }
+          ];
           oh-my-zsh = {
             enable = true;
             custom = "${config.xdg.configHome}/zsh/.zsh_custom";

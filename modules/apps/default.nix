@@ -24,5 +24,6 @@
     ./ulauncher
     ./zoxide
     ./nero-umu
+    ./fnm
   ];
 }

@@ -1,38 +1,36 @@
 {
   lib,
+  pkgs,
   username,
   config,
+  inputs,
   ...
 }:
-
 {
+  imports = [
+    ./apps.nix
+  ];
+
   users.users.${username} = {
     home = "/Users/${username}";
     shell = pkgs.zsh;
   };
 
   environment = {
-    variables = {
-      EDITOR = "nano";
-      VISUAL = "nano";
-    };
     systemPackages = with pkgs; [
       eza # Ls
-      git # Version Control
       mas # Mac App Store $ mas search <app>
       tldr # Help
       wget # Download
-      zsh-powerlevel10k # Prompt
+      nixfmt-rfc-style # Nix formatter
+      whatsapp-for-mac
+      dotnet-sdk
+      raycast
+      discord
+      monitorcontrol
+      rectangle
+      spotify
     ];
-  };
-
-  programs = {
-    zsh.enable = true;
-    direnv = {
-      enable = true;
-      loadInNixShell = true;
-      nix-direnv.enable = true;
-    };
   };
 
   homebrew = {
@@ -42,10 +40,21 @@
       cleanup = "zap";
     };
     casks = [
+      "linearmouse"
+      "visual-studio-code"
+      "1password"
+      "zen"
+      "pearcleaner"
     ];
     masApps = {
       "1Password for Safari" = 1569813296;
+      "Tailscale" = 1475387142;
+      "Wireguard" = 1451685025;
     };
+    brews = [
+      # "wireguard-tools"
+      # "wireguard-go"
+    ];
   };
 
   nix = {
@@ -56,17 +65,29 @@
       options = "--delete-older-than 7d";
     };
     extraOptions = ''
-      # auto-optimise-store = true
+      auto-optimise-store = true
       experimental-features = nix-command flakes
     '';
   };
+  nixpkgs.config.allowUnfree = true;
 
-  home-manager.users.${username} = {
-    home.stateVersion = "25.05";
-  };
-
+  home-manager.users.${username} =
+    { config, pkgs, ... }:
+    {
+      home.stateVersion = "25.05";
+    };
+  security.pam.services.sudo_local.touchIdAuth = true;
   system = {
     primaryUser = "${username}";
     stateVersion = 6;
+    activationScripts.postActivation.text = ''
+      /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+    '';
+    defaults = {
+      dock.autohide = false;
+      dock.show-recents = false;
+    };
   };
 }
+
+# sudo darwin-rebuild switch --flake ~/.config/nix-config

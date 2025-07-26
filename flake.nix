@@ -43,6 +43,7 @@
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
   };
   outputs =
     {
@@ -50,6 +51,7 @@
       nixpkgs,
       home-manager,
       darwin,
+      nix-homebrew,
       ...
     }@inputs:
     let
@@ -62,15 +64,45 @@
           username = "lars";
         in
         {
-          apollo = nix-darwin.lib.darwinSystem {
+          apollo = darwin.lib.darwinSystem {
             system = "aarch64-darwin";
             specialArgs = {
-              inherit inputs outputs username;
-              userConfig = users.${username};
+              inherit
+                inputs
+                outputs
+                fullname
+                username
+                ;
             };
             modules = [
               ./hosts/macbook
+              nix-homebrew.darwinModules.nix-homebrew
+              {
+                nix-homebrew = {
+                  # Install Homebrew under the default prefix
+                  enable = true;
+                  # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
+                  enableRosetta = true;
+                  # User owning the Homebrew prefix
+                  user = "${username}";
+                  # Automatically migrate existing Homebrew installations
+                  autoMigrate = true;
+                };
+              }
               home-manager.darwinModules.home-manager
+              {
+                home-manager = {
+                  backupFileExtension = "hmbackup";
+                  useUserPackages = true;
+                  extraSpecialArgs = {
+                    inherit
+                      inputs
+                      username
+                      fullname
+                      ;
+                  };
+                };
+              }
             ];
           };
         };
@@ -85,7 +117,11 @@
             system = "x86_64-linux";
             specialArgs = {
               inherit inputs outputs;
-              inherit fullname username defaultSession;
+              inherit
+                fullname
+                username
+                defaultSession
+                ;
               vars = {
                 desktop = true;
                 gaming = true;
@@ -109,7 +145,11 @@
                   useUserPackages = true;
                   extraSpecialArgs = {
                     inherit inputs; # Experiment with config and other attributes
-                    inherit fullname username defaultSession;
+                    inherit
+                      fullname
+                      username
+                      defaultSession
+                      ;
                     vars = {
                       desktop = true;
                       gaming = true;
