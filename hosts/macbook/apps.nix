@@ -16,7 +16,6 @@
     ../../modules/apps/fzf
     ../../modules/apps/direnv
     ../../modules/apps/fnm
-    # ../../modules/apps/wireguard-mac
   ];
 
   zsh.enable = true;
@@ -27,5 +26,4 @@
   fzf.enable = true;
   direnv.enable = true;
   fnm.enable = true;
-  # wireguard-mac.enable = true;
 }
