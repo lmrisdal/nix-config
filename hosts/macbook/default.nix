@@ -31,6 +31,7 @@
       rectangle
       spotify
       azure-functions-core-tools
+      #azure-artifacts-credprovider
     ];
   };
 
@@ -75,7 +76,11 @@
   home-manager.users.${username} =
     { config, pkgs, ... }:
     {
-      home.stateVersion = "25.05";
+      home = {
+        username = username;
+        homeDirectory = lib.mkDefault "/Users/${username}";
+        stateVersion = "25.05";
+      };
     };
   security.pam.services.sudo_local.touchIdAuth = true;
   system = {

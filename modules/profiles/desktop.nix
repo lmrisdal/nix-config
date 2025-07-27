@@ -22,6 +22,7 @@ in
     # kitty.enable = true;
     zen-browser.enable = true;
     ulauncher.enable = false;
+    artifacts-credprovider.enable = true;
 
     # System
     base.enable = true;

@@ -25,5 +25,6 @@
     ./zoxide
     ./nero-umu
     ./fnm
+    ./azure-artifacts-credprovider
   ];
 }

@@ -16,6 +16,7 @@
     ../../modules/apps/fzf
     ../../modules/apps/direnv
     ../../modules/apps/fnm
+    ../../modules/apps/azure-artifacts-credprovider
   ];
 
   zsh.enable = true;
@@ -26,4 +27,5 @@
   fzf.enable = true;
   direnv.enable = true;
   fnm.enable = true;
+  artifacts-credprovider.enable = true;
 }
