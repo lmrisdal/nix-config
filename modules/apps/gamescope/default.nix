@@ -19,7 +19,7 @@ in
     programs.gamescope = {
       enable = true;
       package = inputs.chaotic.packages.${pkgs.system}.gamescope_git;
-      capSysNice = false; # 'true' breaks gamescope for Steam https://github.com/NixOS/nixpkgs/issues/292620#issuecomment-2143529075
+      capSysNice = true; # 'true' breaks gamescope for Steam https://github.com/NixOS/nixpkgs/issues/292620#issuecomment-2143529075
     };
     home-manager.users.${username} = {
       services.flatpak = {

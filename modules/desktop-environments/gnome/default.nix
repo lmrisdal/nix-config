@@ -22,6 +22,10 @@ in
       desktopManager.gnome = {
         enable = true;
         extraGSettingsOverridePackages = [ pkgs.mutter ];
+        extraGSettingsOverrides = ''
+          [org.gnome.mutter]
+          experimental-features=['scale-monitor-framebuffer', 'variable-refresh-rate', 'xwayland-native-scaling']
+        '';
       };
 
       gnome.gcr-ssh-agent.enable = false;
@@ -72,17 +76,16 @@ in
     environment.systemPackages = with pkgs; [
       gnome-tweaks
       gnomeExtensions.appindicator
-      gnomeExtensions.auto-accent-colour
       gnomeExtensions.blur-my-shell
       gnomeExtensions.control-monitor-brightness-and-volume-with-ddcutil
       gnomeExtensions.dash-in-panel
       gnomeExtensions.just-perfection
       gnomeExtensions.pano
       gnomeExtensions.arcmenu
-      gnomeExtensions.desktop-icons-ng-ding
       gnomeExtensions.quick-settings-audio-devices-hider
       gnomeExtensions.quick-settings-audio-devices-renamer
-      gnomeExtensions.vitals
+      gnomeExtensions.logo-menu
+      gnomeExtensions.search-light
     ];
 
     ## Exclusions ##
@@ -119,23 +122,24 @@ in
       ]
     );
 
-    programs.dconf.profiles.user.databases = [
-      {
-        settings = {
-          "org/gnome/mutter" = {
-            experimental-features = [
-              "scale-monitor-framebuffer" # Enables fractional scaling (125% 150% 175%)
-              "variable-refresh-rate" # Enables Variable Refresh Rate (VRR) on compatible displays
-              "xwayland-native-scaling" # Scales Xwayland applications to look crisp on HiDPI screens
-            ];
-          };
-        };
-      }
-    ];
+    # programs.dconf.profiles.user.databases = [
+    #   {
+    #     settings = {
+    #       "org/gnome/mutter" = {
+    #         experimental-features = [
+    #           "scale-monitor-framebuffer" # Enables fractional scaling (125% 150% 175%)
+    #           "variable-refresh-rate" # Enables Variable Refresh Rate (VRR) on compatible displays
+    #           "xwayland-native-scaling" # Scales Xwayland applications to look crisp on HiDPI screens
+    #         ];
+    #       };
+    #     };
+    #   }
+    # ];
 
     home-manager.users.${username} =
       { pkgs, config, ... }:
       {
+
         dconf.enable = true;
         dconf.settings = {
           "org/gnome/desktop/interface" = {
@@ -149,6 +153,7 @@ in
           "org/gnome/settings-daemon/plugins/media-keys" = {
             custom-keybindings = [
               "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/1password/"
+              "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/nautilus/"
             ];
           };
           "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/1password" = {
@@ -156,6 +161,24 @@ in
             command = "1password --quick-access";
             binding = "<Ctrl><Shift>space";
           };
+          "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/nautilus" = {
+            name = "Nautilus";
+            command = "nautilus";
+            binding = "<Super>e";
+          };
+          "org/gnome/shell".enabled-extensions = [
+            "appindicatorsupport@rgcjonas.gmail.com"
+            "arcmenu@arcmenu.com"
+            "blur-my-shell@aunetx"
+            "dash-in-panel@fthx"
+            "just-perfection-desktop@just-perfection"
+            "monitor-brightness-volume@ailin.nemui"
+            "pano@elhan.io"
+            "quicksettings-audio-devices-hider@marcinjahn.com"
+            "quicksettings-audio-devices-renamer@marcinjahn.com"
+            "logomenu@aryan_k"
+            "search-light@icedman.github.com"
+          ];
         };
       };
   };

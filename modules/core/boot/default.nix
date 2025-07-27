@@ -39,6 +39,7 @@
       systemd-boot = {
         enable = true;
         editor = false;
+        #edk2-uefi-shell.enable = true; # Needed to find the Windows efiDeviceHandle (map-c and e.g. ls HB0b:\ and look for 'Microsoft')
       };
       timeout = 4;
     };

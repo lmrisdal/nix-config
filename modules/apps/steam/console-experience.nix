@@ -25,11 +25,11 @@ in
     };
     enableHDR = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
     };
     enableVRR = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
     };
   };
   config = lib.mkIf cfg.enable {
@@ -53,7 +53,8 @@ in
       '')
       (pkgs.writeShellScriptBin "gamescope-session" ''
         #!/bin/bash
-        # gamescope -r 240 --mangoapp -w 3840 -h 2160 -W 3840 -H 2160 -O HDMI-A-1 --mangoapp --rt --immediate-flips --force-grab-cursor --hdr-enabled --adaptive-sync -e -- steam -steamdeck -steamos3 -pipewire-dmabuf
+        # gamescope -r 240 -w 3840 -h 2160 -W 3840 -H 2160 -O HDMI-A-1 --mangoapp --rt --immediate-flips --force-grab-cursor --hdr-enabled --adaptive-sync -e -- steam -steamdeck -steamos3 -pipewire-dmabuf
+        # gamescope -r 240 -w 3840 -h 2160 -W 3840 -H 2160 -O HDMI-A-1 --mangoapp --rt --immediate-flips --force-grab-cursor --hdr-enabled --adaptive-sync --backend sdl --steam -- steam -tenfoot -steamos3 -pipewire-dmabuf
         gamescope \
           ${lib.concatStringsSep " " (
             [
@@ -63,10 +64,11 @@ in
               "-h 2160"
               "-W 3840"
               "-H 2160"
-              "-O HDMI-A-1,DP-1"
+              #"-O HDMI-A-1,DP-1"
               "--steam"
-              "--rt"
-              "--immediate-flips"
+              #"--rt"
+              #"--immediate-flips"
+              "--backend sdl"
               "--force-grab-cursor"
             ]
             ++ lib.optionals cfg.enableHDR [
@@ -78,9 +80,9 @@ in
               "--"
               "steam"
               "-steamos3"
-              "-steamdeck"
-              # "-tenfoot"
-              # "-gamepadui"
+              # "-steamdeck"
+              "-tenfoot"
+              "-gamepadui"
               "-pipewire-dmabuf"
             ]
           )}
