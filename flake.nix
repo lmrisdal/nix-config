@@ -110,7 +110,7 @@
         let
           fullname = "Lars Risdal";
           username = "lars";
-          defaultSession = "gnome"; # plasma
+          defaultSession = "plasma"; # gnome, plasma, steam
         in
         {
           nixos = nixpkgs.lib.nixosSystem {

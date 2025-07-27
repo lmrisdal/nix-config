@@ -25,8 +25,8 @@ in
 
     # System
     base.enable = true;
-    plasma.enable = false;
-    gnome.enable = true;
+    plasma.enable = true;
+    gnome.enable = false;
     # office.enable = true;
 
     boot = {

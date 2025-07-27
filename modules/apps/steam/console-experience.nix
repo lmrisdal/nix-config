@@ -15,12 +15,15 @@ in
     enable = lib.mkEnableOption "Enable Steam Console Experience in NixOS";
     desktopSession = lib.mkOption {
       type = lib.types.str;
-      default = "gnome-session";
+      #default = "gnome-session";
+      default = "startplasma-wayland";
       description = "Command to start the desktop session, e.g., 'startplasma-wayland', 'gnome-session' or 'gamescope-session'.";
     };
     logoutCommand = lib.mkOption {
       type = lib.types.str;
-      default = "gnome-session-quit --logout --no-prompt"; # "qdbus org.kde.Shutdown /Shutdown logout";
+      #default = "gnome-session-quit --logout --no-prompt"; # "qdbus org.kde.Shutdown /Shutdown logout";
+      #default = "qdbus org.kde.Shutdown /Shutdown logout";
+      default = "sudo systemctl restart display-manager"; # can be used for all sessions, but needs elevation
       description = "Command to log out of the desktop session, e.g., 'qdbus org.kde.Shutdown /Shutdown logout'.";
     };
     enableHDR = lib.mkOption {
@@ -53,8 +56,7 @@ in
       '')
       (pkgs.writeShellScriptBin "gamescope-session" ''
         #!/bin/bash
-        # gamescope -r 240 -w 3840 -h 2160 -W 3840 -H 2160 -O HDMI-A-1 --mangoapp --rt --immediate-flips --force-grab-cursor --hdr-enabled --adaptive-sync -e -- steam -steamdeck -steamos3 -pipewire-dmabuf
-        # gamescope -r 240 -w 3840 -h 2160 -W 3840 -H 2160 -O HDMI-A-1 --mangoapp --rt --immediate-flips --force-grab-cursor --hdr-enabled --adaptive-sync --backend sdl --steam -- steam -tenfoot -steamos3 -pipewire-dmabuf
+        # gamescope -- steam -steamdeck # run without -steamos3 in desktop mode first
         gamescope \
           ${lib.concatStringsSep " " (
             [
@@ -66,9 +68,9 @@ in
               "-H 2160"
               #"-O HDMI-A-1,DP-1"
               "--steam"
-              #"--rt"
-              #"--immediate-flips"
-              "--backend sdl"
+              # "--rt"
+              # "--immediate-flips"
+              # "--backend sdl" # gnome stuff
               "--force-grab-cursor"
             ]
             ++ lib.optionals cfg.enableHDR [
@@ -80,9 +82,9 @@ in
               "--"
               "steam"
               "-steamos3"
-              # "-steamdeck"
-              "-tenfoot"
-              "-gamepadui"
+              "-steamdeck"
+              #"-tenfoot"
+              #"-gamepadui"
               "-pipewire-dmabuf"
             ]
           )}
