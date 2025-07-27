@@ -61,21 +61,21 @@ in
           ${lib.concatStringsSep " " (
             [
               "-r 240"
-              "--mangoapp"
               "-w 3840"
               "-h 2160"
               "-W 3840"
               "-H 2160"
-              #"-O HDMI-A-1,DP-1"
+              "-O HDMI-A-1,DP-1"
               "--steam"
-              # "--rt"
-              # "--immediate-flips"
-              # "--backend sdl" # gnome stuff
+              "--rt"
+              "--immediate-flips"
+              "--mangoapp"
               "--force-grab-cursor"
+              # "--backend sdl" # gnome 48 issue
             ]
             ++ lib.optionals cfg.enableHDR [
               "--hdr-enabled"
-              "--hdr-itm-enable"
+              #"--hdr-itm-enable"
             ]
             ++ lib.optionals cfg.enableVRR [ "--adaptive-sync" ]
             ++ [
@@ -83,14 +83,15 @@ in
               "steam"
               "-steamos3"
               "-steamdeck"
-              #"-tenfoot"
-              #"-gamepadui"
               "-pipewire-dmabuf"
             ]
           )}
       '')
       (pkgs.writeShellScriptBin "load-session" ''
         #!/bin/sh
+        # get parameter for session
+        session="$1"
+
         if [ -r $XDG_RUNTIME_DIR/switch-to-steam ]; then
           rm $XDG_RUNTIME_DIR/switch-to-steam
           exec gamescope-session
@@ -121,7 +122,7 @@ in
           [Desktop Entry]
           Name=SteamOS
           Comment=A digital distribution platform
-          Exec=load-session
+          Exec=load-session steam
           Type=Application
         '').overrideAttrs
           (_: {
@@ -133,7 +134,7 @@ in
         (pkgs.writeTextDir "share/wayland-sessions/plasma.desktop" ''
           [Desktop Entry]
           Name=Plasma
-          Exec=load-session
+          Exec=load-session plasma
           Type=Application
         '').overrideAttrs
           (_: {
@@ -145,7 +146,7 @@ in
         (pkgs.writeTextDir "share/wayland-sessions/gnome.desktop" ''
           [Desktop Entry]
           Name=Gnome
-          Exec=load-session
+          Exec=load-session gnome
           Type=Application
         '').overrideAttrs
           (_: {

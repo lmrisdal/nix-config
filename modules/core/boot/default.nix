@@ -53,9 +53,10 @@
       "nfs"
     ];
     extraModulePackages = with config.boot.kernelPackages; [ xpadneo ];
+    # connect xbox controller
     extraModprobeConfig = ''
       # connect xbox controller
-           options bluetooth disable_ertm=Y
+      options bluetooth disable_ertm=Y
     '';
   };
   environment.systemPackages = with pkgs; [ sbctl ];
