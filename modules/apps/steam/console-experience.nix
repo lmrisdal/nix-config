@@ -1,9 +1,9 @@
 {
   lib,
   config,
-  username,
   pkgs,
   inputs,
+  username,
   defaultSession,
   ...
 }:
@@ -15,16 +15,8 @@ in
     enable = lib.mkEnableOption "Enable Steam Console Experience in NixOS";
     desktopSession = lib.mkOption {
       type = lib.types.str;
-      #default = "gnome-session";
       default = "startplasma-wayland";
-      description = "Command to start the desktop session, e.g., 'startplasma-wayland', 'gnome-session' or 'gamescope-session'.";
-    };
-    logoutCommand = lib.mkOption {
-      type = lib.types.str;
-      #default = "gnome-session-quit --logout --no-prompt"; # "qdbus org.kde.Shutdown /Shutdown logout";
-      #default = "qdbus org.kde.Shutdown /Shutdown logout";
-      default = "sudo systemctl restart display-manager"; # can be used for all sessions, but needs elevation
-      description = "Command to log out of the desktop session, e.g., 'qdbus org.kde.Shutdown /Shutdown logout'.";
+      description = "Used as a fallback if something should go wrong. This should be 'startplasma-wayland', 'gnome-session', 'hyprland', 'sway' etc.";
     };
     enableHDR = lib.mkOption {
       type = lib.types.bool;
@@ -52,68 +44,87 @@ in
       (pkgs.writeShellScriptBin "switch-to-steamos" ''
         #!/bin/bash
         touch $XDG_RUNTIME_DIR/switch-to-steam
-        ${cfg.logoutCommand}
-      '')
-      (pkgs.writeShellScriptBin "gamescope-session" ''
-        #!/bin/bash
-        # gamescope -- steam -steamdeck # run without -steamos3 in desktop mode first
-        gamescope \
-          ${lib.concatStringsSep " " (
-            [
-              "-r 240"
-              "-w 3840"
-              "-h 2160"
-              "-W 3840"
-              "-H 2160"
-              "-O HDMI-A-1,DP-1"
-              "--steam"
-              "--rt"
-              "--immediate-flips"
-              "--mangoapp"
-              "--force-grab-cursor"
-              # "--backend sdl" # gnome 48 issue
-            ]
-            ++ lib.optionals cfg.enableHDR [
-              "--hdr-enabled"
-              #"--hdr-itm-enable"
-            ]
-            ++ lib.optionals cfg.enableVRR [ "--adaptive-sync" ]
-            ++ [
-              "--"
-              "steam"
-              "-steamos3"
-              "-steamdeck"
-              "-pipewire-dmabuf"
-            ]
-          )}
+        echo -e "\n[Autologin]\nRelogin=true" > /etc/sddm.conf.d/50-autologin.conf
+        sudo systemctl restart display-manager
+        # gnome-session-quit --logout --no-prompt qdbus org.kde.Shutdown /Shutdown logout
       '')
       (pkgs.writeShellScriptBin "load-session" ''
         #!/bin/sh
-        # get parameter for session
-        session="$1"
+        MAIN_SESSION="$1" # the session defined in the desktop file
+        STEAM_SESSION="steam-gamescope"
+        FALLBACK_SESSION="${cfg.desktopSession}"
 
         if [ -r $XDG_RUNTIME_DIR/switch-to-steam ]; then
           rm $XDG_RUNTIME_DIR/switch-to-steam
-          exec gamescope-session
+          exec $STEAM_SESSION
         elif [ -r $XDG_RUNTIME_DIR/switch-to-desktop ]; then
+          DESKTOP_SESSION=$(cat $XDG_RUNTIME_DIR/switch-to-desktop)
           rm $XDG_RUNTIME_DIR/switch-to-desktop
-          exec ${cfg.desktopSession}
-        else
-          if [ "${defaultSession}" = "steam" ]; then
-            exec gamescope-session
+          echo "Switching to session: $DESKTOP_SESSION"
+          if [ -z "$DESKTOP_SESSION" ]; then
+            echo "No desktop session specified, falling back to: $FALLBACK_SESSION"
+            exec $FALLBACK_SESSION
           else
-            exec ${cfg.desktopSession}
+            exec $DESKTOP_SESSION
           fi
+        elif [ -z "$MAIN_SESSION" ]; then
+          echo "No main session specified, falling back to: $FALLBACK_SESSION"
+          exec $FALLBACK_SESSION
+        else
+          exec $MAIN_SESSION
         fi
       '')
       (pkgs.writeShellScriptBin "steamos-session-select" ''
         #!/bin/bash
-        touch $XDG_RUNTIME_DIR/switch-to-desktop
+        echo "${cfg.desktopSession}" > $XDG_RUNTIME_DIR/switch-to-desktop
+        #sed -i 's/^Relogin=.*/Relogin=true/' /etc/sddm.conf.d/50-autologin.conf
+        echo -e "\n[Autologin]\nRelogin=true" > /etc/sddm.conf.d/50-autologin.conf
         steam -shutdown
+      '')
+      (pkgs.writeShellScriptBin "steamos-cleanup" ''
+        #!/bin/bash
+        # Remove autologin configuration when switching to desktop
+        rm /etc/sddm.conf.d/50-autologin.conf
+        rm $XDG_RUNTIME_DIR/switch-to-desktop
+        rm $XDG_RUNTIME_DIR/switch-to-steam
       '')
     ];
     programs.steam = {
-      gamescopeSession.enable = true;
+      gamescopeSession = {
+        enable = true;
+        env = {
+          ENABLE_HDR_WSI = if cfg.enableHDR then "1" else "0";
+          ENABLE_VRR = if cfg.enableVRR then "1" else "0";
+        };
+        args = lib.mkMerge [
+          [
+            "-r 240"
+            "-w 3840"
+            "-h 2160"
+            "-W 3840"
+            "-H 2160"
+            "-O HDMI-A-1,DP-1,*"
+            "--rt"
+            "--immediate-flips"
+            "--mangoapp"
+            "--force-grab-cursor"
+            # "--backend sdl" # gnome 48 issue
+          ]
+          (lib.mkIf cfg.enableHDR [
+            "--hdr-enabled"
+            "--hdr-itm-enable"
+          ])
+          (lib.mkIf cfg.enableVRR [
+            "--adaptive-sync"
+          ])
+        ];
+        steamArgs = [
+          "-steamos3" # run without -steamos3 in desktop mode first
+          "-steamdeck"
+          #"-gamepadui"
+          "-pipewire-dmabuf"
+        ];
+      };
     };
     services.displayManager.sessionPackages = lib.mkIf cfg.enable [
       (
@@ -122,7 +133,7 @@ in
           [Desktop Entry]
           Name=SteamOS
           Comment=A digital distribution platform
-          Exec=load-session steam
+          Exec=load-session steam-gamescope
           Type=Application
         '').overrideAttrs
           (_: {
@@ -134,7 +145,7 @@ in
         (pkgs.writeTextDir "share/wayland-sessions/plasma.desktop" ''
           [Desktop Entry]
           Name=Plasma
-          Exec=load-session plasma
+          Exec=load-session startplasma-wayland
           Type=Application
         '').overrideAttrs
           (_: {
@@ -146,7 +157,7 @@ in
         (pkgs.writeTextDir "share/wayland-sessions/gnome.desktop" ''
           [Desktop Entry]
           Name=Gnome
-          Exec=load-session gnome
+          Exec=load-session gnome-session
           Type=Application
         '').overrideAttrs
           (_: {
@@ -165,7 +176,18 @@ in
                 sha256 = "sha256-Lc5y6jzhrtQAicXnyrr+LrsE7Is/Xbg5UeO0Blisz8I=";
               };
             };
-            return-to-gaming-mode = {
+            steamos-cleanup = {
+              enable = cfg.enable;
+              text = ''
+                [Desktop Entry]
+                Name=SteamOS Cleanup
+                Exec=steamos-cleanup
+                Terminal=false
+                Type=Application
+              '';
+              target = "${config.xdg.configHome}/autostart/steamos-cleanup.desktop";
+            };
+            gaming-mode-desktop-shortcut = {
               enable = cfg.enable;
               text = ''
                 [Desktop Entry]

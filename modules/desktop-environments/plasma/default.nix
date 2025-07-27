@@ -27,7 +27,7 @@ in
       sddm = {
         enable = true;
         wayland.enable = true;
-        autoLogin.relogin = true;
+        # autoLogin.relogin = true;
       };
     };
     services.desktopManager = {
@@ -38,7 +38,22 @@ in
     environment.plasma6.excludePackages = with pkgs.kdePackages; [
       elisa
     ];
-
+    systemd.services.sddm-conf = {
+      wantedBy = [ "multi-user.target" ];
+      enable = true;
+      description = "Move SDDM configuration to /etc/sddm.conf.d so that we can override it later if needed (e.g. for autologin)";
+      serviceConfig = {
+        User = "root";
+        Group = "root";
+      };
+      script = ''
+        #!/bin/sh
+        mkdir -p /etc/sddm.conf.d
+        chmod 777 /etc/sddm.conf.d
+        cat /etc/sddm.conf > /etc/sddm.conf.d/01-system.conf
+        rm /etc/sddm.conf
+      '';
+    };
     home-manager.users.${username} =
       { pkgs, config, ... }:
       {
