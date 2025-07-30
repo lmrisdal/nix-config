@@ -27,7 +27,7 @@ in
       sddm = {
         enable = true;
         wayland.enable = true;
-        # autoLogin.relogin = true;
+        wayland.compositorCommand = "kwin";
       };
     };
     services.desktopManager = {

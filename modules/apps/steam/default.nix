@@ -57,6 +57,9 @@ in
         luxtorpeda
         inputs.chaotic.packages.${system}.proton-cachyos
         proton-ge-bin
+      ]; # https://github.com/NixOS/nixpkgs/issues/25444#issuecomment-1977416787
+      extraPackages = with pkgs; [
+        kdePackages.breeze
       ];
       localNetworkGameTransfers.openFirewall = true;
       protontricks.enable = true;

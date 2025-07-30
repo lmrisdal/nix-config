@@ -93,6 +93,7 @@ in
         ntfs3g
         nixfmt-rfc-style
         libdbusmenu
+        edid-decode
       ];
     };
 

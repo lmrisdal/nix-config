@@ -41,12 +41,15 @@ in
         #!/bin/bash
         exit 7;
       '')
+      (pkgs.writeShellScriptBin "set-relogin" ''
+        #!/bin/bash
+        echo -e "\n[Autologin]\nSession=${defaultSession}\nEnable=true\nRelogin=$1" > /etc/sddm.conf.d/50-autologin.conf
+      '')
       (pkgs.writeShellScriptBin "switch-to-steamos" ''
         #!/bin/bash
         touch $XDG_RUNTIME_DIR/switch-to-steam
-        echo -e "\n[Autologin]\nRelogin=true" > /etc/sddm.conf.d/50-autologin.conf
+        set-relogin true
         sudo systemctl restart display-manager
-        # gnome-session-quit --logout --no-prompt qdbus org.kde.Shutdown /Shutdown logout
       '')
       (pkgs.writeShellScriptBin "load-session" ''
         #!/bin/sh
@@ -77,8 +80,7 @@ in
       (pkgs.writeShellScriptBin "steamos-session-select" ''
         #!/bin/bash
         echo "${cfg.desktopSession}" > $XDG_RUNTIME_DIR/switch-to-desktop
-        #sed -i 's/^Relogin=.*/Relogin=true/' /etc/sddm.conf.d/50-autologin.conf
-        echo -e "\n[Autologin]\nRelogin=true" > /etc/sddm.conf.d/50-autologin.conf
+        set-relogin true
         steam -shutdown
       '')
       (pkgs.writeShellScriptBin "steamos-cleanup" ''
@@ -89,6 +91,42 @@ in
         rm $XDG_RUNTIME_DIR/switch-to-steam
       '')
     ];
+    security.sudo.extraRules = [
+      {
+        users = [ username ];
+        groups = [ 100 ];
+        commands = [
+          # Make it so we don't need root to switch to gaming mode
+          {
+            command = "/run/current-system/sw/bin/switch-to-steamos";
+            options = [
+              "SETENV"
+              "NOPASSWD"
+            ];
+          }
+        ];
+      }
+    ];
+
+    # Sets the default session at launch
+    systemd.services.set-session = {
+      wantedBy = [ "multi-user.target" ];
+      before = [ "display-manager.service" ];
+      enable = true;
+      serviceConfig = {
+        User = "root";
+        Group = "root";
+      };
+      path = [ "/run/current-system/sw" ];
+      script = ''
+        #!/bin/sh
+        displayProductName=$(edid-decode /sys/class/drm/card1-HDMI-A-1/edid | grep "Display Product Name" | cut -d"'" -f2)
+        if [[ "$displayProductName" == *"LG TV"* ]]; then
+          echo -e "\n[Autologin]\nSession=steam\nEnable=true" > /etc/sddm.conf.d/10-defaultsession.conf
+        fi
+      '';
+    };
+
     programs.steam = {
       gamescopeSession = {
         enable = true;
@@ -192,7 +230,7 @@ in
               text = ''
                 [Desktop Entry]
                 Name=Gaming Mode
-                Exec=switch-to-steamos
+                Exec=sudo switch-to-steamos
                 Icon=${config.xdg.configHome}/deckify/steam-gaming-return.png
                 Terminal=false
                 Type=Application
@@ -206,7 +244,7 @@ in
           gamingmode = {
             name = "Gaming Mode";
             genericName = "Gaming Mode";
-            exec = "switch-to-steamos";
+            exec = "sudo switch-to-steamos";
             terminal = false;
             categories = [
               "Application"
