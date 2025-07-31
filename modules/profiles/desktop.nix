@@ -23,6 +23,7 @@ in
     zen-browser.enable = true;
     ulauncher.enable = false;
     artifacts-credprovider.enable = true;
+    coolercontrol.enable = true;
 
     # System
     base.enable = true;

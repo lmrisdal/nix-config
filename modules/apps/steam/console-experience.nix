@@ -127,6 +127,34 @@ in
       '';
     };
 
+    # #!/bin/sh
+    # # Get the maximum width for 16:9 modes using xrandr
+    # xrandr --props | awk '/^[ ]*[0-9]+x[0-9]+[ ]+[0-9]+\.[0-9]+/ {
+    #   split($1, res, "x");
+    #   width=res[1]; height=res[2];
+    #   if (width/height == 16/9 && width > max) max=width
+    # } END { print max }'
+
+    # #!/bin/sh
+    # # Get the maximum height for 16:9 modes using xrandr
+    # xrandr --props | awk '/^[ ]*[0-9]+x[0-9]+[ ]+[0-9]+\.[0-9]+/ {
+    #   split($1, res, "x");
+    #   width=res[1]; height=res[2];
+    #   if (width/height == 16/9 && height > max) max=height
+    # } END { print max }'
+
+    # #!/bin/sh
+    # # Get the maximum refresh rate for 16:9 modes using xrandr, rounded to nearest integer
+    # xrandr --props | awk '
+    # /^[ ]*[0-9]+x[0-9]+[ ]+[0-9]+\.[0-9]+/ {
+    #   split($1, res, "x");
+    #   width=res[1]; height=res[2];
+    #   if (width/height == 16/9 && $2+0 > max) max=$2+0
+    # }
+    # END {
+    #   printf "%.0f\n", max
+    # }'
+
     programs.steam = {
       gamescopeSession = {
         enable = true;
@@ -225,19 +253,19 @@ in
               '';
               target = "${config.xdg.configHome}/autostart/steamos-cleanup.desktop";
             };
-            gaming-mode-desktop-shortcut = {
-              enable = cfg.enable;
-              text = ''
-                [Desktop Entry]
-                Name=Gaming Mode
-                Exec=sudo switch-to-steamos
-                Icon=${config.xdg.configHome}/deckify/steam-gaming-return.png
-                Terminal=false
-                Type=Application
-                StartupNotify=false"
-              '';
-              target = "/home/${username}/Desktop/Return_to_Gaming_Mode.desktop";
-            };
+            # gaming-mode-desktop-shortcut = {
+            #   enable = cfg.enable;
+            #   text = ''
+            #     [Desktop Entry]
+            #     Name=Gaming Mode
+            #     Exec=sudo switch-to-steamos
+            #     Icon=${config.xdg.configHome}/deckify/steam-gaming-return.png
+            #     Terminal=false
+            #     Type=Application
+            #     StartupNotify=false"
+            #   '';
+            #   target = "/home/${username}/Desktop/Return_to_Gaming_Mode.desktop";
+            # };
           };
         };
         xdg.desktopEntries = lib.mkIf cfg.enable {

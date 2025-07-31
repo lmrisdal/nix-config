@@ -26,5 +26,6 @@
     ./nero-umu
     ./fnm
     ./azure-artifacts-credprovider
+    ./coolercontrol
   ];
 }
