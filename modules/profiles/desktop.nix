@@ -218,19 +218,19 @@ in
           teams-for-linux
           emote
         ];
-        # xdg = {
-        #   desktopEntries = lib.mkIf cfg.enable {
-        #     servicebusexplorer = {
-        #       name = "Service Bus Explorer";
-        #       genericName = "Service Bus Explorer";
-        #       exec = "nero-umu --prefix \"default\" .prefixes/nero-umu/default/drive_c/ServiceBusExplorer-6.1.2/ServiceBusExplorer.exe";
-        #       terminal = false;
-        #       categories = [
-        #         "Application"
-        #       ];
-        #     };
-        #   };
-        # };
+        xdg = {
+          desktopEntries = lib.mkIf cfg.enable {
+            servicebusexplorer = {
+              name = "Service Bus Explorer";
+              genericName = "Service Bus Explorer";
+              exec = "nero-umu --prefix \"default\" .prefixes/nero-umu/default/drive_c/users/steamuser/AppData/Roaming/ServiceBusExplorer-6.1.2/ServiceBusExplorer.exe";
+              terminal = false;
+              categories = [
+                "Application"
+              ];
+            };
+          };
+        };
       };
   };
 }

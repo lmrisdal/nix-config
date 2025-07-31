@@ -20,9 +20,13 @@ in
     };
     enableHDR = lib.mkOption {
       type = lib.types.bool;
-      default = false;
+      default = true;
     };
     enableVRR = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+    };
+    enableDesktopShortcut = lib.mkOption {
       type = lib.types.bool;
       default = false;
     };
@@ -41,14 +45,15 @@ in
         #!/bin/bash
         exit 7;
       '')
-      (pkgs.writeShellScriptBin "set-relogin" ''
-        #!/bin/bash
-        echo -e "\n[Autologin]\nSession=${defaultSession}\nEnable=true\nRelogin=$1" > /etc/sddm.conf.d/50-autologin.conf
-      '')
       (pkgs.writeShellScriptBin "switch-to-steamos" ''
         #!/bin/bash
         touch $XDG_RUNTIME_DIR/switch-to-steam
-        set-relogin true
+        echo -e "\n[Autologin]\nRelogin=true" > /etc/sddm.conf.d/50-autologin.conf
+
+        sudo restart-displaymanager
+      '')
+      (pkgs.writeShellScriptBin "restart-displaymanager" ''
+        #!/bin/bash
         sudo systemctl restart display-manager
       '')
       (pkgs.writeShellScriptBin "load-session" ''
@@ -80,7 +85,6 @@ in
       (pkgs.writeShellScriptBin "steamos-session-select" ''
         #!/bin/bash
         echo "${cfg.desktopSession}" > $XDG_RUNTIME_DIR/switch-to-desktop
-        set-relogin true
         steam -shutdown
       '')
       (pkgs.writeShellScriptBin "steamos-cleanup" ''
@@ -94,11 +98,10 @@ in
     security.sudo.extraRules = [
       {
         users = [ username ];
-        groups = [ 100 ];
         commands = [
           # Make it so we don't need root to switch to gaming mode
           {
-            command = "/run/current-system/sw/bin/switch-to-steamos";
+            command = "/run/current-system/sw/bin/restart-displaymanager";
             options = [
               "SETENV"
               "NOPASSWD"
@@ -122,7 +125,7 @@ in
         #!/bin/sh
         displayProductName=$(edid-decode /sys/class/drm/card1-HDMI-A-1/edid | grep "Display Product Name" | cut -d"'" -f2)
         if [[ "$displayProductName" == *"LG TV"* ]]; then
-          echo -e "\n[Autologin]\nSession=steam\nEnable=true" > /etc/sddm.conf.d/10-defaultsession.conf
+          echo -e "\n[Autologin]\nSession=steam\nEnable=true" > /etc/sddm.conf.d/20-defaultsession.conf
         fi
       '';
     };
@@ -187,7 +190,7 @@ in
         steamArgs = [
           "-steamos3" # run without -steamos3 in desktop mode first
           "-steamdeck"
-          #"-gamepadui"
+          #"-tenfoot"
           "-pipewire-dmabuf"
         ];
       };
@@ -253,26 +256,26 @@ in
               '';
               target = "${config.xdg.configHome}/autostart/steamos-cleanup.desktop";
             };
-            # gaming-mode-desktop-shortcut = {
-            #   enable = cfg.enable;
-            #   text = ''
-            #     [Desktop Entry]
-            #     Name=Gaming Mode
-            #     Exec=sudo switch-to-steamos
-            #     Icon=${config.xdg.configHome}/deckify/steam-gaming-return.png
-            #     Terminal=false
-            #     Type=Application
-            #     StartupNotify=false"
-            #   '';
-            #   target = "/home/${username}/Desktop/Return_to_Gaming_Mode.desktop";
-            # };
+            gaming-mode-desktop-shortcut = {
+              enable = cfg.enableDesktopShortcut;
+              text = ''
+                [Desktop Entry]
+                Name=Gaming Mode
+                Exec=switch-to-steamos
+                Icon=${config.xdg.configHome}/deckify/steam-gaming-return.png
+                Terminal=false
+                Type=Application
+                StartupNotify=false"
+              '';
+              target = "/home/${username}/Desktop/Return_to_Gaming_Mode.desktop";
+            };
           };
         };
         xdg.desktopEntries = lib.mkIf cfg.enable {
           gamingmode = {
             name = "Gaming Mode";
             genericName = "Gaming Mode";
-            exec = "sudo switch-to-steamos";
+            exec = "switch-to-steamos";
             terminal = false;
             categories = [
               "Application"

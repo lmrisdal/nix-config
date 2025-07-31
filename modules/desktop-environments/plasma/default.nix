@@ -28,6 +28,7 @@ in
         enable = true;
         wayland.enable = true;
         wayland.compositorCommand = "kwin";
+        autoLogin.relogin = false;
       };
     };
     services.desktopManager = {
@@ -50,7 +51,7 @@ in
         #!/bin/sh
         mkdir -p /etc/sddm.conf.d
         chmod 777 /etc/sddm.conf.d
-        cat /etc/sddm.conf > /etc/sddm.conf.d/01-system.conf
+        cat /etc/sddm.conf > /etc/sddm.conf.d/10-system.conf
         rm /etc/sddm.conf
       '';
     };
