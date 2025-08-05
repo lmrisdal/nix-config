@@ -31,8 +31,26 @@
       rectangle
       spotify
       azure-functions-core-tools
-      #azure-artifacts-credprovider
+      chatgpt
+      google-chrome
+      syncthing
     ];
+  };
+
+  launchd = {
+    user = {
+      agents = {
+        syncthing = {
+          command = "${pkgs.syncthing}/bin/syncthing";
+          serviceConfig = {
+            KeepAlive = true;
+            RunAtLoad = true;
+            StandardOutPath = "/tmp/syncthing_lars.out.log";
+            StandardErrorPath = "/tmp/syncthing_lars.err.log";
+          };
+        };
+      };
+    };
   };
 
   homebrew = {
@@ -41,6 +59,9 @@
       upgrade = false;
       cleanup = "zap";
     };
+    brews = [
+      "azure-cli"
+    ];
     casks = [
       "linearmouse"
       "visual-studio-code"
@@ -48,15 +69,17 @@
       "zen"
       "pearcleaner"
       "redis-insight"
+      "warp"
+      "parallels"
+      "alt-tab"
+      "rustdesk"
     ];
     masApps = {
       "1Password for Safari" = 1569813296;
       "Tailscale" = 1475387142;
       "Wireguard" = 1451685025;
+      "Adobe Lightroom" = 1451544217;
     };
-    brews = [
-      "azure-cli"
-    ];
   };
 
   nix = {
@@ -86,14 +109,14 @@
   system = {
     primaryUser = "${username}";
     stateVersion = 6;
-    activationScripts.postActivation.text = ''
-      /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
-    '';
+    # activationScripts.postActivation.text = ''
+    #   /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+    # '';
     defaults = {
       dock.autohide = false;
       dock.show-recents = false;
+      trackpad.TrackpadThreeFingerDrag = true;
+      trackpad.Clicking = true;
     };
   };
 }
-
-# sudo darwin-rebuild switch --flake ~/.config/nix-config
