@@ -26,6 +26,7 @@ in
         ...
       }:
       {
+        home.sessionPath = [ "$HOME/.npm-global/bin" ];
         programs.zsh = {
           enable = true;
           autosuggestion.enable = true;
