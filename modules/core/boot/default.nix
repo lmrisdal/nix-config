@@ -5,7 +5,6 @@
   ...
 }:
 {
-
   boot = {
     consoleLogLevel = 0;
     initrd = {
@@ -37,11 +36,16 @@
         efiSysMountPoint = "/boot";
       };
       systemd-boot = {
-        enable = true;
+        enable = lib.mkForce false;
+        # enable = true;
         editor = false;
         #edk2-uefi-shell.enable = true; # Needed to find the Windows efiDeviceHandle (map-c and e.g. ls HB0b:\ and look for 'Microsoft')
       };
       timeout = 4;
+    };
+    lanzaboote = {
+      enable = true;
+      pkiBundle = "/var/lib/sbctl";
     };
     plymouth.enable = true;
     supportedFilesystems = [

@@ -39,6 +39,10 @@
       url = "github:zshzoo/cd-ls";
       flake = false;
     };
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.4.2";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     darwin = {
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -137,6 +141,7 @@
               inputs.nur.modules.nixos.default
               inputs.impermanence.nixosModules.impermanence
               inputs.ucodenix.nixosModules.default
+              inputs.lanzaboote.nixosModules.lanzaboote
               home-manager.nixosModules.home-manager
               {
                 home-manager = {
