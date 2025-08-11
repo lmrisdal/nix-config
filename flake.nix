@@ -48,6 +48,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+    nix-index-database = {
+      url = "github:Mic92/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     {
@@ -133,9 +137,9 @@
             };
             modules = [
               ./hosts/desktop
-              inputs.chaotic.nixosModules.default
-              inputs.disko.nixosModules.disko
               ./hosts/desktop/disko.nix
+              inputs.disko.nixosModules.disko
+              inputs.chaotic.nixosModules.default
               inputs.just-one-more-repo.nixosModules.default
               inputs.nix-flatpak.nixosModules.nix-flatpak
               inputs.nur.modules.nixos.default
@@ -165,6 +169,7 @@
                     nix-flatpak.homeManagerModules.nix-flatpak
                     nur.modules.homeManager.default
                     wayland-pipewire-idle-inhibit.homeModules.default
+                    nix-index-database.homeModules.nix-index
                   ];
                 };
               }

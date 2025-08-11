@@ -16,47 +16,20 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    # Custom modules
     # Apps
     onepassword.enable = true;
-    # atuin.enable = true;
-    # bash.enable = true;
-    # bat.enable = true;
-    # boxxy.enable = true;
-    # btop.enable = true;
     direnv.enable = true;
-    # distrobox.enable = true;
     fastfetch.enable = true;
-    # fd.enable = true;
+    fd.enable = true;
     fzf.enable = true;
     git.enable = true;
-    # gpg.enable = true;
-    # helix.enable = true;
+    gpg.enable = true;
     home-managerConfig.enable = true;
-    # jujutsu.enable = true;
-    # keyd.enable = false;
-    # lazydocker.enable = true;
-    # lazygit.enable = true;
-    # lazysql.enable = true;
-    # lsd.enable = true;
-    # mullvad.enable = true;
-    # navi.enable = true;
-    # nh.enable = true;
-    # nix-ld.enable = true;
-    # nix-index.enable = true;
-    # nushell.enable = true;
-    # nvim.enable = true;
-    # pay-respects.enable = true;
-    # rclone.enable = true;
-    # ripgrep.enable = true;
+    keyd.enable = false;
+    nix-index.enable = true;
     ssh.enable = true;
     starship.enable = true;
-    # tailscale.enable = true;
-    # tealdeer.enable = true;
-    # television.enable = true;
-    # topgrade.enable = true;
-    # yazi.enable = true;
-    # yt-dlp.enable = true;
+    tailscale.enable = true;
     zoxide.enable = true;
     zsh.enable = true;
     spotify.enable = true;
@@ -64,7 +37,6 @@ in
     # System
     flatpak.enable = true;
     fonts.enable = true;
-    # hardening.enable = true;
     mounts.enable = true;
     networking.enable = true;
     nixConfig.enable = true;

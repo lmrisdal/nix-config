@@ -30,5 +30,10 @@
     ./rofi
     ./kitty
     ./ghostty
+    ./keyd
+    ./fd
+    ./gpg
+    ./nix-index
+    ./tailscale
   ];
 }
