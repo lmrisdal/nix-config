@@ -19,9 +19,11 @@ in
   };
   config = lib.mkIf cfg.enable {
     # vscode.enable = true;
-    # kitty.enable = true;
+    kitty.enable = true;
+    ghostty.enable = true;
     zen-browser.enable = true;
     ulauncher.enable = false;
+    rofi.enable = true;
     artifacts-credprovider.enable = true;
     coolercontrol.enable = true;
 
@@ -29,7 +31,6 @@ in
     base.enable = true;
     plasma.enable = true;
     gnome.enable = false;
-    # office.enable = true;
 
     boot = {
       binfmt = {
@@ -217,6 +218,7 @@ in
           libreoffice-qt
           teams-for-linux
           emote
+          google-chrome
         ];
         xdg = {
           desktopEntries = lib.mkIf cfg.enable {

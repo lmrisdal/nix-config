@@ -36,6 +36,7 @@
         efiSysMountPoint = "/boot";
       };
       systemd-boot = {
+        configurationLimit = 5;
         enable = lib.mkForce false;
         # enable = true;
         editor = false;
@@ -57,10 +58,10 @@
       "nfs"
     ];
     extraModulePackages = with config.boot.kernelPackages; [ xpadneo ];
-    # connect xbox controller
+    # bluetooth disable_ertm=Y = connect xbox controller at boot
     extraModprobeConfig = ''
-      # connect xbox controller
       options bluetooth disable_ertm=Y
+      options hid_apple fnmode=0
     '';
   };
   environment.systemPackages = with pkgs; [ sbctl ];

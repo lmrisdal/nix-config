@@ -94,6 +94,7 @@ in
         nixfmt-rfc-style
         libdbusmenu
         edid-decode
+        lsof
       ];
     };
 

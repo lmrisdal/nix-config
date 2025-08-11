@@ -27,7 +27,7 @@ in
               [Desktop Entry]
               Name=ulauncher
               Comment=ulauncher Service
-              Exec=ulauncher
+              Exec=ulauncher --hide-window
               StartupNotify=false
               Terminal=false
               Type=Application

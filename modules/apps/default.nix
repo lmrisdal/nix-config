@@ -27,5 +27,8 @@
     ./fnm
     ./azure-artifacts-credprovider
     ./coolercontrol
+    ./rofi
+    ./kitty
+    ./ghostty
   ];
 }

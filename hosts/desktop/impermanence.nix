@@ -6,7 +6,6 @@
         directories = [
           "/etc/NetworkManager/system-connections"
           "/etc/opensnitchd"
-          # "/etc/secureboot"
           "/etc/wireguard"
           "/etc/1password"
           "/var/db/sudo/lectured"
