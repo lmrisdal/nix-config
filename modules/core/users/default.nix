@@ -39,6 +39,7 @@ in
             "uinput"
             "video"
             "wheel"
+            "bluetooth"
           ];
         };
       };

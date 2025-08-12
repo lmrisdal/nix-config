@@ -67,6 +67,7 @@ in
         libdbusmenu
         edid-decode
         lsof
+        #kairpods.packages.${system}.default
       ];
     };
 

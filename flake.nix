@@ -11,6 +11,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak";
+    kairpods.url = "github:bartvdbraak/kAirPods";
     impermanence.url = "github:nix-community/impermanence";
     ucodenix.url = "github:e-tho/ucodenix";
     just-one-more-repo = {

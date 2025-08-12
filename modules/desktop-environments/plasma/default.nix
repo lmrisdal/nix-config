@@ -3,12 +3,17 @@
   config,
   services,
   username,
+  inputs,
   defaultSession ? "plasma",
   pkgs,
   ...
 }:
 let
   cfg = config.plasma;
+  customWallpaper = pkgs.fetchurl {
+    url = "https://w.wallhaven.cc/full/2y/wallhaven-2y2wg6.png";
+    sha256 = "9c5a0d7e4ed8fc218a5adb1c384e463b1b212397859a9a56be1c47cce27a9820";
+  };
 in
 {
   options = {
@@ -29,6 +34,9 @@ in
         wayland.enable = true;
         wayland.compositorCommand = "kwin";
         autoLogin.relogin = false;
+        settings = {
+          Theme.Font = "SF Pro";
+        };
       };
     };
     services.desktopManager = {
@@ -36,10 +44,18 @@ in
         enable = true;
       };
     };
-    environment.systemPackages = with pkgs; [
-      kdePackages.sddm-kcm
-      kde-rounded-corners
-    ];
+    environment.systemPackages =
+      with pkgs;
+      with inputs;
+      [
+        kdePackages.sddm-kcm
+        kde-rounded-corners
+        kwin-effects-forceblur.packages.${system}.default
+        # (pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''
+        #   [General]
+        #   background=${customWallpaper}
+        # '')
+      ];
     environment.plasma6.excludePackages = with pkgs.kdePackages; [
       elisa
     ];
