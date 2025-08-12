@@ -36,6 +36,10 @@ in
         enable = true;
       };
     };
+    environment.systemPackages = with pkgs; [
+      kdePackages.sddm-kcm
+      kde-rounded-corners
+    ];
     environment.plasma6.excludePackages = with pkgs.kdePackages; [
       elisa
     ];

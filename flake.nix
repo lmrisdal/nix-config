@@ -52,6 +52,15 @@
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # KDE
+    kwin-effects-forceblur = {
+      url = "github:taj-ny/kwin-effects-forceblur";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    kwin-effects-kinetic = {
+      url = "github:gurrgur/kwin-effects-kinetic";
+      flake = false;
+    };
   };
   outputs =
     {

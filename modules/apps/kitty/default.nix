@@ -21,6 +21,7 @@ in
         programs.kitty = {
           enable = true;
           settings = {
+            # Appearance
             macos_option_as_alt = "left";
             bold_font = "auto";
             italic_font = "auto";
@@ -72,8 +73,8 @@ in
             color16 = "#ff966c";
             color17 = "#c53b53";
 
-            # shortcuts
-
+            # behavior
+            open_url_with = "default";
           };
           extraConfig = ''
             map ctrl+t new_tab
@@ -85,6 +86,11 @@ in
           shellIntegration.enableZshIntegration = true;
           shellIntegration.enableFishIntegration = true;
           shellIntegration.enableBashIntegration = true;
+        };
+        programs.zsh = {
+          shellAliases = {
+            ssh = "kitty +kitten ssh";
+          };
         };
       };
   };

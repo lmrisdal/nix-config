@@ -110,6 +110,7 @@ in
           teams-for-linux
           emote
           google-chrome
+          azure-cli
         ];
         xdg = {
           desktopEntries = lib.mkIf cfg.enable {
