@@ -128,7 +128,7 @@
         let
           fullname = "Lars Risdal";
           username = "lars";
-          defaultSession = "plasma"; # gnome, plasma, steam
+          defaultSession = "hyprland-uwsm"; # gnome, plasma, steam
         in
         {
           nixos = nixpkgs.lib.nixosSystem {

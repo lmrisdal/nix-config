@@ -29,8 +29,9 @@ in
 
     # System
     base.enable = true;
-    plasma.enable = true;
+    plasma.enable = false;
     gnome.enable = false;
+    hyprland.enable = true;
 
     boot = {
       binfmt = {

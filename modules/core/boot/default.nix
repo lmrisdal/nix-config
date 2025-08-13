@@ -61,7 +61,7 @@
     # bluetooth disable_ertm=Y = connect xbox controller at boot
     extraModprobeConfig = ''
       options bluetooth disable_ertm=Y
-      options hid_apple fnmode=0
+      options hid_apple fnmode=1
     '';
   };
   environment.systemPackages = with pkgs; [ sbctl ];
