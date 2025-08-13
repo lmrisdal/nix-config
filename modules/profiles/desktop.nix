@@ -104,7 +104,7 @@ in
           vscode.fhs
           dotnetCorePackages.sdk_8_0_3xx
           nodejs_24
-          discord
+          discord-canary
           gearlever
           libreoffice-qt
           rustdesk-flutter

@@ -102,6 +102,7 @@ in
     environment.sessionVariables.WLR_NO_HARDWARE_CURSORS = "1";
     home-manager.users.${username} = {
       services.swayosd.enable = true;
+      # wayland.windowManager.hyprland.enable = true;
     };
     services.keyd = {
       enable = false;
