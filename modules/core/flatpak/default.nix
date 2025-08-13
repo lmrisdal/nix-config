@@ -37,10 +37,6 @@ in
       config.common.default = "*";
       wlr.enable = true;
       enable = true;
-      extraPortals = with pkgs; [
-        kdePackages.xdg-desktop-portal-kde
-        xdg-desktop-portal-gtk
-      ];
     };
 
     home-manager.users.${username} =

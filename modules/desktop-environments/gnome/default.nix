@@ -18,6 +18,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    xdg.portal = {
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-gtk
+      ];
+    };
     services = {
       desktopManager.gnome = {
         enable = true;

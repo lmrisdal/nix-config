@@ -23,6 +23,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    xdg.portal = {
+      extraPortals = with pkgs; [
+        kdePackages.xdg-desktop-portal-kde
+        xdg-desktop-portal-gtk
+      ];
+    };
     services.displayManager = {
       defaultSession = "${defaultSession}";
       autoLogin = {

@@ -9,7 +9,7 @@
 let
   cfg = config.hyprland;
   custom-sddm-astronaut = pkgs.sddm-astronaut.override {
-    embeddedTheme = "hyprland_kath";
+    embeddedTheme = "jake_the_dog";
     themeConfig = {
       AllowUppercaseLettersInUsernames = "true";
     };
@@ -92,6 +92,8 @@ in
       pw-volume
       custom-sddm-astronaut
       kdePackages.qtmultimedia
+      grim
+      slurp
     ];
     programs.hyprland.enable = true;
     programs.hyprland.withUWSM = true;
@@ -100,11 +102,6 @@ in
     environment.sessionVariables.WLR_NO_HARDWARE_CURSORS = "1";
     home-manager.users.${username} = {
       services.swayosd.enable = true;
-      systemd.user.services.swayosd = {
-        Install.WantedBy = [ "hyprland-session.target" ];
-        Service.Restart = lib.mkForce "no";
-        Unit.BindsTo = [ "hyprland-session.target" ];
-      };
     };
     services.keyd = {
       enable = false;
