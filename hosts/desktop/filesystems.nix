@@ -42,18 +42,13 @@
 
   swapDevices = lib.mkForce [ ];
 
-  # fileSystems."/home/${username}/Games" = {
-  #   depends = [ "/home" ];
-  #   device = "/dev/disk/by-id/nvme-eui.00000000000000000026b76870ed12c5-part2";
-  #   fsType = "ntfs";
-  #   options = [
-  #     "uid=1000"
-  #     "gid=100"
-  #     "rw"
-  #     "user"
-  #     "exec"
-  #     "umask=000"
-  #   ];
-  #   neededForBoot = false;
-  # };
+  fileSystems."/home/${username}/Games" = {
+    depends = [ "/home" ];
+    device = "/dev/disk/by-uuid/4361f6a9-6cc2-45c5-b347-9982a949b959";
+    fsType = "btrfs";
+    options = [
+      "compress=zstd:1"
+    ];
+    neededForBoot = false;
+  };
 }
