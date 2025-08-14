@@ -1,0 +1,117 @@
+{
+  "layer": "top",
+  "position": "top",
+  "modules-left": [
+    "cpu",
+    "custom/space",
+    "memory",
+    "custom/space",
+    "temperature"
+  ],
+  "modules-center": ["hyprland/workspaces"],
+  "modules-right": [
+    "mpris",
+    "tray",
+    "custom/space",
+    "idle_inhibitor",
+    "pulseaudio#mic",
+    "pulseaudio#audio",
+    "pulseaudio/slider",
+    "clock"
+  ],
+
+  "custom/space": {
+    // "format": "┃ {}",
+    "format": "| {}",
+    "on-click": "~/.config/hypr/scripts/Rofi-launcher.sh"
+  },
+
+  "cpu": {
+    "format": "󰻠 {usage}%",
+    "format-alt": "󰻠 {avg_frequency} GHz",
+    "interval": 5
+  },
+
+  "memory": {
+    "format": "󰍛 {}%",
+    "format-alt": "󰍛 {used}/{total} GiB",
+    "interval": 5
+  },
+
+  "temperature": {
+    "format": " {temperatureC}°C"
+  },
+
+  "tray": {
+    "icon-size": 20,
+    "spacing": 10
+  },
+
+  "clock": {
+    "timezone": "Europe/Oslo",
+    "format": "{:%a %b %d | %H:%M}",
+    "on-click": "~/.config/eww/scripts/toggle_control_center.sh"
+  },
+
+  "hyprland/workspaces": {
+    "active-only": false,
+    "all-outputs": true,
+    "disable-scroll": false,
+    "on-scroll-up": "hyprctl dispatch workspace -1",
+    "on-scroll-down": "hyprctl dispatch workspace +1",
+    "format": "{icon}",
+    "on-click": "activate"
+    // "format-icons": {
+    //   "urgent": "",
+    //   "active": "",
+    //   "default": "󰧞",
+    //   "sort-by-number": true
+    // }
+  },
+
+  "hyprland/window": {
+    "separate-outputs": true
+  },
+
+  "mpris": {
+    "image-size": 64,
+    "image-radius": 12,
+    "blur": false
+  },
+
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "",
+      "deactivated": ""
+    }
+  },
+
+  "pulseaudio#audio": {
+    "format": "{icon} {volume}",
+    "format-bluetooth-muted": "󰟎",
+    "format-muted": "󰸈",
+    "format-icons": {
+      "headphone": "",
+      "default": ""
+    },
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-",
+    "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%+ -l 1",
+    "tooltip": true
+  },
+  "pulseaudio#mic": {
+    "format": "{format_source}",
+    "format-source": " {volume}",
+    "format-source-muted": "",
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 1%-",
+    "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 1%+ -l 1",
+    "tooltip": true
+  },
+  "pulseaudio/slider": {
+    "min": 0,
+    "max": 100,
+    "orientation": "horizontal"
+  }
+}
