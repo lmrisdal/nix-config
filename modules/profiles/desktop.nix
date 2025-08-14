@@ -26,6 +26,7 @@ in
     rofi.enable = true;
     artifacts-credprovider.enable = true;
     coolercontrol.enable = true;
+    vesktop.enable = true;
 
     # System
     base.enable = true;
@@ -104,7 +105,6 @@ in
           vscode.fhs
           dotnetCorePackages.sdk_8_0_3xx
           nodejs_24
-          discord-canary
           gearlever
           libreoffice-qt
           rustdesk-flutter

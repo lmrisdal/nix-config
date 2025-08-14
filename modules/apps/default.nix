@@ -35,5 +35,6 @@
     ./gpg
     ./nix-index
     ./tailscale
+    ./vesktop
   ];
 }

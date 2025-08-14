@@ -30,7 +30,7 @@ in
         programs.zsh = {
           enable = true;
           autosuggestion.enable = true;
-          dotDir = ".config/zsh";
+          dotDir = "${config.xdg.configHome}/zsh";
           enableCompletion = true;
           history = {
             path = "${config.xdg.dataHome}/zsh/zsh_history";

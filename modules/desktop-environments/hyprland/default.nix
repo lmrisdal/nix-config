@@ -33,6 +33,7 @@ in
     # };
     xdg.portal = {
       extraPortals = with pkgs; [
+        xdg-desktop-portal
         xdg-desktop-portal-hyprland
       ];
     };
@@ -94,8 +95,10 @@ in
       kdePackages.qtmultimedia
       grim
       slurp
+      networkmanagerapplet
     ];
     programs.hyprland.enable = true;
+    programs.hyprland.package = pkgs.hyprland;
     programs.hyprland.withUWSM = true;
     programs.waybar.enable = true;
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
