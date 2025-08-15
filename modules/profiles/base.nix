@@ -42,6 +42,7 @@ in
     nixConfig.enable = true;
     packages.enable = true;
     pipewire.enable = true;
+    secrets.enable = true;
     users.enable = true;
     virtualization.enable = true;
 
@@ -57,18 +58,6 @@ in
         zsh
       ];
       stub-ld.enable = true;
-      systemPackages = with pkgs; [
-        lm_sensors
-        pciutils
-        xdg-dbus-proxy
-        xdg-user-dirs
-        ntfs3g
-        nixfmt-rfc-style
-        libdbusmenu
-        edid-decode
-        lsof
-        #kairpods.packages.${system}.default
-      ];
     };
 
     i18n = {

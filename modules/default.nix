@@ -9,5 +9,8 @@
 
     # Profiles
     ./profiles
+
+    # Secrets
+    ../secrets
   ];
 }

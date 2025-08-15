@@ -1,9 +1,4 @@
 (final: prev: {
-  # gpu-screen-recorder = prev.callPackage ./gpu-screen-recorder { };
-  # gpu-screen-recorder-ui = prev.callPackage ./gpu-screen-recorder/ui { };
-  # gpu-screen-recorder-notification = prev.callPackage ./gpu-screen-recorder/notif { };
-  inter = prev.callPackage ./inter { };
-  klassy = prev.callPackage ./klassy { };
   moondeck-buddy = prev.callPackage ./moondeck-buddy { };
   plymouth = prev.plymouth.overrideAttrs (
     { src, ... }:

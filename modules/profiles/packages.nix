@@ -12,7 +12,7 @@ in
 {
   options = {
     packages = {
-      enable = lib.mkEnableOption "Enable packages in home-manager";
+      enable = lib.mkEnableOption "Enable misc NixOS and Home Manager packages";
     };
   };
   config = lib.mkIf cfg.enable {
@@ -24,6 +24,20 @@ in
           formatted = builtins.concatStringsSep "\n" sortedUnique;
         in
         formatted;
+      systemPackages = with pkgs; [
+        lm_sensors
+        pciutils
+        xdg-dbus-proxy
+        xdg-user-dirs
+        ntfs3g
+        nixfmt-rfc-style
+        libdbusmenu
+        edid-decode
+        lsof
+        killall
+        btop
+        #kairpods.packages.${system}.default
+      ];
     };
     programs = {
       appimage = {
@@ -66,10 +80,6 @@ in
           p7zip
           libnotify
           dig
-          ### Ansible ###
-          # ansible
-          # ansible-language-server
-          # ansible-lintx
         ];
       };
   };

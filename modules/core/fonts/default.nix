@@ -106,6 +106,8 @@ in
         (makeAppleFont "sf-arabic" "SF Arabic Fonts.pkg" fontSources.sf-arabic)
         (makeAppleFont "ny" "NY Fonts.pkg" fontSources.ny)
         appleColorEmoji
+        nerd-fonts.caskaydia-mono
+        cascadia-code
       ];
       fontconfig = {
         allowBitmaps = false;

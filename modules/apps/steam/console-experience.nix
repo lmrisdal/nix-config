@@ -47,44 +47,15 @@ in
       '')
       (pkgs.writeShellScriptBin "switch-to-steamos" ''
         #!/bin/bash
-        touch $XDG_RUNTIME_DIR/switch-to-steam
-        echo -e "\n[Autologin]\nRelogin=true" > /etc/sddm.conf.d/50-autologin.conf
-
+        echo -e "\n[Autologin]\nRelogin=true\nSession=steam" > /etc/sddm.conf.d/50-autologin.conf
         sudo restart-displaymanager
       '')
       (pkgs.writeShellScriptBin "restart-displaymanager" ''
         #!/bin/bash
         sudo systemctl restart display-manager
       '')
-      (pkgs.writeShellScriptBin "load-session" ''
-        #!/bin/sh
-        MAIN_SESSION="$1" # the session defined in the desktop file
-        STEAM_SESSION="steam-gamescope"
-        FALLBACK_SESSION="${cfg.desktopSession}"
-
-        if [ -r $XDG_RUNTIME_DIR/switch-to-steam ]; then
-          rm $XDG_RUNTIME_DIR/switch-to-steam
-          exec $STEAM_SESSION
-        elif [ -r $XDG_RUNTIME_DIR/switch-to-desktop ]; then
-          DESKTOP_SESSION=$(cat $XDG_RUNTIME_DIR/switch-to-desktop)
-          rm $XDG_RUNTIME_DIR/switch-to-desktop
-          echo "Switching to session: $DESKTOP_SESSION"
-          if [ -z "$DESKTOP_SESSION" ]; then
-            echo "No desktop session specified, falling back to: $FALLBACK_SESSION"
-            exec $FALLBACK_SESSION
-          else
-            exec $DESKTOP_SESSION
-          fi
-        elif [ -z "$MAIN_SESSION" ]; then
-          echo "No main session specified, falling back to: $FALLBACK_SESSION"
-          exec $FALLBACK_SESSION
-        else
-          exec $MAIN_SESSION
-        fi
-      '')
       (pkgs.writeShellScriptBin "steamos-session-select" ''
         #!/bin/bash
-        echo "${cfg.desktopSession}" > $XDG_RUNTIME_DIR/switch-to-desktop
         steam -shutdown
       '')
       (pkgs.writeShellScriptBin "steamos-cleanup" ''
@@ -94,12 +65,63 @@ in
         rm $XDG_RUNTIME_DIR/switch-to-desktop
         rm $XDG_RUNTIME_DIR/switch-to-steam
       '')
+
+      # #!/bin/sh
+      # # Get the maximum width for 16:9 modes using xrandr
+      # xrandr --props | awk '/^[ ]*[0-9]+x[0-9]+[ ]+[0-9]+\.[0-9]+/ {
+      #   split($1, res, "x");
+      #   width=res[1]; height=res[2];
+      #   if (width/height == 16/9 && width > max) max=width
+      # } END { print max }'
+
+      # #!/bin/sh
+      # # Get the maximum height for 16:9 modes using xrandr
+      # xrandr --props | awk '/^[ ]*[0-9]+x[0-9]+[ ]+[0-9]+\.[0-9]+/ {
+      #   split($1, res, "x");
+      #   width=res[1]; height=res[2];
+      #   if (width/height == 16/9 && height > max) max=height
+      # } END { print max }'
+
+      # #!/bin/sh
+      # # Get the maximum refresh rate for 16:9 modes using xrandr, rounded to nearest integer
+      # xrandr --props | awk '
+      # /^[ ]*[0-9]+x[0-9]+[ ]+[0-9]+\.[0-9]+/ {
+      #   split($1, res, "x");
+      #   width=res[1]; height=res[2];
+      #   if (width/height == 16/9 && $2+0 > max) max=$2+0
+      # }
+      # END {
+      #   printf "%.0f\n", max
+      # }'
+
+      # TODO: Get display info into gamescope-session
+
+      (pkgs.writeShellScriptBin "gamescope-session" ''
+        #!/bin/bash
+        echo -e "\n[Autologin]\nRelogin=true\nSession=${defaultSession}" > /etc/sddm.conf.d/50-autologin.conf
+        export ENABLE_HDR_WSI=1
+        export ENABLE_VRR=1
+        gamescope \
+          --steam \
+          -r 240 \
+          -w 3840 -h 2160 \
+          -W 3840 -H 2160 \
+          -O HDMI-A-1,DP-1,* \
+          --rt \
+          --immediate-flips \
+          --mangoapp \
+          --force-grab-cursor \
+          --hdr-enabled \
+          --hdr-itm-enable \
+          --adaptive-sync \
+          -- steam -steamos3 -steamdeck -pipewire-dmabuf # run without -steamos3 from terminal first
+      '')
     ];
     security.sudo.extraRules = [
       {
         users = [ username ];
         commands = [
-          # Make it so we don't need root to switch to gaming mode
+          # Make it so we don't need to elevate to switch to gaming mode
           {
             command = "/run/current-system/sw/bin/restart-displaymanager";
             options = [
@@ -130,69 +152,9 @@ in
       '';
     };
 
-    # #!/bin/sh
-    # # Get the maximum width for 16:9 modes using xrandr
-    # xrandr --props | awk '/^[ ]*[0-9]+x[0-9]+[ ]+[0-9]+\.[0-9]+/ {
-    #   split($1, res, "x");
-    #   width=res[1]; height=res[2];
-    #   if (width/height == 16/9 && width > max) max=width
-    # } END { print max }'
-
-    # #!/bin/sh
-    # # Get the maximum height for 16:9 modes using xrandr
-    # xrandr --props | awk '/^[ ]*[0-9]+x[0-9]+[ ]+[0-9]+\.[0-9]+/ {
-    #   split($1, res, "x");
-    #   width=res[1]; height=res[2];
-    #   if (width/height == 16/9 && height > max) max=height
-    # } END { print max }'
-
-    # #!/bin/sh
-    # # Get the maximum refresh rate for 16:9 modes using xrandr, rounded to nearest integer
-    # xrandr --props | awk '
-    # /^[ ]*[0-9]+x[0-9]+[ ]+[0-9]+\.[0-9]+/ {
-    #   split($1, res, "x");
-    #   width=res[1]; height=res[2];
-    #   if (width/height == 16/9 && $2+0 > max) max=$2+0
-    # }
-    # END {
-    #   printf "%.0f\n", max
-    # }'
-
     programs.steam = {
       gamescopeSession = {
         enable = true;
-        env = {
-          ENABLE_HDR_WSI = if cfg.enableHDR then "1" else "0";
-          ENABLE_VRR = if cfg.enableVRR then "1" else "0";
-        };
-        args = lib.mkMerge [
-          [
-            "-r 240"
-            "-w 3840"
-            "-h 2160"
-            "-W 3840"
-            "-H 2160"
-            "-O HDMI-A-1,DP-1,*"
-            "--rt"
-            "--immediate-flips"
-            "--mangoapp"
-            "--force-grab-cursor"
-            # "--backend sdl" # gnome 48 issue
-          ]
-          (lib.mkIf cfg.enableHDR [
-            "--hdr-enabled"
-            "--hdr-itm-enable"
-          ])
-          (lib.mkIf cfg.enableVRR [
-            "--adaptive-sync"
-          ])
-        ];
-        steamArgs = [
-          "-steamos3" # run without -steamos3 in desktop mode first
-          "-steamdeck"
-          #"-tenfoot"
-          "-pipewire-dmabuf"
-        ];
       };
     };
     services.displayManager.sessionPackages = lib.mkIf cfg.enable [
@@ -202,35 +164,11 @@ in
           [Desktop Entry]
           Name=SteamOS
           Comment=A digital distribution platform
-          Exec=load-session steam-gamescope
+          Exec=gamescope-session
           Type=Application
         '').overrideAttrs
           (_: {
             passthru.providedSessions = [ "steam" ];
-          })
-      )
-      (
-        # Override the plasma.desktop file to use the gamescope-session script
-        (pkgs.writeTextDir "share/wayland-sessions/plasma.desktop" ''
-          [Desktop Entry]
-          Name=Plasma
-          Exec=load-session startplasma-wayland
-          Type=Application
-        '').overrideAttrs
-          (_: {
-            passthru.providedSessions = [ "plasma" ];
-          })
-      )
-      (
-        # Override the gnome.desktop file to use the gamescope-session script
-        (pkgs.writeTextDir "share/wayland-sessions/gnome.desktop" ''
-          [Desktop Entry]
-          Name=Gnome
-          Exec=load-session gnome-session
-          Type=Application
-        '').overrideAttrs
-          (_: {
-            passthru.providedSessions = [ "gnome" ];
           })
       )
     ];

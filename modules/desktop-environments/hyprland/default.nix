@@ -22,6 +22,8 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
+    hyprpanel.enable = true;
+
     xdg.portal = {
       extraPortals = with pkgs; [
         xdg-desktop-portal
@@ -78,6 +80,7 @@ in
       kdePackages.xwaylandvideobridge
       kdePackages.dolphin
       kdePackages.qt6ct
+      kdePackages.ark
       libsForQt5.qt5ct
       glib
       gsettings-desktop-schemas
@@ -96,10 +99,26 @@ in
     programs.hyprland.enable = true;
     programs.hyprland.package = pkgs.hyprland;
     programs.hyprland.withUWSM = true;
-    programs.waybar.enable = true;
+    #programs.waybar.enable = true;
     programs.dconf.enable = true;
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
     environment.sessionVariables.WLR_NO_HARDWARE_CURSORS = "1";
+    systemd.services.sddm-conf = {
+      wantedBy = [ "multi-user.target" ];
+      enable = true;
+      description = "Move SDDM configuration to /etc/sddm.conf.d so that we can override it later if needed (e.g. for autologin)";
+      serviceConfig = {
+        User = "root";
+        Group = "root";
+      };
+      script = ''
+        #!/bin/sh
+        mkdir -p /etc/sddm.conf.d
+        chmod 777 /etc/sddm.conf.d
+        cat /etc/sddm.conf > /etc/sddm.conf.d/10-system.conf
+        rm /etc/sddm.conf
+      '';
+    };
     home-manager.users.${username} =
       {
         inputs,
@@ -107,7 +126,6 @@ in
         ...
       }:
       {
-        dconf.enable = true;
         gtk = {
           enable = true;
         };
@@ -115,29 +133,35 @@ in
         programs.wlogout = {
           enable = true;
           layout = [
-            # {
-            #   label = "lock";
-            #   action = "hyprlock";
-            #   text = "Lock";
-            #   keybind = "l";
-            # }
+            {
+              label = "logout";
+              action = "loginctl kill-user $(whoami)";
+              text = "Logout";
+              # keybind = "l";
+            }
+            {
+              label = "lock";
+              action = "hyprlock";
+              text = "Lock";
+              # keybind = "x";
+            }
             {
               label = "sleep";
               action = "systemctl suspend";
               text = "Sleep";
-              keybind = "s";
+              # keybind = "s";
             }
             {
               label = "reboot";
               action = "systemctl reboot";
               text = "Reboot";
-              keybind = "r";
+              # keybind = "r";
             }
             {
               label = "shutdown";
               action = "shutdown now";
               text = "Shutdown";
-              keybind = "p";
+              # keybind = "p";
             }
           ];
         };
@@ -147,49 +171,6 @@ in
           enableBashIntegration = true;
           enableFishIntegration = true;
         };
-        # wayland.windowManager.hyprland.enable = true;
       };
-    services.keyd = {
-      enable = false;
-      keyboards = {
-        default = {
-          ids = [ "*" ]; # what goes into the [id] section, here we select all keyboard
-          # extraConfig = builtins.readFile /home/deftdawg/source/meta-mac/keyd/kde-mac-keyboard.conf; # use includes when debugging, easier to edit in vscode
-          extraConfig = ''
-            [main]
-            # Use the 'leftmeta' key as the new "Cmd" key, activating the 'meta_mac' layer
-            leftmeta = layer(meta_mac)
-            rightmeta = rightalt
-
-            # Optional: Ensure 'leftalt' retains its default behavior (usually not necessary)
-            # leftalt = leftalt
-
-            # The 'meta_mac' modifier layer; inherits from the 'Ctrl' modifier layer
-            [meta_mac:C]
-            # Copy
-            c = C-insert
-            # Paste
-            v = S-insert
-            # Cut
-            x = S-delete
-            # Move cursor to the beginning of the line
-            left = home
-            # Move cursor to the end of the line
-            right = end
-
-            # # As soon as 'tab' is pressed (but not yet released), switch to the 'app_switch_state' overlay
-            # # Send a 'M-tab' key tap before entering 'app_switch_state'
-            # tab = swapm(app_switch_state, M-tab)
-
-            # # 'app_switch_state' modifier layer; inherits from the 'Meta' modifier layer
-            # [app_switch_state:M]
-
-            # # Meta-Tab: Switch to the next application
-            # tab = M-tab
-            # right = M-tab
-          '';
-        };
-      };
-    };
   };
 }

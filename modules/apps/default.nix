@@ -36,5 +36,6 @@
     ./nix-index
     ./tailscale
     ./vesktop
+    ./hyprpanel
   ];
 }

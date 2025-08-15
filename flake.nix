@@ -6,6 +6,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -145,22 +149,22 @@
                 gaming = true;
               };
             };
-            modules = [
+            modules = with inputs; [
               ./hosts/desktop
               ./hosts/desktop/disko.nix
-              inputs.disko.nixosModules.disko
-              inputs.chaotic.nixosModules.default
-              inputs.just-one-more-repo.nixosModules.default
-              inputs.nix-flatpak.nixosModules.nix-flatpak
-              inputs.nur.modules.nixos.default
-              inputs.impermanence.nixosModules.impermanence
-              inputs.ucodenix.nixosModules.default
-              inputs.lanzaboote.nixosModules.lanzaboote
+              disko.nixosModules.disko
+              chaotic.nixosModules.default
+              just-one-more-repo.nixosModules.default
+              nix-flatpak.nixosModules.nix-flatpak
+              nur.modules.nixos.default
+              impermanence.nixosModules.impermanence
+              ucodenix.nixosModules.default
+              lanzaboote.nixosModules.lanzaboote
+              sops-nix.nixosModules.sops
               home-manager.nixosModules.home-manager
               {
                 home-manager = {
                   backupFileExtension = "hmbackup";
-                  #useGlobalPkgs = true;
                   useUserPackages = true;
                   extraSpecialArgs = {
                     inherit inputs; # Experiment with config and other attributes
@@ -179,6 +183,7 @@
                     nix-flatpak.homeManagerModules.nix-flatpak
                     nur.modules.homeManager.default
                     wayland-pipewire-idle-inhibit.homeModules.default
+                    sops-nix.homeManagerModules.sops
                     nix-index-database.homeModules.nix-index
                   ];
                 };
