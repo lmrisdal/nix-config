@@ -49,27 +49,27 @@ in
       ddcutil # control monitor brightness
       brightnessctl # control monitor brightness
       kdePackages.xwaylandvideobridge
-      kdePackages.dolphin
-      kdePackages.qt6ct
-      kdePackages.ark
-      libsForQt5.qt5ct
-      glib
-      gsettings-desktop-schemas
+      # kdePackages.dolphin
+      # kdePackages.qt6ct
+      # kdePackages.ark
+      # libsForQt5.qt5ct
+      # glib
+      # gsettings-desktop-schemas
       gnome-control-center
-      nwg-look
+      # nwg-look
       swaynotificationcenter
       rose-pine-cursor
       rose-pine-hyprcursor
-      kdePackages.qtmultimedia
-      grim
-      slurp
+      # kdePackages.qtmultimedia
+      # grim
+      # slurp
       networkmanagerapplet
       hyprpolkitagent
-      nemo-with-extensions
-      nemo-fileroller
-      nemo-preview
-      yad
-      wl-clipboard
+      nemo-with-extensions # file manager
+      nemo-fileroller # archive manager
+      nemo-preview # image preview
+      yad # dialog utility
+      wl-clipboard # clipboard utils
     ];
     programs.hyprland.enable = true;
     programs.hyprland.package = pkgs.hyprland;
