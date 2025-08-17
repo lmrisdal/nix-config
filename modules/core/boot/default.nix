@@ -43,7 +43,7 @@
         editor = false;
         #edk2-uefi-shell.enable = true; # Needed to find the Windows efiDeviceHandle (map-c and e.g. ls HB0b:\ and look for 'Microsoft')
       };
-      timeout = lib.mkDefault 10;
+      timeout = lib.mkDefault 0;
     };
     lanzaboote = {
       enable = true;

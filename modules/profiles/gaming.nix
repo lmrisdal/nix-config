@@ -29,7 +29,7 @@ in
     steam.enable = true;
     consoleExperience.enable = true;
     vkbasalt.enable = true;
-    # sunshine.enable = true;
+    sunshine.enable = true;
 
     boot = {
       kernelModules = [

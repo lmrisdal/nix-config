@@ -36,7 +36,6 @@ in
         lsof
         killall
         btop
-        #kairpods.packages.${system}.default
       ];
     };
     programs = {

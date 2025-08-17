@@ -91,7 +91,7 @@ in
       enable = true;
       mouse = {
         scrollMethod = "button";
-        scrollButton = 2; # middle button
+        scrollButton = 2;
       };
     };
 

@@ -106,6 +106,9 @@ in
             steamcmd
           ];
         };
+        services.flatpak.packages = [
+          "io.github.Foldex.AdwSteamGtk"
+        ];
       };
   };
 }

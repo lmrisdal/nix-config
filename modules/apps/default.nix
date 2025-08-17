@@ -41,5 +41,6 @@
     ./wlogout
     ./sddm
     ./vicinae
+    ./sunshine
   ];
 }

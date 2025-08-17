@@ -4,6 +4,7 @@
   pkgs,
   username,
   defaultSession,
+  inputs,
   ...
 }:
 let
@@ -24,6 +25,7 @@ in
     xdg.portal = {
       extraPortals = with pkgs; [
         xdg-desktop-portal
+        xdg-desktop-portal-gtk
         xdg-desktop-portal-hyprland
       ];
     };
@@ -41,7 +43,7 @@ in
       zathura # pdf viewer
       mpv # media player
       imv # image viewer
-      overskride # bluetooth
+      blueberry # bluetooth
       pavucontrol # volume control
       nautilus # file manager
       ddcutil # control monitor brightness
@@ -67,6 +69,7 @@ in
       nemo-fileroller
       nemo-preview
       yad
+      wl-clipboard
     ];
     programs.hyprland.enable = true;
     programs.hyprland.package = pkgs.hyprland;

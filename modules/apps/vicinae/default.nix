@@ -11,11 +11,11 @@ let
   cfg = config.vicinae;
   vicinae = pkgs.stdenv.mkDerivation rec {
     pname = "vicinae";
-    version = "0.1.0";
+    version = "0.1.1";
 
     src = pkgs.fetchurl {
       url = "https://github.com/vicinaehq/vicinae/releases/download/v${version}/vicinae-linux-x86_64-v${version}.tar.gz";
-      sha256 = "sha256-HYynXER3KUtMbhHJMMtzAICPsWfQXC3ck2gqQX2AQD0=";
+      sha256 = "sha256-FX0N0VsWNEOcTTeCCzjGYcxL0uUmcchUBDfQ5dXGVfs=";
     };
 
     nativeBuildInputs = with pkgs; [
@@ -93,25 +93,25 @@ in
       home.packages = [ cfg.vicinae ];
 
       # https://docs.vicinae.com/theming#creating-a-custom-theme
-      home.file.".config/vicinae/themes/custom.json" = {
+      home.file.".config/vicinae/themes/catpuccin.json" = {
         text = builtins.toJSON {
           version = "1.0.0";
           appearance = "dark";
           icon = "";
-          name = "Custom Theme";
+          name = "Catppuccin";
           description = "Theme generated from NixOS defaults colorScheme";
-          # palette = {
-          #   background = "#${nixosConfig.defaults.colorScheme.palette.base01}";
-          #   foreground = "#${nixosConfig.defaults.colorScheme.palette.base05}";
-          #   blue = "#${nixosConfig.defaults.colorScheme.palette.base0D}";
-          #   green = "#${nixosConfig.defaults.colorScheme.palette.base0B}";
-          #   magenta = "#${nixosConfig.defaults.colorScheme.palette.base0E}";
-          #   orange = "#${nixosConfig.defaults.colorScheme.palette.base09}";
-          #   purple = "#${nixosConfig.defaults.colorScheme.palette.base0F}";
-          #   red = "#${nixosConfig.defaults.colorScheme.palette.base08}";
-          #   yellow = "#${nixosConfig.defaults.colorScheme.palette.base0A}";
-          #   cyan = "#${nixosConfig.defaults.colorScheme.palette.base0C}";
-          # };
+          palette = {
+            background = "#1E1E2E";
+            foreground = "#CDD6F4";
+            blue = "#89B4FA";
+            green = "#A6E3A1";
+            magenta = "#F5C2E7";
+            orange = "#FAB387";
+            purple = "#CBA6F7";
+            red = "#F38BA8";
+            yellow = "#F9E2AF";
+            cyan = "#94E2D5";
+          };
         };
       };
       systemd.user.services.vicinae = {
