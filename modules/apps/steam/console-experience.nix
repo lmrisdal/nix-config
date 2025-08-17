@@ -65,47 +65,31 @@ in
         rm $XDG_RUNTIME_DIR/switch-to-desktop
         rm $XDG_RUNTIME_DIR/switch-to-steam
       '')
-
-      # #!/bin/sh
-      # # Get the maximum width for 16:9 modes using xrandr
-      # xrandr --props | awk '/^[ ]*[0-9]+x[0-9]+[ ]+[0-9]+\.[0-9]+/ {
-      #   split($1, res, "x");
-      #   width=res[1]; height=res[2];
-      #   if (width/height == 16/9 && width > max) max=width
-      # } END { print max }'
-
-      # #!/bin/sh
-      # # Get the maximum height for 16:9 modes using xrandr
-      # xrandr --props | awk '/^[ ]*[0-9]+x[0-9]+[ ]+[0-9]+\.[0-9]+/ {
-      #   split($1, res, "x");
-      #   width=res[1]; height=res[2];
-      #   if (width/height == 16/9 && height > max) max=height
-      # } END { print max }'
-
-      # #!/bin/sh
-      # # Get the maximum refresh rate for 16:9 modes using xrandr, rounded to nearest integer
-      # xrandr --props | awk '
-      # /^[ ]*[0-9]+x[0-9]+[ ]+[0-9]+\.[0-9]+/ {
-      #   split($1, res, "x");
-      #   width=res[1]; height=res[2];
-      #   if (width/height == 16/9 && $2+0 > max) max=$2+0
-      # }
-      # END {
-      #   printf "%.0f\n", max
-      # }'
-
-      # TODO: Get display info into gamescope-session
-
+      (pkgs.writeShellScriptBin "get-screen-width" ''
+        #!/bin/bash
+        echo $(edid-decode /sys/class/drm/card1-HDMI-A-1/edid | grep -oP '\b\d+x\d+\b' | cut -dx -f1 | sort -n | tail -1)
+      '')
+      (pkgs.writeShellScriptBin "get-screen-height" ''
+        #!/bin/bash
+        echo $(edid-decode /sys/class/drm/card1-HDMI-A-1/edid | grep -oP '[0-9]{3,5}x[0-9]{3,5}' | cut -dx -f2 | sort -n | tail -1)
+      '')
+      (pkgs.writeShellScriptBin "get-screen-refresh-rate" ''
+        #!/bin/bash
+        echo $(edid-decode /sys/class/drm/card1-HDMI-A-1/edid | grep "Maximum Refresh Rate" | cut -d"'" -f2 | awk '{print $4}')
+      '')
       (pkgs.writeShellScriptBin "gamescope-session" ''
         #!/bin/bash
         echo -e "\n[Autologin]\nRelogin=true\nSession=${defaultSession}" > /etc/sddm.conf.d/50-autologin.conf
         export ENABLE_HDR_WSI=1
         export ENABLE_VRR=1
+        width=$(get-screen-width)
+        height=$(get-screen-height)
+        refresh_rate=$(get-screen-refresh-rate)
         gamescope \
           --steam \
-          -r 240 \
-          -w 3840 -h 2160 \
-          -W 3840 -H 2160 \
+          -r $refresh_rate \
+          -w $width -h $height \
+          -W $width -H $height \
           -O HDMI-A-1,DP-1,* \
           --rt \
           --immediate-flips \
@@ -133,7 +117,7 @@ in
       }
     ];
 
-    # Sets the default session at launch
+    # Boot to SteamOS when connected to my LG TV
     systemd.services.set-session = {
       wantedBy = [ "multi-user.target" ];
       before = [ "display-manager.service" ];
@@ -177,7 +161,7 @@ in
       {
         home = {
           file = {
-            "${config.xdg.configHome}/deckify/steam-gaming-return.png" = lib.mkIf cfg.enable {
+            "${config.xdg.configHome}/icons/steam-gaming-return.png" = lib.mkIf cfg.enable {
               source = pkgs.fetchurl {
                 url = "https://raw.githubusercontent.com/unlbslk/arch-deckify/refs/heads/main/icons/steam-gaming-return.png";
                 sha256 = "sha256-Lc5y6jzhrtQAicXnyrr+LrsE7Is/Xbg5UeO0Blisz8I=";
@@ -200,7 +184,7 @@ in
                 [Desktop Entry]
                 Name=Gaming Mode
                 Exec=switch-to-steamos
-                Icon=${config.xdg.configHome}/deckify/steam-gaming-return.png
+                Icon=${config.xdg.configHome}/icons/steam-gaming-return.png
                 Terminal=false
                 Type=Application
                 StartupNotify=false"
@@ -211,15 +195,15 @@ in
         };
         xdg.desktopEntries = lib.mkIf cfg.enable {
           gamingmode = {
-            name = "Gaming Mode";
-            genericName = "Gaming Mode";
+            name = "Switch to Gaming Mode";
+            genericName = "Switch to Gaming Mode";
             exec = "switch-to-steamos";
             terminal = false;
             categories = [
               "Application"
               "Network"
             ];
-            icon = "${config.xdg.configHome}/deckify/steam-gaming-return.png";
+            icon = "${config.xdg.configHome}/icons/steam-gaming-return.png";
           };
         };
       };

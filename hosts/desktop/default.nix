@@ -42,17 +42,17 @@
       "amd_pstate=guided"
       "microcode.amd_sha_check=off"
     ];
-    loader = {
-      systemd-boot = {
-        windows = {
-          "11" = {
-            title = "Windows 11";
-            efiDeviceHandle = "HD0b";
-            sortKey = "z_windows";
-          };
-        };
-      };
-    };
+    # loader = {
+    #   systemd-boot = {
+    #     windows = {
+    #       "11" = {
+    #         title = "Windows 11";
+    #         efiDeviceHandle = "HD0b";
+    #         sortKey = "z_windows";
+    #       };
+    #     };
+    #   };
+    # };
     tmp.tmpfsSize = "100%";
     extraModprobeConfig =
       "options nvidia "

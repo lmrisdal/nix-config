@@ -8,12 +8,6 @@
 }:
 let
   cfg = config.hyprland;
-  custom-sddm-astronaut = pkgs.sddm-astronaut.override {
-    embeddedTheme = "jake_the_dog";
-    themeConfig = {
-      AllowUppercaseLettersInUsernames = "true";
-    };
-  };
 in
 {
   options = {
@@ -22,7 +16,10 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
+    sddm.enable = true;
     hyprpanel.enable = true;
+    hyprlock.enable = true;
+    wlogout.enable = true;
 
     xdg.portal = {
       extraPortals = with pkgs; [
@@ -30,40 +27,12 @@ in
         xdg-desktop-portal-hyprland
       ];
     };
-    services.displayManager = {
-      defaultSession = "${defaultSession}";
-      autoLogin = {
-        enable = true;
-        user = username;
-      };
-      sddm = {
-        enable = true;
-        wayland.enable = true;
-        package = pkgs.kdePackages.sddm;
-        enableHidpi = true;
-        theme = "sddm-astronaut-theme";
-        settings = {
-          Theme = {
-            Current = "sddm-astronaut-theme";
-            CursorTheme = "rose-pine-cursor";
-            CursorSize = 24;
-            Font = "SF Pro";
-          };
-        };
-        extraPackages = with pkgs; [
-          custom-sddm-astronaut
-        ];
-        autoLogin.relogin = false;
-      };
-    };
     services.dbus.enable = true;
     services.playerctld.enable = true;
     environment.systemPackages = with pkgs; [
       pyprland # plugin system
       hyprpicker # color picker
       hyprcursor # cursor format
-      hyprlock # lock screen
-      hyprpolkitagent # polkit agent
       hypridle # idle daemon
       hyprpaper # wallpaper util
       swww # wallpaper util
@@ -89,12 +58,15 @@ in
       swaynotificationcenter
       rose-pine-cursor
       rose-pine-hyprcursor
-      pw-volume
-      custom-sddm-astronaut
       kdePackages.qtmultimedia
       grim
       slurp
       networkmanagerapplet
+      hyprpolkitagent
+      nemo-with-extensions
+      nemo-fileroller
+      nemo-preview
+      yad
     ];
     programs.hyprland.enable = true;
     programs.hyprland.package = pkgs.hyprland;
@@ -103,22 +75,6 @@ in
     programs.dconf.enable = true;
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
     environment.sessionVariables.WLR_NO_HARDWARE_CURSORS = "1";
-    systemd.services.sddm-conf = {
-      wantedBy = [ "multi-user.target" ];
-      enable = true;
-      description = "Move SDDM configuration to /etc/sddm.conf.d so that we can override it later if needed (e.g. for autologin)";
-      serviceConfig = {
-        User = "root";
-        Group = "root";
-      };
-      script = ''
-        #!/bin/sh
-        mkdir -p /etc/sddm.conf.d
-        chmod 777 /etc/sddm.conf.d
-        cat /etc/sddm.conf > /etc/sddm.conf.d/10-system.conf
-        rm /etc/sddm.conf
-      '';
-    };
     home-manager.users.${username} =
       {
         inputs,
@@ -128,42 +84,21 @@ in
       {
         gtk = {
           enable = true;
+          theme = {
+            name = "Adwaita-dark";
+            package = pkgs.gnome-themes-extra;
+          };
+          gtk3.extraConfig.gtk-application-prefer-dark-theme = 1;
+          gtk4.extraConfig.gtk-application-prefer-dark-theme = 1;
         };
-        services.swayosd.enable = true;
-        programs.wlogout = {
+        qt = {
           enable = true;
-          layout = [
-            {
-              label = "logout";
-              action = "loginctl kill-user $(whoami)";
-              text = "Logout";
-              # keybind = "l";
-            }
-            {
-              label = "lock";
-              action = "hyprlock";
-              text = "Lock";
-              # keybind = "x";
-            }
-            {
-              label = "sleep";
-              action = "systemctl suspend";
-              text = "Sleep";
-              # keybind = "s";
-            }
-            {
-              label = "reboot";
-              action = "systemctl reboot";
-              text = "Reboot";
-              # keybind = "r";
-            }
-            {
-              label = "shutdown";
-              action = "shutdown now";
-              text = "Shutdown";
-              # keybind = "p";
-            }
-          ];
+          style = {
+            name = "adwaita-dark";
+          };
+        };
+        dconf.settings = {
+          "org/gnome/desktop/interface".color-scheme = "prefer-dark";
         };
         programs.eww = {
           enable = true;

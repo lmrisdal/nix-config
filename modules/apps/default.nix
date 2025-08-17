@@ -37,5 +37,9 @@
     ./tailscale
     ./vesktop
     ./hyprpanel
+    ./hyprlock
+    ./wlogout
+    ./sddm
+    ./vicinae
   ];
 }
