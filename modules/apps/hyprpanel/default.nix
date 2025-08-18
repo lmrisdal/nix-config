@@ -21,6 +21,7 @@ in
       {
         programs.hyprpanel = {
           enable = true;
+          # systemd.enable = true;
           settings = {
             bar = {
               launcher.autoDetectIcon = true;
@@ -29,15 +30,18 @@ in
             };
             layout = {
               bar.layouts = {
-                "0" = {
+                "*" = {
                   left = [
                     "dashboard"
+                    "workspaces"
+                    "ram"
+                    "cpu"
+                    "cputemp"
                   ];
                   middle = [
-                    "workspaces"
+                    "media"
                   ];
                   right = [
-                    "media"
                     "volume"
                     "systray"
                     "notifications"
@@ -89,6 +93,9 @@ in
                 margin_bottom = "-5px";
                 buttons.radius = "10px";
                 outer_spacing = "0.4em";
+                clock = {
+                  format = "%a %b %d  %I:%M %p";
+                };
               };
               font = {
                 name = "SF Pro";

@@ -36,6 +36,7 @@ in
         lsof
         killall
         btop
+        cmatrix
       ];
     };
     programs = {

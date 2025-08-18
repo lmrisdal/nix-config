@@ -19,6 +19,7 @@ in
       };
       useDHCP = lib.mkDefault true;
       wireguard.enable = true;
+      # wireless.iwd.enable = true;
     };
   };
 }

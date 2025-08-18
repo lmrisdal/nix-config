@@ -29,7 +29,7 @@ in
     steam.enable = true;
     consoleExperience.enable = true;
     vkbasalt.enable = true;
-    sunshine.enable = true;
+    #sunshine.enable = true;
 
     boot = {
       kernelModules = [
@@ -288,7 +288,7 @@ in
         home = {
           file =
             let
-              primaryscreen = "HDMI-1";
+              primaryscreen = "HDMI-A-1";
             in
             {
               desktop-entry-dxvk =

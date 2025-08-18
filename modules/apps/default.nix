@@ -42,5 +42,6 @@
     ./sddm
     ./vicinae
     ./sunshine
+    ./hypridle
   ];
 }

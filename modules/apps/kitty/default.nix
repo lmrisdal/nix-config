@@ -37,6 +37,7 @@ in
             url_color = "#4fd6be";
             cursor = "#c8d3f5";
             cursor_text_color = "#222436";
+            confirm_os_window_close = "0";
 
             # Tabs
             active_tab_background = "#82aaff";

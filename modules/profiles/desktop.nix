@@ -112,6 +112,7 @@ in
           teams-for-linux
           emote
           google-chrome
+          chromium
           azure-cli
         ];
         xdg = {

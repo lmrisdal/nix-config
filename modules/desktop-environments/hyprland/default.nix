@@ -20,12 +20,12 @@ in
     sddm.enable = true;
     hyprpanel.enable = true;
     hyprlock.enable = true;
-    wlogout.enable = true;
+    hypridle.enable = true;
+    wlogout.enable = false;
 
     xdg.portal = {
       extraPortals = with pkgs; [
         xdg-desktop-portal
-        xdg-desktop-portal-gtk
         xdg-desktop-portal-hyprland
       ];
     };
@@ -35,7 +35,6 @@ in
       pyprland # plugin system
       hyprpicker # color picker
       hyprcursor # cursor format
-      hypridle # idle daemon
       hyprpaper # wallpaper util
       swww # wallpaper util
       hyprshot # screenshot util
@@ -44,26 +43,19 @@ in
       mpv # media player
       imv # image viewer
       blueberry # bluetooth
+      bluetui # bluetooth tui
       pavucontrol # volume control
+      wiremix # volume control
       nautilus # file manager
       ddcutil # control monitor brightness
       brightnessctl # control monitor brightness
       kdePackages.xwaylandvideobridge
-      # kdePackages.dolphin
-      # kdePackages.qt6ct
-      # kdePackages.ark
-      # libsForQt5.qt5ct
-      # glib
-      # gsettings-desktop-schemas
-      gnome-control-center
-      # nwg-look
+      gnome-control-center # env XDG_CURRENT_DESKTOP=GNOME gnome-control-center
       swaynotificationcenter
       rose-pine-cursor
       rose-pine-hyprcursor
-      # kdePackages.qtmultimedia
-      # grim
-      # slurp
       networkmanagerapplet
+      #impala # wifi management
       hyprpolkitagent
       nemo-with-extensions # file manager
       nemo-fileroller # archive manager
