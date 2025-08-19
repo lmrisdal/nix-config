@@ -34,6 +34,9 @@
       chatgpt
       google-chrome
       syncthing
+      aerospace
+      kitty
+      autoraise
     ];
   };
 
@@ -113,7 +116,7 @@
     #   /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
     # '';
     defaults = {
-      dock.autohide = false;
+      dock.autohide = true;
       dock.show-recents = false;
       trackpad.TrackpadThreeFingerDrag = true;
       trackpad.Clicking = true;
