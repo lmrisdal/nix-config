@@ -10,10 +10,6 @@
 }:
 let
   cfg = config.plasma;
-  customWallpaper = pkgs.fetchurl {
-    url = "https://w.wallhaven.cc/full/2y/wallhaven-2y2wg6.png";
-    sha256 = "9c5a0d7e4ed8fc218a5adb1c384e463b1b212397859a9a56be1c47cce27a9820";
-  };
 in
 {
   options = {
@@ -29,22 +25,6 @@ in
         xdg-desktop-portal-gtk
       ];
     };
-    services.displayManager = {
-      defaultSession = "${defaultSession}";
-      autoLogin = {
-        enable = true;
-        user = username;
-      };
-      sddm = {
-        enable = true;
-        wayland.enable = true;
-        wayland.compositorCommand = "kwin";
-        autoLogin.relogin = false;
-        settings = {
-          Theme.Font = "SF Pro";
-        };
-      };
-    };
     services.desktopManager = {
       plasma6 = {
         enable = true;
@@ -57,30 +37,10 @@ in
         kdePackages.sddm-kcm
         kde-rounded-corners
         kwin-effects-forceblur.packages.${system}.default
-        # (pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''
-        #   [General]
-        #   background=${customWallpaper}
-        # '')
       ];
     environment.plasma6.excludePackages = with pkgs.kdePackages; [
       elisa
     ];
-    systemd.services.sddm-conf = {
-      wantedBy = [ "multi-user.target" ];
-      enable = true;
-      description = "Move SDDM configuration to /etc/sddm.conf.d so that we can override it later if needed (e.g. for autologin)";
-      serviceConfig = {
-        User = "root";
-        Group = "root";
-      };
-      script = ''
-        #!/bin/sh
-        mkdir -p /etc/sddm.conf.d
-        chmod 777 /etc/sddm.conf.d
-        cat /etc/sddm.conf > /etc/sddm.conf.d/10-system.conf
-        rm /etc/sddm.conf
-      '';
-    };
     home-manager.users.${username} =
       { pkgs, config, ... }:
       {

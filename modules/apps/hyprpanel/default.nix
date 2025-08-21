@@ -16,27 +16,32 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
+    # environment.systemPackages = with pkgs; [
+    #   hyprpanel
+    # ];
     home-manager.users.${username} =
       { config, pkgs, ... }:
       {
         programs.hyprpanel = {
           enable = true;
-          # systemd.enable = true;
+          systemd.enable = true;
           settings = {
             bar = {
               launcher.autoDetectIcon = true;
               workspaces.show_icons = true;
               scrollSpeed = 5;
-            };
-            layout = {
-              bar.layouts = {
+              clock = {
+                format = "%a %b %d  %H:%M";
+              };
+              layouts = {
                 "*" = {
                   left = [
                     "dashboard"
                     "workspaces"
-                    "ram"
-                    "cpu"
-                    "cputemp"
+                    "windowtitle"
+                    # "ram"
+                    # "cpu"
+                    # "cputemp"
                   ];
                   middle = [
                     "media"
@@ -44,6 +49,7 @@ in
                   right = [
                     "volume"
                     "systray"
+                    "clock"
                     "notifications"
                   ];
                 };
@@ -79,7 +85,7 @@ in
                     shortcut2.command = "flatpak run com.spotify.Client";
                     shortcut3.command = "vesktop";
                     shortcut3.tooltip = "Vesktop";
-                    shortcut4.command = "rofi -show drun -show-icons";
+                    shortcut4.command = "vicinae";
                   };
                 };
               };
@@ -93,9 +99,6 @@ in
                 margin_bottom = "-5px";
                 buttons.radius = "10px";
                 outer_spacing = "0.4em";
-                clock = {
-                  format = "%a %b %d  %I:%M %p";
-                };
               };
               font = {
                 name = "SF Pro";

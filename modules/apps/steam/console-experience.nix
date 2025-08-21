@@ -47,7 +47,7 @@ in
       '')
       (pkgs.writeShellScriptBin "switch-to-steamos" ''
         #!/bin/bash
-        echo -e "\n[Autologin]\nRelogin=true\nSession=steam" > /etc/sddm.conf.d/50-autologin.conf
+        echo -e "\n[Autologin]\nUser=${username}\nRelogin=true\nSession=steam" > /etc/sddm.conf.d/50-autologin.conf
         sudo restart-displaymanager
       '')
       (pkgs.writeShellScriptBin "restart-displaymanager" ''
@@ -65,21 +65,45 @@ in
         rm $XDG_RUNTIME_DIR/switch-to-desktop
         rm $XDG_RUNTIME_DIR/switch-to-steam
       '')
+      (pkgs.writeShellScriptBin "get-screen-device-name" ''
+        #!/bin/bash
+        echo $(edid-decode /sys/class/drm/card1-HDMI-A-1/edid | grep "Display Product Name" | cut -d"'" -f2)
+      '')
       (pkgs.writeShellScriptBin "get-screen-width" ''
         #!/bin/bash
-        echo $(edid-decode /sys/class/drm/card1-HDMI-A-1/edid | grep -oP '\b\d+x\d+\b' | cut -dx -f1 | sort -n | tail -1)
+        width=$(edid-decode /sys/class/drm/card1-HDMI-A-1/edid 2>/dev/null | grep -oP '\b\d+x\d+\b' | cut -dx -f1 | sort -n | tail -1)
+        if [[ -z "$width" || "$width" -eq 0 || "$width" -gt 3840 ]]; then
+          echo "3840"
+        else
+          echo "$width"
+        fi
       '')
       (pkgs.writeShellScriptBin "get-screen-height" ''
         #!/bin/bash
-        echo $(edid-decode /sys/class/drm/card1-HDMI-A-1/edid | grep -oP '[0-9]{3,5}x[0-9]{3,5}' | cut -dx -f2 | sort -n | tail -1)
+        height=$(edid-decode /sys/class/drm/card1-HDMI-A-1/edid 2>/dev/null | grep -oP '[0-9]{3,5}x[0-9]{3,5}' | cut -dx -f2 | sort -n | tail -1)
+        if [[ -z "$height" || "$height" -eq 0 ]]; then
+          echo "2160"
+        else
+          echo "$height"
+        fi
       '')
       (pkgs.writeShellScriptBin "get-screen-refresh-rate" ''
         #!/bin/bash
-        echo $(edid-decode /sys/class/drm/card1-HDMI-A-1/edid | grep "Maximum Refresh Rate" | cut -d"'" -f2 | awk '{print $4}')
+        device_name=$(get-screen-device-name)
+        if [[ "$device_name" == "LG TV SSCR2" ]]; then
+          echo "120"
+        else
+          refresh=$(edid-decode /sys/class/drm/card1-HDMI-A-1/edid 2>/dev/null | grep "Maximum Refresh Rate" | cut -d"'" -f2 | awk '{print $4}')
+          if [[ -z "$refresh" || "$refresh" -eq 0 ]]; then
+            echo "60"
+          else
+            echo "$refresh"
+          fi
+        fi
       '')
       (pkgs.writeShellScriptBin "gamescope-session" ''
         #!/bin/bash
-        echo -e "\n[Autologin]\nRelogin=true\nSession=${defaultSession}" > /etc/sddm.conf.d/50-autologin.conf
+        echo -e "\n[Autologin]\nUser=${username}\nRelogin=true\nSession=${defaultSession}" > /etc/sddm.conf.d/50-autologin.conf
         export ENABLE_HDR_WSI=1
         export ENABLE_VRR=1
         width=$(get-screen-width)
@@ -131,7 +155,7 @@ in
         #!/bin/sh
         displayProductName=$(edid-decode /sys/class/drm/card1-HDMI-A-1/edid | grep "Display Product Name" | cut -d"'" -f2)
         if [[ "$displayProductName" == *"LG TV"* ]]; then
-          echo -e "\n[Autologin]\nSession=steam\nEnable=true" > /etc/sddm.conf.d/20-defaultsession.conf
+          echo -e "\n[Autologin]\nUser=${username}\nSession=steam\nEnable=true" > /etc/sddm.conf.d/20-defaultsession.conf
         fi
       '';
     };

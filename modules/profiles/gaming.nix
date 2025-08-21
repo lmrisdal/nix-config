@@ -120,13 +120,6 @@ in
             '';
             destination = "/etc/udev/rules.d/30-zram.rules";
           })
-          (writeTextFile {
-            name = "40-logitech-g920.rules";
-            text = ''
-              ATTR{idVendor}=="046d", ATTR{idProduct}=="c261", RUN+="${usb-modeswitch}/bin/usb_modeswitch -c '/etc/usb_modeswitch.d/046d:c261'"
-            '';
-            destination = "/etc/udev/rules.d/40-logitech-g920.rules";
-          })
           # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/udev/rules.d/50-sata.rules
           (writeTextFile {
             name = "50-sata.rules";
@@ -246,6 +239,21 @@ in
               ATTRS{idVendor}=="054c", ATTRS{idProduct}=="0ce6", ENV{PULSE_IGNORE}="1", ENV{ACP_IGNORE}="1"
             '';
             destination = "/etc/udev/rules.d/51-disable-dualsense-sound-and-vibration.rules";
+          })
+          # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/udev/rules.d/71-nvidia.rules
+          (writeTextFile {
+            name = "71-nvidia.rules";
+            text = ''
+              # Enable runtime PM for NVIDIA VGA/3D controller devices on driver bind
+              ACTION=="add|bind", SUBSYSTEM=="pci", DRIVERS=="nvidia", \
+                  ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", \
+                  TEST=="power/control", ATTR{power/control}="auto"
+              # Disable runtime PM for NVIDIA VGA/3D controller devices on driver unbind
+              ACTION=="remove|unbind", SUBSYSTEM=="pci", DRIVERS=="nvidia", \
+                  ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", \
+                  TEST=="power/control", ATTR{power/control}="on"
+            '';
+            destination = "/etc/udev/rules.d/71-nvidia.rules";
           })
         ];
       };

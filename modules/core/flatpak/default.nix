@@ -34,8 +34,18 @@ in
     users.users.${username}.extraGroups = [ "flatpak" ];
 
     xdg.portal = {
-      config.common.default = "*";
-      wlr.enable = true;
+      config = {
+        common.default = [ "gtk" ]; # fallback
+        hyprland.default = [
+          "hyprland"
+          "gtk"
+        ];
+        plasma.default = [
+          "kde"
+          "gtk"
+        ];
+      };
+      #wlr.enable = true;
       enable = true;
     };
 
@@ -63,26 +73,25 @@ in
           overrides = {
             global = {
               Context = {
-                filesystems =
-                  [
-                    "/nix/store:ro"
-                    "/run/current-system/sw/bin:ro"
-                    "/run/media/${username}:ro"
-                    # Theming
-                    "${config.home.homeDirectory}/.icons:ro"
-                    "${config.home.homeDirectory}/.themes:ro"
-                    "xdg-config/fontconfig:ro"
-                    "xdg-config/gtkrc:ro"
-                    "xdg-config/gtkrc-2.0:ro"
-                    "xdg-config/gtk-2.0:ro"
-                    "xdg-config/gtk-3.0:ro"
-                    "xdg-config/gtk-4.0:ro"
-                    "xdg-data/themes:ro"
-                    "xdg-data/icons:ro"
-                  ]
-                  ++ lib.optionals vars.gaming [
-                    "xdg-run/discord-ipc-*"
-                  ];
+                filesystems = [
+                  "/nix/store:ro"
+                  "/run/current-system/sw/bin:ro"
+                  "/run/media/${username}:ro"
+                  # Theming
+                  "${config.home.homeDirectory}/.icons:ro"
+                  "${config.home.homeDirectory}/.themes:ro"
+                  "xdg-config/fontconfig:ro"
+                  "xdg-config/gtkrc:ro"
+                  "xdg-config/gtkrc-2.0:ro"
+                  "xdg-config/gtk-2.0:ro"
+                  "xdg-config/gtk-3.0:ro"
+                  "xdg-config/gtk-4.0:ro"
+                  "xdg-data/themes:ro"
+                  "xdg-data/icons:ro"
+                ]
+                ++ lib.optionals vars.gaming [
+                  "xdg-run/discord-ipc-*"
+                ];
               };
               Environment = {
                 # Wrong cursor in flatpaks fix

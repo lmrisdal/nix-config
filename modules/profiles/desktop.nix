@@ -31,9 +31,10 @@ in
 
     # System
     base.enable = true;
-    plasma.enable = false;
-    gnome.enable = false;
+    sddm.enable = true;
+    plasma.enable = true;
     hyprland.enable = true;
+    gnome.enable = false;
 
     boot = {
       binfmt = {
@@ -114,6 +115,7 @@ in
           google-chrome
           chromium
           azure-cli
+          postman
         ];
         xdg = {
           desktopEntries = lib.mkIf cfg.enable {

@@ -9,10 +9,14 @@
 let
   cfg = config.sddm;
   custom-sddm-astronaut = pkgs.sddm-astronaut.override {
-    embeddedTheme = "jake_the_dog";
+    embeddedTheme = "japanese_aesthetic"; # "jake_the_dog";
     themeConfig = {
       AllowUppercaseLettersInUsernames = "true";
     };
+  };
+  customWallpaper = pkgs.fetchurl {
+    url = "https://raw.githubusercontent.com/lmrisdal/nix-config/refs/heads/main/dots/girl-with-cigarette.png";
+    sha256 = "sha256-qWSLcAOzdVbWkYXiBnyYxu3kNaSTY4KiS4C33OxOK/c=";
   };
 in
 {
@@ -24,30 +28,34 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       custom-sddm-astronaut
+      (pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''
+        [General]
+        background=${customWallpaper}
+      '')
     ];
     services.displayManager = {
       defaultSession = "${defaultSession}";
       autoLogin = {
-        enable = true;
+        enable = false;
         user = username;
       };
       sddm = {
         enable = true;
-        wayland.enable = true;
-        package = pkgs.kdePackages.sddm;
+        wayland.enable = false;
+        # package = pkgs.kdePackages.sddm;
         enableHidpi = true;
-        theme = "sddm-astronaut-theme";
-        settings = {
-          Theme = {
-            Current = "sddm-astronaut-theme";
-            CursorTheme = "rose-pine-cursor";
-            CursorSize = 24;
-            Font = "SF Pro";
-          };
-        };
-        extraPackages = with pkgs; [
-          custom-sddm-astronaut
-        ];
+        # theme = "sddm-astronaut-theme";
+        # settings = {
+        #   Theme = {
+        #     Current = "sddm-astronaut-theme";
+        #     CursorTheme = "rose-pine-cursor";
+        #     CursorSize = 24;
+        #     Font = "SF Pro";
+        #   };
+        # };
+        # extraPackages = with pkgs; [
+        #   custom-sddm-astronaut
+        # ];
         autoLogin.relogin = false;
       };
     };
