@@ -9,7 +9,7 @@
 {
   imports = [
     ../../modules/apps/zsh
-    ../../modules/apps/git
+    # ../../modules/apps/git
     ../../modules/apps/starship
     ../../modules/apps/fastfetch
     ../../modules/apps/zoxide
@@ -20,7 +20,7 @@
   ];
 
   zsh.enable = true;
-  git.enable = true;
+  # git.enable = true;
   starship.enable = true;
   fastfetch.enable = true;
   zoxide.enable = true;
