@@ -17,7 +17,6 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    # sddm.enable = true;
     hyprlock.enable = true;
     hypridle.enable = true;
     hyprpanel.enable = true;
@@ -54,9 +53,6 @@ in
       pavucontrol # volume control
       wiremix # volume control
       nautilus # file manager
-      (pkgs.writeShellScriptBin "toggle-color-scheme" ''
-        XDG_DATA_DIRS="${pkgs.glib.getSchemaPath pkgs.glib}" "${pkgs.glib}/bin/gsettings" set org.gnome.desktop.interface color-scheme prefer-dark
-      '')
       ddcutil # control monitor brightness
       brightnessctl # control monitor brightness
       kdePackages.xwaylandvideobridge
@@ -76,7 +72,7 @@ in
     programs.hyprland.enable = true;
     programs.hyprland.package = pkgs.hyprland;
     programs.hyprland.withUWSM = true;
-    programs.dconf.enable = true;
+    #programs.dconf.enable = true;
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
     environment.sessionVariables.WLR_NO_HARDWARE_CURSORS = "1";
     home-manager.users.${username} =
@@ -86,22 +82,22 @@ in
         ...
       }:
       {
-        # gtk = {
-        #   enable = true;
-        #   theme = {
-        #     name = "Adwaita-dark";
-        #     package = pkgs.gnome-themes-extra;
-        #   };
-        # };
-        # qt = {
-        #   enable = true;
-        #   style = {
-        #     name = "adwaita-dark";
-        #   };
-        # };
-        # dconf.settings = {
-        #   "org/gnome/desktop/interface".color-scheme = "prefer-dark";
-        # };
+        gtk = {
+          enable = true;
+          theme = {
+            name = "Adwaita-dark";
+            package = pkgs.gnome-themes-extra;
+          };
+        };
+        qt = {
+          enable = true;
+          style = {
+            name = "adwaita-dark";
+          };
+        };
+        dconf.settings = {
+          "org/gnome/desktop/interface".color-scheme = "prefer-dark";
+        };
         services.hyprpolkitagent.enable = true;
       };
   };
