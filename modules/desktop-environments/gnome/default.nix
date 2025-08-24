@@ -47,18 +47,6 @@ in
       #     user = username;
       #   };
       # };
-      displayManager = {
-        defaultSession = "${defaultSession}";
-        autoLogin = {
-          enable = true;
-          user = username;
-        };
-        sddm = {
-          enable = true;
-          wayland.enable = true;
-          autoLogin.relogin = true;
-        };
-      };
 
       udev.packages = with pkgs; [ gnome-settings-daemon ];
     };
