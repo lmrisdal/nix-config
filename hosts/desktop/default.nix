@@ -86,6 +86,7 @@
     };
     cpu.amd.updateMicrocode = true;
   };
+  environment.sessionVariables.GSK_RENDERER = "ngl";
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   networking.useDHCP = lib.mkDefault true;
