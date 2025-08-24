@@ -32,7 +32,7 @@ in
     # System
     base.enable = true;
     sddm.enable = true;
-    plasma.enable = true;
+    plasma.enable = false;
     hyprland.enable = true;
     gnome.enable = false;
 
