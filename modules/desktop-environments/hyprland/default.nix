@@ -43,7 +43,6 @@ in
       swww # wallpaper util
       hyprshot # screenshot util
       swappy # screenshot annotation
-      satty # screenshot annotation
       helix # txt editor
       zathura # pdf viewer
       mpv # media player
@@ -56,16 +55,10 @@ in
       ddcutil # control monitor brightness
       brightnessctl # control monitor brightness
       kdePackages.xwaylandvideobridge
-      gnome-control-center # env XDG_CURRENT_DESKTOP=GNOME GDK_BACKEND=x11 gnome-control-center
-      #swaynotificationcenter
+      gnome-control-center # env XDG_CURRENT_DESKTOP=GNOME gnome-control-center
       rose-pine-cursor
       rose-pine-hyprcursor
       networkmanagerapplet
-      #impala # wifi management
-      # hyprpolkitagent
-      nemo-with-extensions # file manager
-      nemo-fileroller # archive manager
-      nemo-preview # image preview
       yad # dialog utility
       wl-clipboard # clipboard utils
     ];
@@ -99,6 +92,7 @@ in
           "org/gnome/desktop/interface".color-scheme = "prefer-dark";
         };
         services.hyprpolkitagent.enable = true;
+        services.clipman.enable = true;
       };
   };
 }
