@@ -28,10 +28,16 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       custom-sddm-astronaut
-      (pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''
-        [General]
-        background=${customWallpaper}
-      '')
+      (sddm-chili-theme.override {
+        themeConfig = {
+          background = "${customWallpaper}";
+        };
+      })
+      libsForQt5.qt5.qtquickcontrols
+      # (pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''
+      #   [General]
+      #   background=${customWallpaper}
+      # '')
     ];
     services.displayManager = {
       defaultSession = "${defaultSession}";
@@ -44,18 +50,20 @@ in
         wayland.enable = false;
         # package = pkgs.kdePackages.sddm;
         enableHidpi = true;
+        theme = "chili";
         # theme = "sddm-astronaut-theme";
-        # settings = {
-        #   Theme = {
-        #     Current = "sddm-astronaut-theme";
-        #     CursorTheme = "rose-pine-cursor";
-        #     CursorSize = 24;
-        #     Font = "SF Pro";
-        #   };
-        # };
-        # extraPackages = with pkgs; [
-        #   custom-sddm-astronaut
-        # ];
+        settings = {
+          Theme = {
+            Current = "chili"; # "sddm-astronaut-theme";
+            CursorTheme = "rose-pine-cursor";
+            CursorSize = 24;
+            Font = "SF Pro";
+          };
+        };
+        extraPackages = with pkgs; [
+          # custom-sddm-astronaut
+          sddm-chili-theme
+        ];
         autoLogin.relogin = false;
       };
     };
