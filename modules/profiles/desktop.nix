@@ -116,6 +116,7 @@ in
           chromium
           azure-cli
           postman
+          pulumi-bin
         ];
         xdg = {
           desktopEntries = lib.mkIf cfg.enable {
