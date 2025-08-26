@@ -92,7 +92,6 @@ in
           "org/gnome/desktop/interface".color-scheme = "prefer-dark";
         };
         services.hyprpolkitagent.enable = true;
-        services.clipman.enable = true;
       };
   };
 }

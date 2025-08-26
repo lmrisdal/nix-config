@@ -17,6 +17,7 @@
     nix-flatpak.url = "github:gmodena/nix-flatpak";
     impermanence.url = "github:nix-community/impermanence";
     ucodenix.url = "github:e-tho/ucodenix";
+    vicinae.url = "github:tomromeo/vicinae-nix";
     just-one-more-repo = {
       url = "github:ProverbialPennance/just-one-more-repo";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -184,6 +185,7 @@
                     wayland-pipewire-idle-inhibit.homeModules.default
                     sops-nix.homeManagerModules.sops
                     nix-index-database.homeModules.nix-index
+                    vicinae.homeManagerModules.default
                   ];
                 };
               }
