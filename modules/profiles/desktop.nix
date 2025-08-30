@@ -68,9 +68,14 @@ in
       graphics = {
         enable = true;
         enable32Bit = true;
+        extraPackages = with pkgs; [
+          vaapiVdpau
+          nvidia-vaapi-driver
+        ];
       };
     };
     nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+    programs.gnome-disks.enable = true;
     services = {
       btrfs = {
         autoScrub = {
@@ -81,7 +86,7 @@ in
       devmon.enable = true;
       fwupd.enable = true;
       lact.enable = true;
-      power-profiles-daemon.enable = true;
+      power-profiles-daemon.enable = false;
       udisks2 = {
         enable = true;
       };

@@ -62,8 +62,14 @@ in
         kdePackages.breeze
       ];
       localNetworkGameTransfers.openFirewall = true;
-      protontricks.enable = true;
+      #protontricks.enable = true;
       remotePlay.openFirewall = true;
+    };
+
+    services.flatpak = {
+      packages = [
+        "com.github.Matoking.protontricks"
+      ];
     };
 
     home-manager.users.${username} =

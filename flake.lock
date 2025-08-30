@@ -276,24 +276,6 @@
         "type": "github"
       }
     },
-    "flake-utils_2": {
-      "inputs": {
-        "systems": "systems_4"
-      },
-      "locked": {
-        "lastModified": 1731533236,
-        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
     "gitignore": {
       "inputs": {
         "nixpkgs": [
@@ -412,26 +394,6 @@
       "original": {
         "owner": "Jovian-Experiments",
         "repo": "Jovian-NixOS",
-        "type": "github"
-      }
-    },
-    "just-one-more-repo": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1755411813,
-        "narHash": "sha256-q4q5xCOArnGLjcJFHhZ/ln1sFBmF2kTw+8h+21KqU1U=",
-        "owner": "ProverbialPennance",
-        "repo": "just-one-more-repo",
-        "rev": "11ff801cd431f12a0ec122a3e5ca4e3e6e1dd338",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ProverbialPennance",
-        "repo": "just-one-more-repo",
         "type": "github"
       }
     },
@@ -639,25 +601,6 @@
         "type": "github"
       }
     },
-    "nix-vscode-extensions": {
-      "inputs": {
-        "flake-utils": "flake-utils",
-        "nixpkgs": "nixpkgs_4"
-      },
-      "locked": {
-        "lastModified": 1755483252,
-        "narHash": "sha256-I9hwIezfrzEvGMYJif4BgzfeMjwUp5s3W1yajvdII/8=",
-        "owner": "nix-community",
-        "repo": "nix-vscode-extensions",
-        "rev": "f30e5a7ad0de0d1d385893a7d3fb5c864306a500",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "nix-vscode-extensions",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1755186698,
@@ -754,22 +697,6 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1744868846,
-        "narHash": "sha256-5RJTdUHDmj12Qsv7XOhuospjAjATNiTMElplWnJE9Hs=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c",
-        "type": "github"
-      }
-    },
-    "nixpkgs_5": {
-      "locked": {
         "lastModified": 1755186698,
         "narHash": "sha256-wNO3+Ks2jZJ4nTHMuks+cxAiVBGNuEBXsT29Bz6HASo=",
         "owner": "nixos",
@@ -784,7 +711,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_6": {
+    "nixpkgs_5": {
       "locked": {
         "lastModified": 1755027561,
         "narHash": "sha256-IVft239Bc8p8Dtvf7UAACMG5P3ZV+3/aO28gXpGtMXI=",
@@ -856,7 +783,6 @@
         "disko": "disko",
         "home-manager": "home-manager_2",
         "impermanence": "impermanence",
-        "just-one-more-repo": "just-one-more-repo",
         "kwin-effects-forceblur": "kwin-effects-forceblur",
         "kwin-effects-kinetic": "kwin-effects-kinetic",
         "lanzaboote": "lanzaboote",
@@ -865,8 +791,7 @@
         "nix-gaming": "nix-gaming",
         "nix-homebrew": "nix-homebrew",
         "nix-index-database": "nix-index-database",
-        "nix-vscode-extensions": "nix-vscode-extensions",
-        "nixpkgs": "nixpkgs_5",
+        "nixpkgs": "nixpkgs_4",
         "nur": "nur",
         "sops-nix": "sops-nix",
         "ucodenix": "ucodenix",
@@ -984,21 +909,6 @@
     },
     "systems_4": {
       "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
-        "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-systems",
-        "repo": "default",
-        "type": "github"
-      }
-    },
-    "systems_5": {
-      "locked": {
         "lastModified": 1689347949,
         "narHash": "sha256-12tWmuL2zgBgZkdoB6qXZsgJEH9LR3oUgpaQq2RbI80=",
         "owner": "nix-systems",
@@ -1092,20 +1002,20 @@
     },
     "vicinae": {
       "inputs": {
-        "flake-utils": "flake-utils_2",
-        "nixpkgs": "nixpkgs_6"
+        "flake-utils": "flake-utils",
+        "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1756197586,
-        "narHash": "sha256-jqljypvPZ/Vn4EIHZOaSyOP8TRSe3dlsVt7i9hn7TBk=",
-        "owner": "tomromeo",
-        "repo": "vicinae-nix",
-        "rev": "4c606de83a42cce06b553b7ae25fb0f79a3fb754",
+        "lastModified": 1756558610,
+        "narHash": "sha256-8hIrMjRJtwiU6sA20YjfS2t3eFjzPn+fOf7WY0wiesM=",
+        "owner": "vicinaehq",
+        "repo": "vicinae",
+        "rev": "c592b1daffdbd9eb7c13da5ce1301da3c1455626",
         "type": "github"
       },
       "original": {
-        "owner": "tomromeo",
-        "repo": "vicinae-nix",
+        "owner": "vicinaehq",
+        "repo": "vicinae",
         "type": "github"
       }
     },
@@ -1115,7 +1025,7 @@
         "nixpkgs": [
           "nixpkgs"
         ],
-        "systems": "systems_5",
+        "systems": "systems_4",
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {

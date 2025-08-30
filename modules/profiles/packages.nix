@@ -80,7 +80,7 @@ in
           p7zip
           libnotify
           dig
-          darktable
+          #darktable
         ];
       };
   };

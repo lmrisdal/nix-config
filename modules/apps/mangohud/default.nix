@@ -34,6 +34,8 @@ in
               ##  Display  ##
               ###############
               fps_limit=240,165,144,120,90,60,30,0
+              vsync=2
+              gl_vsync=1
 
               ###########
               ## Binds ##
@@ -104,22 +106,6 @@ in
               resolution
               present_mode
               display_server # Doesn't work when legacy_layout=0
-
-              ############
-              ## Custom ##
-              ############
-              custom_text=VRR
-              exec=if (${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor --outputs | ${pkgs.ripgrep}/bin/rg Vrr | ${pkgs.coreutils}/bin/head -1 | ${pkgs.ripgrep}/bin/rg -q Automatic); then echo "Yes"; else echo "No"; fi
-              custom_text=P-State
-              exec=echo $(${pkgs.bat}/bin/bat --plain /sys/devices/system/cpu/amd_pstate/status /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference)
-              custom_text=V-Cache
-              exec=echo $(${pkgs.bat}/bin/bat --plain /sys/bus/platform/drivers/amd_x3d_vcache/AMDI0101:00/amd_x3d_mode)
-              custom_text=OS
-              exec=${pkgs.ripgrep}/bin/rg -w PRETTY_NAME /etc/os-release | ${pkgs.coreutils}/bin/cut -d '=' -f2 | ${pkgs.coreutils}/bin/tr -d '"'
-              custom_text=Distrobox
-              exec=${pkgs.bash}/bin/bash -c '[ -n "''${CONTAINER_ID}" ] && echo Yes || echo No'
-              custom_text=Kernel
-              exec=${pkgs.coreutils}/bin/uname -r
 
               ########
               ## UI ##

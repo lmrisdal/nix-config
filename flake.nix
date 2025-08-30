@@ -17,16 +17,12 @@
     nix-flatpak.url = "github:gmodena/nix-flatpak";
     impermanence.url = "github:nix-community/impermanence";
     ucodenix.url = "github:e-tho/ucodenix";
-    vicinae.url = "github:tomromeo/vicinae-nix";
-    just-one-more-repo = {
-      url = "github:ProverbialPennance/just-one-more-repo";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    vicinae.url = "github:vicinaehq/vicinae";
+    nix-gaming.url = "github:fufexan/nix-gaming";
     nix-citizen = {
       url = "github:LovingMelody/nix-citizen";
       inputs.nix-gaming.follows = "nix-gaming";
     };
-    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     wayland-pipewire-idle-inhibit = {
       url = "github:rafaelrc7/wayland-pipewire-idle-inhibit";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -35,7 +31,6 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-gaming.url = "github:fufexan/nix-gaming";
     nur = {
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -154,7 +149,6 @@
               ./hosts/desktop/disko.nix
               disko.nixosModules.disko
               chaotic.nixosModules.default
-              just-one-more-repo.nixosModules.default
               nix-flatpak.nixosModules.nix-flatpak
               nur.modules.nixos.default
               impermanence.nixosModules.impermanence

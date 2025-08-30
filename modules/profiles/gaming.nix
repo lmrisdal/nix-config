@@ -29,7 +29,7 @@ in
     steam.enable = true;
     consoleExperience.enable = true;
     vkbasalt.enable = true;
-    #sunshine.enable = true;
+    sunshine.enable = true;
 
     boot = {
       kernelModules = [
@@ -62,6 +62,11 @@ in
       };
     };
 
+    environment.systemPackages = with pkgs; [
+      # star citizen
+      inputs.nix-citizen.packages.${system}.star-citizen
+    ];
+
     hardware = {
       uinput.enable = true;
       xpadneo.enable = true;
@@ -70,12 +75,10 @@ in
 
     nix.settings = {
       extra-substituters = [
-        "https://just-one-more-cache.cachix.org/"
         "https://nix-gaming.cachix.org"
         "https://nix-citizen.cachix.org"
       ];
       extra-trusted-public-keys = [
-        "just-one-more-cache.cachix.org-1:4nShcKEgcUEVlJqKFrgDwoGfqLnw5KPG4UDTV02jnr4="
         "nix-citizen.cachix.org-1:lPMkWc2X8XD4/7YPEEwXKKBg+SVbYTVrAaLA2wQTKCo="
         "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
       ];

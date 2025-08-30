@@ -16,40 +16,82 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
+    boot = {
+      extraModprobeConfig = ''
+        options kvm_amd nested=1
+        options kvm ignore_msrs=1 report_ignored_msrs=0
+      '';
+      # kernel.sysctl = {
+      #   "net.ipv4.ip_forward" = 1;
+      # };
+    };
+
     environment = {
       systemPackages = with pkgs; [
-        docker-compose
-        podlet
+        # docker-compose
+        # podlet
+        quickemu
+        spice
+        spice-protocol
+        virtiofsd
+        virtio-win
+        win-spice
       ];
     };
+    networking.firewall.trustedInterfaces = [ "virbr0" ];
     virtualisation = {
-      podman = {
+      # podman = {
+      #   enable = true;
+      #   autoPrune = {
+      #     enable = true;
+      #     dates = "weekly";
+      #   };
+      #   defaultNetwork.settings.dns_enabled = true;
+      # };
+      libvirtd = {
+        # Make sure you run this once: "sudo virsh net-autostart default"
         enable = true;
-        autoPrune = {
-          enable = true;
-          dates = "weekly";
+        qemu = {
+          swtpm.enable = true;
+          ovmf.enable = true;
+          ovmf.packages = [ pkgs.OVMFFull.fd ];
+          vhostUserPackages = with pkgs; [ virtiofsd ];
         };
-        defaultNetwork.settings.dns_enabled = true;
-        #dockerCompat = true;
-        #dockerSocket.enable = true;
+      };
+      spiceUSBRedirection.enable = true;
+      vmVariant = {
+        virtualisation = {
+          memorySize = 4096;
+          cores = 3;
+        };
       };
     };
 
+    programs.virt-manager.enable = true;
+    users.groups.libvirtd.members = [ "${username}" ];
     users = {
       users = {
         ${username} = {
           extraGroups = [
             "docker"
+            "kvm"
             "podman"
+            "libvirtd"
           ];
         };
       };
     };
 
-    services.flatpak = {
-      packages = [
-        "org.gnome.Boxes"
-      ];
-    };
+    home-manager.users.${username} =
+      { pkgs, config, ... }:
+      {
+        dconf.enable = true;
+        dconf.settings = {
+          "org/virt-manager/virt-manager/connections" = {
+            autoconnect = [ "qemu:///system" ];
+            uris = [ "qemu:///system" ];
+          };
+        };
+      };
   };
 }

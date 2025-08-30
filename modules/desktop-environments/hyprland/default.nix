@@ -35,6 +35,7 @@ in
     '';
     services.dbus.enable = true;
     services.playerctld.enable = true;
+    services.gvfs.enable = true;
     environment.systemPackages = with pkgs; [
       pyprland # plugin system
       hyprpicker # color picker
@@ -65,7 +66,6 @@ in
     programs.hyprland.enable = true;
     programs.hyprland.package = pkgs.hyprland;
     programs.hyprland.withUWSM = true;
-    #programs.dconf.enable = true;
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
     environment.sessionVariables.WLR_NO_HARDWARE_CURSORS = "1";
     home-manager.users.${username} =

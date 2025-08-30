@@ -103,6 +103,7 @@ in
       '')
       (pkgs.writeShellScriptBin "gamescope-session" ''
         #!/bin/bash
+        systemctl --user start --now sunshine
         echo -e "\n[Autologin]\nUser=${username}\nRelogin=true\nSession=${defaultSession}" > /etc/sddm.conf.d/50-autologin.conf
         export ENABLE_HDR_WSI=1
         export ENABLE_VRR=1
