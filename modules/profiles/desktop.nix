@@ -119,7 +119,8 @@ in
           emote
           google-chrome
           chromium
-          azure-cli
+          python313Packages.azure-multiapi-storage
+          #azure-cli
           postman
           pulumi-bin
         ];
