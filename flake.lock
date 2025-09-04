@@ -1006,11 +1006,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1756558610,
-        "narHash": "sha256-8hIrMjRJtwiU6sA20YjfS2t3eFjzPn+fOf7WY0wiesM=",
+        "lastModified": 1756613030,
+        "narHash": "sha256-ZmTRB+q0ROuFCUIG3BvJPCQaRVik6sT5OYSvdbI1aw4=",
         "owner": "vicinaehq",
         "repo": "vicinae",
-        "rev": "c592b1daffdbd9eb7c13da5ce1301da3c1455626",
+        "rev": "7214534292b97f99e2a11dbfe0cde49414aab2e8",
         "type": "github"
       },
       "original": {

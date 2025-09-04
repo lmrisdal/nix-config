@@ -8,12 +8,9 @@
 }:
 let
   cfg = config.sddm;
-  custom-sddm-astronaut = pkgs.sddm-astronaut.override {
-    embeddedTheme = "pixel_sakura"; # "jake_the_dog";
-    # themeConfig = {
-    #   AllowUppercaseLettersInUsernames = "true";
-    # };
-  };
+  # custom-sddm-astronaut = pkgs.sddm-astronaut.override {
+  #   embeddedTheme = "pixel_sakura"; # "jake_the_dog";
+  # };
   customWallpaper = pkgs.fetchurl {
     url = "https://raw.githubusercontent.com/lmrisdal/nix-config/refs/heads/main/dots/girl-with-cigarette.png";
     sha256 = "sha256-qWSLcAOzdVbWkYXiBnyYxu3kNaSTY4KiS4C33OxOK/c=";
@@ -27,12 +24,12 @@ in
   };
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      custom-sddm-astronaut
-      # (sddm-chili-theme.override {
-      #   themeConfig = {
-      #     background = "${customWallpaper}";
-      #   };
-      # })
+      # custom-sddm-astronaut
+      (sddm-chili-theme.override {
+        themeConfig = {
+          background = "${customWallpaper}";
+        };
+      })
       # libsForQt5.qt5.qtquickcontrols
       #kdePackages.qt6ct
       # (pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''
@@ -48,22 +45,22 @@ in
       };
       sddm = {
         enable = true;
-        wayland.enable = false;
-        package = pkgs.kdePackages.sddm;
+        wayland.enable = true;
+        # package = pkgs.kdePackages.sddm;
         enableHidpi = true;
-        theme = "sddm-astronaut-theme";
-        # theme = "chili";
+        # theme = "sddm-astronaut-theme";
+        theme = "chili";
         settings = {
           Theme = {
-            Current = "sddm-astronaut-theme"; # "chili"; # "sddm-astronaut-theme";
+            Current = "chili"; # "sddm-astronaut-theme";
             CursorTheme = "rose-pine-cursor";
             CursorSize = 24;
             Font = "SF Pro";
           };
         };
         extraPackages = with pkgs; [
-          custom-sddm-astronaut
-          # sddm-chili-theme
+          # custom-sddm-astronaut
+          sddm-chili-theme
         ];
         autoLogin.relogin = false;
       };
