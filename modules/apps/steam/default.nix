@@ -55,7 +55,7 @@ in
       dedicatedServer.openFirewall = true;
       extraCompatPackages = with pkgs; [
         luxtorpeda
-        inputs.chaotic.packages.${system}.proton-cachyos
+        inputs.chaotic.packages.${system}.proton-cachyos_x86_64_v4
         proton-ge-bin
       ]; # https://github.com/NixOS/nixpkgs/issues/25444#issuecomment-1977416787
       extraPackages = with pkgs; [
