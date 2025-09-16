@@ -31,7 +31,7 @@ in
         };
         programs.rofi = {
           enable = true;
-          package = pkgs.rofi-wayland;
+          package = pkgs.rofi;
           location = "center";
           theme = "${config.xdg.configHome}/rofi/themes/spotlight-dark.rasi";
           terminal = "kitty";

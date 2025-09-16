@@ -108,6 +108,8 @@ in
         appleColorEmoji
         nerd-fonts.caskaydia-mono
         cascadia-code
+        corefonts
+        vista-fonts
       ];
       fontconfig = {
         allowBitmaps = false;

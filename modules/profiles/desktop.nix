@@ -120,7 +120,7 @@ in
           google-chrome
           chromium
           python313Packages.azure-multiapi-storage
-          #azure-cli
+          azure-cli
           postman
           pulumi-bin
           redisinsight

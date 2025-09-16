@@ -77,7 +77,7 @@
   hardware = {
     nvidia = {
       modesetting.enable = true;
-      # nvidiaPersistenced = true; # https://github.com/NixOS/nixpkgs/pull/439514
+      nvidiaPersistenced = true; # https://github.com/NixOS/nixpkgs/pull/439514
       powerManagement.enable = false;
       powerManagement.finegrained = false;
       open = false;
