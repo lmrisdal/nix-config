@@ -123,6 +123,7 @@ in
           #azure-cli
           postman
           pulumi-bin
+          redisinsight
         ];
         xdg = {
           desktopEntries = lib.mkIf cfg.enable {
