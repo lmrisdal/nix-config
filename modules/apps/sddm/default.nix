@@ -40,7 +40,7 @@ in
     services.displayManager = {
       defaultSession = "${defaultSession}";
       autoLogin = {
-        enable = false;
+        enable = true;
         user = username;
       };
       sddm = {
