@@ -17,6 +17,7 @@ in
   config = lib.mkIf cfg.enable {
     programs.gamemode = {
       enable = true;
+      enableRenice = true;
       settings = {
         general = {
           desiredgov = "performance";

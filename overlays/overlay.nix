@@ -11,4 +11,5 @@
       };
     }
   );
+  jovian-greeter = final.callPackage ./jovian-greeter { };
 })

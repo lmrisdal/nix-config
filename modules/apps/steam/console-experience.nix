@@ -13,11 +13,6 @@ in
 {
   options.consoleExperience = {
     enable = lib.mkEnableOption "Enable Steam Console Experience in NixOS";
-    desktopSession = lib.mkOption {
-      type = lib.types.str;
-      default = "startplasma-wayland";
-      description = "Used as a fallback if something should go wrong. This should be 'startplasma-wayland', 'gnome-session', 'hyprland', 'sway' etc.";
-    };
     enableHDR = lib.mkOption {
       type = lib.types.bool;
       default = true;
@@ -32,6 +27,9 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
+    environment.sessionVariables = {
+      DESKTOP_SESSION = "${defaultSession}";
+    };
     environment.systemPackages = with pkgs; [
       (pkgs.writeShellScriptBin "jupiter-biosupdate" ''
         #!/bin/bash
@@ -47,8 +45,21 @@ in
       '')
       (pkgs.writeShellScriptBin "switch-to-steamos" ''
         #!/bin/bash
-        echo -e "\n[Autologin]\nUser=${username}\nRelogin=true\nSession=steam" > /etc/sddm.conf.d/50-autologin.conf
-        sudo restart-displaymanager
+        set -euo pipefail
+        #echo -e "\n[Autologin]\nUser=${username}\nRelogin=true\nSession=steam" > /etc/sddm.conf.d/50-autologin.conf
+        #sudo restart-displaymanager
+        mkdir -p ~/.local/state
+        >~/.local/state/steamos-session-select echo "steam"
+        if pgrep -x steam >/dev/null; then
+            echo "Shutting down Steam..."
+            steam -shutdown
+            while pgrep -x steam >/dev/null; do
+                sleep 1
+            done
+            echo "Steam closed."
+        fi
+        loginctl terminate-user "${username}"
+        #hyprctl dispatch exit
       '')
       (pkgs.writeShellScriptBin "restart-displaymanager" ''
         #!/bin/bash
@@ -61,7 +72,7 @@ in
       (pkgs.writeShellScriptBin "steamos-cleanup" ''
         #!/bin/bash
         # Remove autologin configuration when switching to desktop
-        rm /etc/sddm.conf.d/50-autologin.conf
+        #rm /etc/sddm.conf.d/50-autologin.conf
         rm $XDG_RUNTIME_DIR/switch-to-desktop
         rm $XDG_RUNTIME_DIR/switch-to-steam
       '')
@@ -104,13 +115,15 @@ in
       (pkgs.writeShellScriptBin "gamescope-session" ''
         #!/bin/bash
         systemctl --user start --now sunshine
-        echo -e "\n[Autologin]\nUser=${username}\nRelogin=true\nSession=${defaultSession}" > /etc/sddm.conf.d/50-autologin.conf
+        #echo -e "\n[Autologin]\nUser=${username}\nRelogin=true\nSession=${defaultSession}" > /etc/sddm.conf.d/50-autologin.conf
+        mkdir -p ~/.local/state
+        >~/.local/state/steamos-session-select echo "${defaultSession}"
         export ENABLE_HDR_WSI=1
         export ENABLE_VRR=1
         width=$(get-screen-width)
         height=$(get-screen-height)
         refresh_rate=$(get-screen-refresh-rate)
-        gamescope \
+        exec gamescope \
           --steam \
           -r $refresh_rate \
           -w $width -h $height \
@@ -123,7 +136,7 @@ in
           --hdr-enabled \
           --hdr-itm-enable \
           --adaptive-sync \
-          -- steam -steamos3 -steamdeck -pipewire-dmabuf # run without -steamos3 from terminal first
+          -- steam -steamos3 -steampal -steamdeck -gamepadui -pipewire-dmabuf # run without -steamos3 from terminal first
       '')
     ];
     security.sudo.extraRules = [
@@ -156,7 +169,9 @@ in
         #!/bin/sh
         displayProductName=$(edid-decode /sys/class/drm/card1-HDMI-A-1/edid | grep "Display Product Name" | cut -d"'" -f2)
         if [[ "$displayProductName" == *"LG TV"* ]]; then
-          echo -e "\n[Autologin]\nUser=${username}\nSession=steam\nEnable=true" > /etc/sddm.conf.d/20-defaultsession.conf
+          # echo -e "\n[Autologin]\nUser=${username}\nSession=steam\nEnable=true" > /etc/sddm.conf.d/20-defaultsession.conf
+          mkdir -p ~/.local/state
+          >~/.local/state/steamos-session-select echo "steam"
         fi
       '';
     };

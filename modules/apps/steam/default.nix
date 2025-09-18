@@ -93,6 +93,7 @@ in
             };
             steam-autostart = {
               enable = cfg.autostart;
+              # -steamos3 -steampal -steamdeck
               text = ''
                 [Desktop Entry]
                 Name=Steam

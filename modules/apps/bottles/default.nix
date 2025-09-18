@@ -76,10 +76,7 @@ in
             "com.usebottles.bottles" = {
               Context = {
                 filesystems = [
-                  "${config.home.homeDirectory}/Downloads"
-                  "${config.home.homeDirectory}/Games"
-                  "${config.xdg.dataHome}/applications"
-                  "${config.xdg.dataHome}/games"
+                  "${config.xdg.dataHome}/bottles"
                   "${config.xdg.dataHome}/Steam"
                 ];
               };
@@ -89,7 +86,6 @@ in
                 PROTON_USE_NTSYNC = "1";
                 PROTON_USE_WOW64 = "1";
                 PULSE_SINK = "Game";
-                #WINE_CPU_TOPOLOGY = "16:0,1,2,3,4,5,6,7,16,17,18,19,20,21,22,23";
               };
               "Session Bus Policy" = {
                 "org.freedesktop.Flatpak" = "talk";

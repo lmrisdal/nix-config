@@ -65,6 +65,9 @@ in
                 weather.location = "Oslo";
                 weather.key = config.sops.secrets."weather.json".path;
               };
+              power = {
+                logout = "loginctl terminate-session '$XDG_SESSION_ID'";
+              };
               dashboard = {
                 directories = {
                   enabled = false;

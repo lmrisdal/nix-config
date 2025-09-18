@@ -38,42 +38,78 @@ in
     };
     services.sunshine = {
       enable = true;
-      autoStart = true;
+      autoStart = false; # Seems to have issue using KMS with this autostart option. Use desktop file instead.
       capSysAdmin = true;
       openFirewall = true;
       package = pkgs.sunshine.override { cudaSupport = true; };
-      applications = {
-        env = {
-          PATH = "$(PATH):/run/current-system/sw/bin:/etc/profiles/per-user/${username}/bin:$(HOME)/.local/bin";
+    };
+    home-manager.users.${username} =
+      { pkgs, config, ... }:
+      {
+        home.packages = with pkgs; [ moondeck-buddy ];
+        xdg.autostart.entries = with pkgs; [ "${moondeck-buddy}/share/applications/MoonDeckBuddy.desktop" ];
+        home.file = {
+          sunshine-autostart = {
+            enable = true;
+            text = ''
+              [Desktop Entry]
+              Name=sunshine
+              Comment=sunshine Service
+              Exec=sunshine
+              StartupNotify=false
+              Terminal=false
+              Type=Application
+            '';
+            target = "${config.xdg.configHome}/autostart/sunshine.desktop";
+          };
+          sunshine-conf = {
+            enable = true;
+            text = ''
+              av1_mode = 0
+              back_button_timeout = 100
+              capture = kms
+              encoder = nvenc
+              hevc_mode = 0
+            '';
+            target = "${config.xdg.configHome}/sunshine/sunshine.conf";
+          };
+          sunshine-apps = {
+            enable = true;
+            text = ''
+              {
+                "env": {
+                  "PATH": "$(PATH):$(HOME)/.local/bin"
+                },
+                "apps": [
+                  {
+                    "name": "Desktop",
+                    "image-path": "desktop.png"
+                  },
+                  {
+                    "name": "MoonDeckStream",
+                    "cmd": "${pkgs.moondeck-buddy}/bin/MoonDeckStream",
+                    "exclude-global-prep-cmd": "false",
+                    "elevated": "false"
+                  },
+                  {
+                    "name": "Steam Big Picture",
+                    "detached": [
+                      "setsid steam steam://open/bigpicture"
+                    ],
+                    "prep-cmd": [
+                      {
+                        "do": "",
+                        "undo": "setsid steam steam://close/bigpicture"
+                      }
+                    ],
+                    "image-path": "steam.png"
+                  }
+                ]
+              }
+            '';
+            target = "${config.xdg.configHome}/sunshine/apps.json";
+          };
         };
-        apps = [
-          {
-            name = "Desktop";
-            image-path = "desktop.png";
-          }
-          {
-            name = "MoonDeckStream";
-            cmd = "${pkgs.moondeck-buddy}/bin/MoonDeckStream";
-            exclude-global-prep-cmd = "false";
-            elevated = "false";
-          }
-          {
-            name = "Steam Big Picture";
-            image-path = "steam.png";
-            detached = [ "steam steam://open/bigpicture" ];
-            auto-detach = "true";
-            wait-all = "true";
-            exit-timeout = "5";
-          }
-        ];
       };
-      settings = {
-        output_name = 1;
-      };
-    };
-    home-manager.users.${username} = {
-      home.packages = with pkgs; [ moondeck-buddy ];
-      xdg.autostart.entries = with pkgs; [ "${moondeck-buddy}/share/applications/MoonDeckBuddy.desktop" ];
-    };
   };
 }

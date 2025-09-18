@@ -26,12 +26,13 @@ in
     rofi.enable = true;
     artifacts-credprovider.enable = true;
     coolercontrol.enable = true;
-    vesktop.enable = true;
+    #vesktop.enable = true;
     vicinae.enable = true;
 
     # System
     base.enable = true;
-    sddm.enable = true;
+    # sddm.enable = true;
+    greetd.enable = true;
     plasma.enable = false;
     hyprland.enable = true;
     gnome.enable = false;
@@ -124,6 +125,7 @@ in
           postman
           pulumi-bin
           redisinsight
+          discord
         ];
         xdg = {
           desktopEntries = lib.mkIf cfg.enable {

@@ -43,5 +43,6 @@
     ./vicinae
     ./sunshine
     ./hypridle
+    ./greetd
   ];
 }

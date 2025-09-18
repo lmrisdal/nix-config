@@ -16,6 +16,7 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
+    environment.variables.MOZ_DISABLE_RDD_SANDBOX = "1";
     home-manager.users.${username} =
       { config, pkgs, ... }:
       {
@@ -61,6 +62,11 @@ in
               in
               {
                 "browser.tabs.warnOnClose" = locked false;
+                "media.ffmpeg.vaapi.enabled" = true;
+                "media.rdd-ffmpeg.enabled" = true;
+                "media.av1.enabled" = true;
+                "gfx.x11-egl.force-enabled" = true;
+                "widget.dmabuf.force-enabled" = true;
               };
           };
         };

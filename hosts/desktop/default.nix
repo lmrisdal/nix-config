@@ -2,6 +2,7 @@
   lib,
   username,
   config,
+  pkgs,
   ...
 }:
 {
@@ -70,9 +71,9 @@
         # settings
         "NVreg_InitializeSystemMemoryAllocations=0"
         "NVreg_RegistryDwords=RMIntrLockingMode=1"
+        "NVreg_PreserveVideoMemoryAllocations=1"
       ];
   };
-
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware = {
     nvidia = {
@@ -80,11 +81,10 @@
       nvidiaPersistenced = true; # https://github.com/NixOS/nixpkgs/pull/439514
       powerManagement.enable = false;
       powerManagement.finegrained = false;
-      open = false;
+      open = true;
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.beta;
     };
-    cpu.amd.updateMicrocode = true;
   };
   environment.sessionVariables.GSK_RENDERER = "ngl";
 
@@ -97,6 +97,7 @@
 
   powerManagement.cpuFreqGovernor = "schedutil";
 
+  hardware.cpu.amd.updateMicrocode = true;
   services = {
     ucodenix = {
       enable = true;

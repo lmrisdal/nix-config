@@ -16,10 +16,11 @@ in
     networking = {
       networkmanager = {
         enable = true;
+        wifi.powersave = false;
       };
       useDHCP = lib.mkDefault true;
       wireguard.enable = true;
-      # wireless.iwd.enable = true;
     };
+    boot.kernel.sysctl."net.ipv4.tcp_mtu_probing" = true;
   };
 }
