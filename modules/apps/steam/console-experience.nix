@@ -121,7 +121,7 @@ in
         export ENABLE_HDR_WSI=1
         export ENABLE_VRR=1
         width=$(get-screen-width)
-        height=$(get-screen-height)
+        height=$(get-screen-height) 
         refresh_rate=$(get-screen-refresh-rate)
         exec gamescope \
           --steam \

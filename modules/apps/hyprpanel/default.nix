@@ -16,9 +16,9 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    # environment.systemPackages = with pkgs; [
-    #   hyprpanel
-    # ];
+    environment.systemPackages = with pkgs; [
+      python313Packages.gpustat
+    ];
     home-manager.users.${username} =
       { config, pkgs, ... }:
       {
