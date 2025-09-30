@@ -7,8 +7,8 @@
 }:
 let
   cfg = config.mangohud;
-  cpu = if config.networking.hostName == "nixos-desktop" then "9800X3D" else "";
-  gpu = if config.networking.hostName == "nixos-desktop" then "RTX 4090" else "";
+  cpu = "9800X3D";
+  gpu = "RTX 4090";
 in
 {
   options = {

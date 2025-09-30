@@ -22,6 +22,7 @@
       "compress=zstd:1"
       "subvol=home"
     ];
+    neededForBoot = true;
   };
 
   fileSystems."/nix" = {

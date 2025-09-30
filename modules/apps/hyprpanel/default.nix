@@ -86,8 +86,8 @@ in
                     shortcut1.command = "zen";
                     shortcut1.tooltip = "Zen";
                     shortcut2.command = "flatpak run com.spotify.Client";
-                    shortcut3.command = "vesktop";
-                    shortcut3.tooltip = "Vesktop";
+                    shortcut3.command = "discord";
+                    shortcut3.tooltip = "Discord";
                     shortcut4.command = "vicinae";
                   };
                 };

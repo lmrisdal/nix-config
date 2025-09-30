@@ -42,6 +42,8 @@ in
             (lib.mkIf (pkgs.stdenv.isLinux) {
               nrs = "sudo nixos-rebuild switch --flake ~/.config/nix-config";
               nrt = "sudo nixos-rebuild test --flake ~/.config/nix-config";
+              pulumilogindt = "source \"$(command -v pulumi-env-dt)\"";
+              pulumiloginqp = "source \"$(command -v pulumi-env-qp)\"";
             })
             (lib.mkIf (pkgs.stdenv.isDarwin) {
               drs = "sudo darwin-rebuild switch --flake ~/.config/nix-config";

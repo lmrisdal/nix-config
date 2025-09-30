@@ -59,7 +59,6 @@ in
       gnome-control-center # env XDG_CURRENT_DESKTOP=GNOME gnome-control-center
       rose-pine-cursor
       rose-pine-hyprcursor
-      networkmanagerapplet
       yad # dialog utility
       wl-clipboard # clipboard utils
     ];

@@ -549,11 +549,6 @@ in
               "org.duckstation.DuckStation"
               "org.easyrpg.player"
               "io.github.Faugus.faugus-launcher"
-              {
-                appId = "io.github.hedge_dev.unleashedrecomp";
-                bundle = "file://${config.home.homeDirectory}/Games/io.github.hedge_dev.unleashedrecomp.flatpak";
-                sha256 = "13wca95yngfwl1y0c05y0b2w7aa8k3nkhvk46wsrxjvw3shb35im";
-              }
             ];
           };
           # ludusavi = {
