@@ -44,5 +44,6 @@
     ./sunshine
     ./hypridle
     ./greetd
+    ./wf-recorder
   ];
 }

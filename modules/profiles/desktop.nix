@@ -28,6 +28,7 @@ in
     coolercontrol.enable = true;
     #vesktop.enable = true;
     vicinae.enable = true;
+    wf-recorder.enable = true;
 
     # System
     base.enable = true;

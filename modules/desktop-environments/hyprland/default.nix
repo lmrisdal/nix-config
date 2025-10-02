@@ -36,6 +36,11 @@ in
     services.dbus.enable = true;
     services.playerctld.enable = true;
     services.gvfs.enable = true;
+    services.gnome.sushi.enable = true;
+    programs.nautilus-open-any-terminal = {
+      enable = true;
+      terminal = "kitty";
+    };
     environment.systemPackages = with pkgs; [
       pyprland # plugin system
       hyprpicker # color picker
@@ -43,8 +48,8 @@ in
       hyprpaper # wallpaper util
       swww # wallpaper util
       hyprshot # screenshot util
-      swappy # screenshot annotation
-      helix # txt editor
+      satty # screenshot annotation
+      xfce.mousepad # txt editor
       zathura # pdf viewer
       mpv # media player
       imv # image viewer
@@ -61,6 +66,68 @@ in
       rose-pine-hyprcursor
       yad # dialog utility
       wl-clipboard # clipboard utils
+      socat # socket utility
+      #wl-screenrec # screen recording https://github.com/russelltg/wl-screenrec/issues/95
+      (pkgs.writeShellScriptBin "toggle-altwin" ''
+        # Toggle Hyprland alt/win key swap (altwin:swap_lalt_lwin)
+        set -euo pipefail
+        if ! command -v hyprctl >/dev/null 2>&1; then
+          echo "hyprctl not found in PATH" >&2
+          exit 1
+        fi
+        output="$(hyprctl getoption input:kb_options 2>/dev/null || true)"
+        if echo "$output" | grep -q 'str: *altwin:swap_lalt_lwin' && echo "$output" | grep -q 'set: *true'; then
+          hyprctl keyword input:kb_options ""
+          notify-send "Alt/Win swap disabled" -t 1000
+        else
+          hyprctl keyword input:kb_options "altwin:swap_lalt_lwin"
+          notify-send "Alt/Win swap enabled" -t 1000
+        fi
+      '')
+      (pkgs.writeShellScriptBin "hypr-toggle-hdr" ''
+        #!/usr/bin/env bash
+
+        monitor=$(${pkgs.hyprland}/bin/hyprctl monitors -j | ${pkgs.jq}/bin/jq -r ".[] | select(.focused==true).name")
+        # Find the sysfs path to EDID dynamically under card*
+        edid_path=""
+        for card in /sys/class/drm/card*; do
+          candidate="$card-$monitor/edid"
+          if [ -f "$candidate" ]; then
+            edid_path="$candidate"
+            break
+          fi
+        done
+
+        if [ -z "$edid_path" ]; then
+          echo "EDID file not found for monitor $monitor under any card* directory."
+          exit 1
+        fi
+
+        if ${pkgs.edid-decode}/bin/edid-decode < "$edid_path" | grep -q "HDR Static Metadata Data Block"; then
+          echo "HDR support detected on $monitor"
+
+          # Query monitor state
+          state=$(${pkgs.hyprland}/bin/hyprctl monitors -j | ${pkgs.jq}/bin/jq -r ".[] | select(.name==\"$monitor\")")
+          
+          format=$(echo "$state" | ${pkgs.jq}/bin/jq -r ".currentFormat")
+          
+          ### HDR / SDR toggle (bitdepth + cm)
+          if [[ "$format" == "XRGB8888" ]]; then
+              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:bitdepth" 10
+              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:cm" hdr
+              ${pkgs.hyprland}/bin/hyprctl keyword "decoration:blur:enabled" true
+          elif [[ "$format" == "XBGR2101010" ]]; then
+              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:bitdepth" 8
+              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:cm" srgb
+              ${pkgs.hyprland}/bin/hyprctl keyword "decoration:blur:enabled" true
+          else
+              echo "Unknown format: $format"
+          fi
+
+        else
+          echo "HDR not supported on $monitor; no changes made."
+        fi
+      '')
     ];
     programs.hyprland.enable = true;
     programs.hyprland.package = pkgs.hyprland;
