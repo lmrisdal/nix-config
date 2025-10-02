@@ -134,15 +134,18 @@ in
           # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/udev/rules.d/60-ioschedulers.rules
           (writeTextFile {
             name = "60-ioschedulers.rules";
+            destination = "/etc/udev/rules.d/60-ioschedulers.rules";
             text = ''
               # HDD
-              ACTION=="add|change", KERNEL=="sd[a-z]*", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="bfq"
+              ACTION!="remove", KERNEL=="sd[a-z]*", ATTR{queue/rotational}=="1", \
+                  ATTR{queue/scheduler}="bfq"
               # SSD
-              ACTION=="add|change", KERNEL=="sd[a-z]*|mmcblk[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="mq-deadline"
+              ACTION!="remove", KERNEL=="sd[a-z]*|mmcblk[0-9]*", ATTR{queue/rotational}=="0", \
+                  ATTR{queue/scheduler}="adios"
               # NVMe SSD
-              ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="none"
+              ACTION!="remove", KERNEL=="nvme[0-9]*", ATTR{queue/rotational}=="0", \
+                  ATTR{queue/scheduler}="adios"
             '';
-            destination = "/etc/udev/rules.d/60-ioschedulers.rules";
           })
           # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/udev/rules.d/69-hdparm.rules
           (writeTextFile {
