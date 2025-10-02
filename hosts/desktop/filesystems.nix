@@ -19,7 +19,7 @@
   fileSystems."/home" = {
     fsType = "btrfs";
     options = [
-      "compress=zstd:1"
+      "compress=zstd:3"
       "subvol=home"
     ];
     neededForBoot = true;
@@ -28,7 +28,7 @@
   fileSystems."/nix" = {
     fsType = "btrfs";
     options = [
-      "compress=zstd:1"
+      "compress=zstd:3"
       "subvol=nix"
     ];
   };
@@ -36,7 +36,7 @@
   fileSystems."/persist" = {
     neededForBoot = true;
     options = [
-      "compress=zstd:1"
+      "compress=zstd:3"
       "subvol=persist"
     ];
   };
@@ -48,7 +48,7 @@
     device = "/dev/disk/by-uuid/4361f6a9-6cc2-45c5-b347-9982a949b959";
     fsType = "btrfs";
     options = [
-      "compress=zstd:1"
+      "compress=zstd:3"
     ];
     neededForBoot = false;
   };
