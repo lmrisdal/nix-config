@@ -127,6 +127,7 @@ in
           postman
           pulumi-bin
           redisinsight
+          jetbrains.rider
           discord
           (pkgs.writeShellScriptBin "pulumi-env-dt" ''
             _pulumi_read() { tr -d '\n' < "$1"; }
