@@ -299,159 +299,6 @@ in
         ...
       }:
       {
-        home = {
-          file =
-            let
-              primaryscreen = "HDMI-A-1";
-            in
-            {
-              desktop-entry-dxvk =
-                let
-                  configFile = pkgs.fetchurl {
-                    url = "https://raw.githubusercontent.com/doitsujin/dxvk/master/dxvk.conf";
-                    hash = "sha256-at2s/DZEwkzQT47rBOWRfd0jBu1pJuqsqyHslMbjVfk=";
-                  };
-                in
-                {
-                  enable = true;
-                  text = ''
-                    [Desktop Entry]
-                    Comment=Create a new DXVK config from template
-                    Icon=text-plain
-                    Name=DXVK Config...
-                    Type=Link
-                    URL[$e]=file:${configFile}
-                  '';
-                  target = "${config.xdg.dataHome}/templates/dxvk.desktop";
-                };
-              desktop-entry-mangohud =
-                let
-                  configFile = pkgs.fetchurl {
-                    url = "https://raw.githubusercontent.com/flightlessmango/MangoHud/master/data/MangoHud.conf";
-                    hash = "sha256-v4HdqQtJBvPR19SNf+FxoV5wJ+0Ou/1UYAkIwskXIWc=";
-                  };
-                in
-                {
-                  enable = true;
-                  text = ''
-                    [Desktop Entry]
-                    Comment=Create a new MangoHud config from template
-                    Icon=io.github.flightlessmango.mangohud
-                    Name=MangoHud Config...
-                    Type=Link
-                    URL[$e]=file:${configFile}
-                  '';
-                  target = "${config.xdg.dataHome}/templates/mangohud.desktop";
-                };
-              desktop-entry-vkBasalt =
-                let
-                  configFile = pkgs.fetchurl {
-                    url = "https://raw.githubusercontent.com/DadSchoorse/vkBasalt/master/config/vkBasalt.conf";
-                    hash = "sha256-IN/Kuc17EZfzRoo8af1XoBX2/48/bCdyOxw/Tl463Mg=";
-                  };
-                in
-                {
-                  enable = true;
-                  text = ''
-                    [Desktop Entry]
-                    Comment=Create a new vkBasalt config from template
-                    Icon=text-plain
-                    Name=vkBasalt Config...
-                    Type=Link
-                    URL[$e]=file:${configFile}
-                  '';
-                  target = "${config.xdg.dataHome}/templates/vkBasalt.desktop";
-                };
-              screen-hdr-off = {
-                enable = true;
-                source =
-                  with pkgs;
-                  lib.getExe (writeShellApplication {
-                    name = "hdr-off";
-                    runtimeInputs = [
-                      kdePackages.libkscreen
-                    ];
-                    text = ''
-                      kscreen-doctor output.${primaryscreen}.hdr.disable output.${primaryscreen}.wcg.disable
-                    '';
-                  });
-                target = "${config.xdg.dataHome}/scripts/hdr-off.sh";
-              };
-              screen-hdr-on = {
-                enable = true;
-                source =
-                  with pkgs;
-                  lib.getExe (writeShellApplication {
-                    name = "hdr-on";
-                    runtimeInputs = [
-                      kdePackages.libkscreen
-                    ];
-                    text = ''
-                      kscreen-doctor output.${primaryscreen}.hdr.enable output.${primaryscreen}.wcg.enable
-                    '';
-                  });
-                target = "${config.xdg.dataHome}/scripts/hdr-on.sh";
-              };
-              screen-vrr-off = {
-                enable = true;
-                source =
-                  with pkgs;
-                  lib.getExe (writeShellApplication {
-                    name = "vrr-off";
-                    runtimeInputs = [
-                      kdePackages.libkscreen
-                    ];
-                    text = ''
-                      kscreen-doctor output.${primaryscreen}.vrrpolicy.never
-                    '';
-                  });
-                target = "${config.xdg.dataHome}/scripts/vrr-off.sh";
-              };
-              screen-vrr-on = {
-                enable = true;
-                source =
-                  with pkgs;
-                  lib.getExe (writeShellApplication {
-                    name = "vrr-on";
-                    runtimeInputs = [
-                      kdePackages.libkscreen
-                    ];
-                    text = ''
-                      kscreen-doctor output.${primaryscreen}.vrrpolicy.automatic
-                    '';
-                  });
-                target = "${config.xdg.dataHome}/scripts/vrr-on.sh";
-              };
-              wine-controller-proton = {
-                # https://selfmadepenguin.wordpress.com/2024/02/14/how-i-solved-my-gamecontroller-problems/
-                # Import with: wine start regedit.exe /home/lars/.local/share/wine-controller.reg
-                enable = true;
-                text = ''
-                  Windows Registry Editor Version 5.00
-
-                  [HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\winebus]
-                  "DisableHidraw"=dword:00000001
-                  "Enable SDL"=dword:00000001
-                '';
-                target = "${config.xdg.dataHome}/scripts/wine-controller.reg";
-              };
-              wine-mouse-acceleration = {
-                # https://reddit.com/r/linux_gaming/comments/1hs1685/windows_mouse_acceleration_seems_to_be_enabled_in/
-                # Import with: wine start regedit.exe /home/lars/.local/share/wine-mouse-acceleration.reg
-                enable = true;
-                text = ''
-                  Windows Registry Editor Version 5.00
-
-                  [HKEY_CURRENT_USER\Control Panel\Mouse]
-                  "MouseSpeed"="0"
-                  "MouseThreshold1"="0"
-                  "MouseThreshold2"="0"
-                '';
-                target = "${config.xdg.dataHome}/scripts/wine-mouse-acceleration.reg";
-              };
-            };
-        };
-
         services = {
           flatpak = {
             overrides = {
@@ -464,7 +311,7 @@ in
                 Context = {
                   filesystems = [
                     "!home"
-                    "${config.home.homeDirectory}/Games/Emulation/Games/Nintendo Wii U"
+                    "${config.home.homeDirectory}/Games/ROMs/wiiu/"
                   ];
                 };
               };
@@ -472,7 +319,7 @@ in
                 Context = {
                   filesystems = [
                     "!home"
-                    "${config.home.homeDirectory}/Games/Emulation/Games/Nintendo Switch/"
+                    "${config.home.homeDirectory}/Games/ROMs/switch/"
                   ];
                 };
               };
@@ -480,7 +327,7 @@ in
                 Context = {
                   filesystems = [
                     "!home"
-                    "${config.home.homeDirectory}/Games/Emulation/Games/Nintendo DS/"
+                    "${config.home.homeDirectory}/Games/ROMS/ds/"
                   ];
                 };
               };
@@ -488,7 +335,7 @@ in
                 Context = {
                   filesystems = [
                     "!home"
-                    "/mnt/vault101/data/Games/Emulation/PlayStation 2"
+                    "${config.home.homeDirectory}/Games/ROMS/ps2/"
                   ];
                 };
               };
@@ -496,7 +343,7 @@ in
                 Context = {
                   filesystems = [
                     "!home"
-                    "/mnt/vault101/data/Games/Emulation/PlayStation 3"
+                    "${config.home.homeDirectory}/Games/ROMS/ps3/"
                   ];
                 };
               };
@@ -504,7 +351,15 @@ in
                 Context = {
                   filesystems = [
                     "!home"
-                    "/mnt/vault101/data/Games/Emulation/PlayStation"
+                    "${config.home.homeDirectory}/Games/ROMS/psx/"
+                  ];
+                };
+              };
+              "net.shadps4.shadPS4" = {
+                Context = {
+                  filesystems = [
+                    "!home"
+                    "${config.home.homeDirectory}/Games/ROMS/ps4/"
                   ];
                 };
               };
@@ -512,8 +367,8 @@ in
                 Context = {
                   filesystems = [
                     "!home"
-                    "/mnt/vault101/data/Games/Emulation/Nintendo GameCube"
-                    "/mnt/vault101/data/Games/Emulation/Nintendo Wii"
+                    "${config.home.homeDirectory}/Games/ROMS/wii/"
+                    "${config.home.homeDirectory}/Games/ROMS/gc/"
                   ];
                 };
               };
@@ -530,7 +385,7 @@ in
               "org.easyrpg.player" = {
                 Context = {
                   filesystems = [
-                    "/mnt/vault101/data/Games/Emulation/RPG Maker"
+                    "${config.home.homeDirectory}/Games/ROMS/rpg/"
                     "!home"
                     "!host"
                   ];
@@ -552,96 +407,96 @@ in
               "org.duckstation.DuckStation"
               "org.easyrpg.player"
               "io.github.Faugus.faugus-launcher"
+              "net.pcsx2.PCSX2"
+              "net.shadps4.shadPS4"
             ];
           };
-          # ludusavi = {
-          #   enable = true;
-          #   backupNotification = true;
-          #   settings = {
-          #     backup = {
-          #       path = "${config.home.homeDirectory}/Games/games/ludusavi";
-          #       format = {
-          #         chosen = "zip";
-          #         zip.compression = "deflate";
-          #       };
-          #     };
-          #     customGames = [
-          #       {
-          #         name = "Dolphin-Emu";
-          #         files = [
-          #           "${config.xdg.dataHome}/dolphin-emu/StateSaves"
-          #           "${config.home.homeDirectory}/.var/app/org.DolphinEmu.dolphin-emu/data/dolphin-emu/StateSaves"
-          #         ];
-          #       }
-          #       {
-          #         name = "Duckstation";
-          #         files = [
-          #           "${config.xdg.configHome}/duckstation/memcards"
-          #           "${config.xdg.configHome}/duckstation/savestates"
-          #           "${config.home.homeDirectory}/.var/app/org.duckstation.DuckStation/config/duckstation/memcards"
-          #           "${config.home.homeDirectory}/.var/app/org.duckstation.DuckStation/config/duckstation/savestates"
-          #         ];
-          #       }
-          #       {
-          #         name = "OpenMW";
-          #         files = [
-          #           "${config.xdg.dataHome}/openmw/saves"
-          #         ];
-          #       }
-          #       {
-          #         name = "PCSX2";
-          #         files = [
-          #           "${config.xdg.configHome}/PCSX2/memcards"
-          #           "${config.xdg.configHome}/PCSX2/sstates"
-          #           "${config.home.homeDirectory}/.var/app/net.pcsx2.PCSX2/config/PCSX2/memcards"
-          #           "${config.home.homeDirectory}/.var/app/net.pcsx2.PCSX2/config/PCSX2/sstates"
-          #         ];
-          #       }
-          #     ];
-          #     restore = {
-          #       path = "${config.home.homeDirectory}/Games/games/ludusavi";
-          #     };
-          #     roots = [
-          #       {
-          #         path = "${config.xdg.configHome}/heroic";
-          #         store = "heroic";
-          #       }
-          #       {
-          #         path = "${config.home.homeDirectory}/Games/Heroic";
-          #         store = "heroic";
-          #       }
-          #       {
-          #         path = "${config.xdg.dataHome}/lutris";
-          #         store = "lutris";
-          #       }
-          #       {
-          #         path = "${config.home.homeDirectory}/Games/Bottles/Battle.net";
-          #         store = "otherWine";
-          #       }
-          #       {
-          #         path = "${config.home.homeDirectory}/Games/Bottles/GOG-Galaxy";
-          #         store = "otherWine";
-          #       }
-          #       {
-          #         path = "${config.home.homeDirectory}/Games/Bottles/itch.io";
-          #         store = "otherWine";
-          #       }
-          #       {
-          #         path = "${config.home.homeDirectory}/Games/Bottles/Uplay";
-          #         store = "otherWine";
-          #       }
-          #       {
-          #         path = "${config.xdg.dataHome}/Steam";
-          #         store = "steam";
-          #       }
-          #       {
-          #         path = "${config.home.homeDirectory}/Games/SteamLibrary";
-          #         store = "steam";
-          #       }
-          #     ];
-          #     theme = "dark";
-          #   };
-          # };
+          ludusavi = {
+            enable = true;
+            backupNotification = true;
+            settings = {
+              backup = {
+                path = "/mnt/vault101/lars/saves/ludusavi";
+                format = {
+                  chosen = "zip";
+                  zip.compression = "deflate";
+                };
+              };
+              customGames = [
+                {
+                  name = "Dolphin-Emu";
+                  files = [
+                    "${config.xdg.dataHome}/dolphin-emu/StateSaves"
+                    "${config.home.homeDirectory}/.var/app/org.DolphinEmu.dolphin-emu/data/dolphin-emu/StateSaves"
+                  ];
+                }
+                {
+                  name = "Duckstation";
+                  files = [
+                    "${config.xdg.configHome}/duckstation/memcards"
+                    "${config.xdg.configHome}/duckstation/savestates"
+                    "${config.home.homeDirectory}/.var/app/org.duckstation.DuckStation/config/duckstation/memcards"
+                    "${config.home.homeDirectory}/.var/app/org.duckstation.DuckStation/config/duckstation/savestates"
+                  ];
+                }
+                {
+                  name = "PCSX2";
+                  files = [
+                    "${config.xdg.configHome}/PCSX2/memcards"
+                    "${config.xdg.configHome}/PCSX2/sstates"
+                    "${config.home.homeDirectory}/.var/app/net.pcsx2.PCSX2/config/PCSX2/memcards"
+                    "${config.home.homeDirectory}/.var/app/net.pcsx2.PCSX2/config/PCSX2/sstates"
+                  ];
+                }
+              ];
+              restore = {
+                path = "/mnt/vault101/lars/saves/ludusavi";
+              };
+              roots = [
+                {
+                  path = "${config.xdg.configHome}/heroic";
+                  store = "heroic";
+                }
+                {
+                  path = "${config.home.homeDirectory}/Games/Heroic";
+                  store = "heroic";
+                }
+                {
+                  path = "${config.xdg.dataHome}/lutris";
+                  store = "lutris";
+                }
+                {
+                  path = "${config.home.homeDirectory}/Games/Lutris";
+                  store = "lutris";
+                }
+                # {
+                #   path = "${config.home.homeDirectory}/Games/Bottles/Battle.net";
+                #   store = "otherWine";
+                # }
+                # {
+                #   path = "${config.home.homeDirectory}/Games/Bottles/GOG-Galaxy";
+                #   store = "otherWine";
+                # }
+                # {
+                #   path = "${config.home.homeDirectory}/Games/Bottles/itch.io";
+                #   store = "otherWine";
+                # }
+                # {
+                #   path = "${config.home.homeDirectory}/Games/Bottles/Uplay";
+                #   store = "otherWine";
+                # }
+                {
+                  path = "${config.xdg.dataHome}/Steam";
+                  store = "steam";
+                }
+                {
+                  path = "${config.home.homeDirectory}/Games/SteamLibrary";
+                  store = "steam";
+                }
+              ];
+              theme = "dark";
+            };
+          };
           wayland-pipewire-idle-inhibit = {
             enable = true;
             settings = {
@@ -656,43 +511,13 @@ in
             };
           };
         };
-        # systemd.user.timers.ludusavi = lib.mkForce {
-        #   Install.WantedBy = [ "timers.target" ];
-        #   Timer = {
-        #     OnBootSec = "2min";
-        #     OnUnitActiveSec = "24h";
-        #   };
-        # };
-        # xdg = {
-        #   desktopEntries = {
-        #     gog-galaxy =
-        #       let
-        #         icon = pkgs.fetchurl {
-        #           url = "https://docs.gog.com/_assets/galaxy_icon_rgb.svg";
-        #           hash = "sha256-SpaFaSK05Uq534qPYV7s7/vzexZmMnpJiVtOsbCtjvg=";
-        #         };
-        #       in
-        #       {
-        #         name = "GOG Galaxy";
-        #         comment = "Launch GOG Galaxy using Bottles.";
-        #         exec = "flatpak run --command=bottles-cli com.usebottles.bottles run -p \"GOG Galaxy\" -b \"GOG Galaxy\" -- %u";
-        #         icon = "${icon}";
-        #         categories = [ "Game" ];
-        #         noDisplay = false;
-        #         startupNotify = true;
-        #         settings = {
-        #           StartupWMClass = "GOG Galaxy";
-        #         };
-        #       };
-        #     itch = {
-        #       name = "itch";
-        #       comment = "Install and play itch.io games easily";
-        #       exec = "env PULSE_SINK=Game obs-gamecapture mangohud itch";
-        #       icon = "itch";
-        #       categories = [ "Game" ];
-        #     };
-        #   };
-        # };
+        systemd.user.timers.ludusavi = lib.mkForce {
+          Install.WantedBy = [ "timers.target" ];
+          Timer = {
+            OnBootSec = "2min";
+            OnUnitActiveSec = "24h";
+          };
+        };
       };
   };
 }

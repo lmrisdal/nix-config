@@ -99,9 +99,9 @@ in
       };
     };
 
-    system.stateVersion = "25.05";
-
     time.timeZone = "Europe/Oslo";
+
+    system.stateVersion = "25.05";
 
     home-manager.users.${username} =
       { lib, username, ... }:

@@ -38,11 +38,32 @@ in
         fi
       '')
     ];
-    home-manager.users.${username} = {
-      home.packages = with pkgs; [ ktailctl ];
-      xdg.autostart.entries = with pkgs; [
-        "${ktailctl}/share/applications/org.fkoehler.KTailctl.desktop"
-      ];
-    };
+    home-manager.users.${username} =
+      {
+        config,
+        ...
+      }:
+      {
+        # services.tailscale-systray.enable = true;
+        home.packages = with pkgs; [
+          trayscale
+          tailscale-systray
+        ];
+        home.file = {
+          trayscale-autostart = {
+            enable = true;
+            text = ''
+              [Desktop Entry]
+              Name=Tailscale
+              Comment=Tailscale system tray
+              Exec=tailscale-systray
+              StartupNotify=false
+              Terminal=false
+              Type=Application
+            '';
+            target = "${config.xdg.configHome}/autostart/tailscale-systray.desktop";
+          };
+        };
+      };
   };
 }
