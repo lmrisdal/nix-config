@@ -85,32 +85,13 @@ in
           extraProfileCommands = ''
             export GPG_TTY=$(tty)
           '';
-          #language.base = "en_US.UTF-8";
           sessionPath = [
             "${config.home.homeDirectory}/.bin"
             "${config.home.homeDirectory}/.local/bin"
           ];
           sessionVariables = {
-            # MANPAGER = "batman";
             NIXOS_OZONE_WL = "1"; # Electron apps
             NIXPKGS_ALLOW_UNFREE = "1";
-            # XCOMPOSECACHE = "${config.xdg.cacheHome}/X11/xcompose";
-          };
-          shellAliases = {
-            # b = "bat --color=always -pp";
-            # bb = "bat --color=always";
-            # db = "distrobox";
-            # dbe = "db enter";
-            # l = "lsd -la --group-dirs=first";
-            # nv = "nvim";
-            # ngc = "nh clean all";
-            # nor = "nh os switch";
-            # npr = "nixpkgs-review pr --print-result";
-            # psr = "plasmashell --replace & disown";
-            # rbn = "podman stop -a && systemctl reboot";
-            # repw = "systemctl --user restart pipewire{,-pulse} wireplumber";
-            # up = "topgrade";
-            # wget = "wget --hsts-file=${config.xdg.dataHome}/wget-hsts";
           };
         };
         nixpkgs = {

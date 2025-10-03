@@ -19,14 +19,25 @@ in
       tailscale = {
         enable = true;
         openFirewall = true;
-        #package = pkgs.unstable.tailscale;
         extraSetFlags = [
+          "--ssh"
           "--accept-routes"
         ];
         useRoutingFeatures = "both";
       };
     };
-
+    environment.systemPackages = with pkgs; [
+      (pkgs.writeShellScriptBin "toggle-tailscale" ''
+        status=$(tailscale status | grep -o 'active')
+        if [ "$status" = "active" ]; then
+          tailscale down
+          notify-send "Tailscale disconnected"
+        else
+          tailscale up
+          notify-send "Tailscale connected"
+        fi
+      '')
+    ];
     home-manager.users.${username} = {
       home.packages = with pkgs; [ ktailctl ];
       xdg.autostart.entries = with pkgs; [

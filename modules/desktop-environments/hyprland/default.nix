@@ -67,6 +67,7 @@ in
       yad # dialog utility
       wl-clipboard # clipboard utils
       socat # socket utility
+      gnome-system-monitor # system monitor
       #wl-screenrec # screen recording https://github.com/russelltg/wl-screenrec/issues/95
       (pkgs.writeShellScriptBin "toggle-altwin" ''
         # Toggle Hyprland alt/win key swap (altwin:swap_lalt_lwin)
@@ -115,10 +116,21 @@ in
           if [[ "$format" == "XRGB8888" ]]; then
               ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:bitdepth" 10
               ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:cm" hdr
+              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:supports_wide_color" 1
+              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:supports_hdr" 1
+              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:sdrbrightness" hdr
+              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:sdrsaturation" hdr
+              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:sdr_min_luminance" 0.005
+              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:sdr_max_luminance" 200
+              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:min_luminance" 0
+              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:max_luminance" 1300
+              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:max_avg_luminance" 200
               ${pkgs.hyprland}/bin/hyprctl keyword "decoration:blur:enabled" true
           elif [[ "$format" == "XBGR2101010" ]]; then
               ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:bitdepth" 8
               ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:cm" srgb
+              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:supports_wide_color" 0
+              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:supports_hdr" 0
               ${pkgs.hyprland}/bin/hyprctl keyword "decoration:blur:enabled" true
           else
               echo "Unknown format: $format"
