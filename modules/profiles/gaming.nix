@@ -19,7 +19,7 @@ in
   config = lib.mkIf cfg.enable {
     # Custom modules
     bottles.enable = true;
-    gamemode.enable = false;
+    gamemode.enable = true;
     gamescope.enable = true;
     heroic.enable = true;
     lutris.enable = true;

@@ -78,11 +78,11 @@ in
       '')
       (pkgs.writeShellScriptBin "get-screen-device-name" ''
         #!/bin/bash
-        echo $(edid-decode /sys/class/drm/card1-HDMI-A-1/edid | grep "Display Product Name" | cut -d"'" -f2)
+        echo $(${pkgs.edid-decode}/bin/edid-decode /sys/class/drm/card1-HDMI-A-1/edid | grep "Display Product Name" | cut -d"'" -f2)
       '')
       (pkgs.writeShellScriptBin "get-screen-width" ''
         #!/bin/bash
-        width=$(edid-decode /sys/class/drm/card1-HDMI-A-1/edid 2>/dev/null | grep -oP '\b\d+x\d+\b' | cut -dx -f1 | sort -n | tail -1)
+        width=$(${pkgs.edid-decode}/bin/edid-decode /sys/class/drm/card1-HDMI-A-1/edid 2>/dev/null | grep -oP '\b\d+x\d+\b' | cut -dx -f1 | sort -n | tail -1)
         if [[ -z "$width" || "$width" -eq 0 || "$width" -gt 3840 ]]; then
           echo "3840"
         else
@@ -91,7 +91,7 @@ in
       '')
       (pkgs.writeShellScriptBin "get-screen-height" ''
         #!/bin/bash
-        height=$(edid-decode /sys/class/drm/card1-HDMI-A-1/edid 2>/dev/null | grep -oP '[0-9]{3,5}x[0-9]{3,5}' | cut -dx -f2 | sort -n | tail -1)
+        height=$(${pkgs.edid-decode}/bin/edid-decode /sys/class/drm/card1-HDMI-A-1/edid 2>/dev/null | grep -oP '[0-9]{3,5}x[0-9]{3,5}' | cut -dx -f2 | sort -n | tail -1)
         if [[ -z "$height" || "$height" -eq 0 ]]; then
           echo "2160"
         else
@@ -104,7 +104,7 @@ in
         if [[ "$device_name" == "LG TV SSCR2" ]]; then
           echo "120"
         else
-          refresh=$(edid-decode /sys/class/drm/card1-HDMI-A-1/edid 2>/dev/null | grep "Maximum Refresh Rate" | cut -d"'" -f2 | awk '{print $4}')
+          refresh=$(${pkgs.edid-decode}/bin/edid-decode /sys/class/drm/card1-HDMI-A-1/edid 2>/dev/null | grep "Maximum Refresh Rate" | cut -d"'" -f2 | awk '{print $4}')
           if [[ -z "$refresh" || "$refresh" -eq 0 ]]; then
             echo "60"
           else
@@ -114,7 +114,6 @@ in
       '')
       (pkgs.writeShellScriptBin "gamescope-session" ''
         #!/bin/bash
-        systemctl --user start --now sunshine
         #echo -e "\n[Autologin]\nUser=${username}\nRelogin=true\nSession=${defaultSession}" > /etc/sddm.conf.d/50-autologin.conf
         mkdir -p ~/.local/state
         >~/.local/state/steamos-session-select echo "${defaultSession}"
@@ -137,6 +136,8 @@ in
           --hdr-itm-enable \
           --adaptive-sync \
           -- steam -steamos3 -steampal -steamdeck -gamepadui -pipewire-dmabuf # run without -steamos3 from terminal first
+          sleep 5
+          systemctl --user start --now sunshine
       '')
     ];
     security.sudo.extraRules = [
@@ -167,7 +168,7 @@ in
       path = [ "/run/current-system/sw" ];
       script = ''
         #!/bin/sh
-        displayProductName=$(edid-decode /sys/class/drm/card1-HDMI-A-1/edid | grep "Display Product Name" | cut -d"'" -f2)
+        displayProductName=$(${pkgs.edid-decode}/bin/edid-decode /sys/class/drm/card1-HDMI-A-1/edid | grep "Display Product Name" | cut -d"'" -f2)
         if [[ "$displayProductName" == *"LG TV"* ]]; then
           # echo -e "\n[Autologin]\nUser=${username}\nSession=steam\nEnable=true" > /etc/sddm.conf.d/20-defaultsession.conf
           mkdir -p ~/.local/state

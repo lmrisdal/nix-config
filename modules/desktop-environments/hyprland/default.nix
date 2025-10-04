@@ -86,8 +86,6 @@ in
         fi
       '')
       (pkgs.writeShellScriptBin "hypr-toggle-hdr" ''
-        #!/usr/bin/env bash
-
         monitor=$(${pkgs.hyprland}/bin/hyprctl monitors -j | ${pkgs.jq}/bin/jq -r ".[] | select(.focused==true).name")
         # Find the sysfs path to EDID dynamically under card*
         edid_path=""
@@ -107,38 +105,123 @@ in
         if ${pkgs.edid-decode}/bin/edid-decode < "$edid_path" | grep -q "HDR Static Metadata Data Block"; then
           echo "HDR support detected on $monitor"
 
+          enable_hdr() {
+            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:bitdepth" 10
+            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:cm" hdr
+            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:sdrbrightness" hdr
+            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:sdrsaturation" hdr
+            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:sdr_min_luminance" 0.005
+            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:sdr_max_luminance" 200
+            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:min_luminance" 0
+            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:max_luminance" 1000
+            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:max_avg_luminance" 200
+            ${pkgs.hyprland}/bin/hyprctl keyword "decoration:blur:enabled" true # without this, blur turns off when toggling hdr
+          }
+
+          disable_hdr() {
+            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:bitdepth" 8
+            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:cm" srgb
+            ${pkgs.hyprland}/bin/hyprctl keyword "decoration:blur:enabled" true # without this, blur turns off when toggling hdr
+          }
+
           # Query monitor state
           state=$(${pkgs.hyprland}/bin/hyprctl monitors -j | ${pkgs.jq}/bin/jq -r ".[] | select(.name==\"$monitor\")")
           
           format=$(echo "$state" | ${pkgs.jq}/bin/jq -r ".currentFormat")
           
-          ### HDR / SDR toggle (bitdepth + cm)
-          if [[ "$format" == "XRGB8888" ]]; then
-              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:bitdepth" 10
-              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:cm" hdr
-              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:supports_wide_color" 1
-              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:supports_hdr" 1
-              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:sdrbrightness" hdr
-              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:sdrsaturation" hdr
-              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:sdr_min_luminance" 0.005
-              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:sdr_max_luminance" 200
-              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:min_luminance" 0
-              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:max_luminance" 1300
-              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:max_avg_luminance" 200
-              ${pkgs.hyprland}/bin/hyprctl keyword "decoration:blur:enabled" true
-          elif [[ "$format" == "XBGR2101010" ]]; then
-              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:bitdepth" 8
-              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:cm" srgb
-              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:supports_wide_color" 0
-              ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:supports_hdr" 0
-              ${pkgs.hyprland}/bin/hyprctl keyword "decoration:blur:enabled" true
-          else
-              echo "Unknown format: $format"
-          fi
+          override=$1 # "on", "off", or empty/other -> toggle fallback
+          echo "override: '$override', current format: '$format'"
+
+          case "$override" in
+            on)
+              enable_hdr
+              exit 0
+              ;;
+            off)
+              disable_hdr
+              exit 0
+              ;;
+            *)
+              if [[ "$format" == "XRGB8888" ]]; then
+                enable_hdr
+              elif [[ "$format" == "XBGR2101010" ]]; then
+                disable_hdr
+              else
+                echo "Unknown format: $format"
+                exit 1
+              fi
+              ;;
+          esac
 
         else
           echo "HDR not supported on $monitor; no changes made."
         fi
+      '')
+      (pkgs.writeShellScriptBin "hypr-get-hdr-state" ''
+        monitor=$(${pkgs.hyprland}/bin/hyprctl monitors -j | ${pkgs.jq}/bin/jq -r '.[] | select(.focused==true).name')
+        state=$(${pkgs.hyprland}/bin/hyprctl monitors -j | ${pkgs.jq}/bin/jq -r ".[] | select(.name==\"$monitor\")")
+        format=$(echo "$state" | ${pkgs.jq}/bin/jq -r ".currentFormat")
+        if [[ "$format" == "XBGR2101010" ]]; then
+          echo 1 # HDR
+        else
+          echo 0 # SDR
+        fi
+      '')
+      (pkgs.writeShellScriptBin "hypr-toggle-vrr" ''
+        state_dir="/home/${username}/.local/state/hypr"
+        state_file="$state_dir/vrr_enabled"
+        mkdir -p "$state_dir"
+
+        # Read current preference; default to 3 (auto)
+        if [ -r "$state_file" ]; then
+          current_vrr="$(cat "$state_file" 2>/dev/null || echo 3)"
+        else
+          current_vrr="3"
+        fi
+
+        monitor=$(${pkgs.hyprland}/bin/hyprctl monitors -j | ${pkgs.jq}/bin/jq -r '.[] | select(.focused==true).name')
+        override=$1  # "on" -> 3, "off" -> 0, empty/other -> toggle
+
+        case "$override" in
+          on)  target=3 ;;
+          off) target=0 ;;
+          *)   if [ "$current_vrr" = "3" ]; then target=0; else target=3; fi ;;
+        esac
+
+        ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:vrr" "$target"
+        echo "$target" > "$state_file"
+
+        if [ "$target" -eq 3 ]; then
+          notify-send "VRR: auto (enabled)" -t 1500
+        else
+          notify-send "VRR: off" -t 1500
+        fi
+      '')
+      (pkgs.writeShellScriptBin "hypr-set-resolution" ''
+        monitor=$(${pkgs.hyprland}/bin/hyprctl monitors -j | ${pkgs.jq}/bin/jq -r '.[] | select(.focused==true).name')
+        width=$1
+        height=$2
+        refresh=$3
+        if [ -z "$width" ] || [ -z "$height" ] || [ -z "$refresh" ]; then
+          echo "Usage: hypr-set-resolution <width> <height> <refresh_rate>"
+          exit 1
+        fi
+        ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:mode" "''${width}x''${height}@''${refresh}"
+        ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:scale" 1
+      '')
+      (pkgs.writeShellScriptBin "hypr-reset-resolution" ''
+        monitor=$(${pkgs.hyprland}/bin/hyprctl monitors -j | ${pkgs.jq}/bin/jq -r '.[] | select(.focused==true).name')
+        ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:mode" "3840x2160@240"
+        ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:scale" 1.2
+      '')
+      (pkgs.writeShellScriptBin "hypr-set-scale" ''
+        monitor=$(${pkgs.hyprland}/bin/hyprctl monitors -j | ${pkgs.jq}/bin/jq -r '.[] | select(.focused==true).name')
+        scale=$1
+        if [ -z "$scale" ]; then
+          echo "Usage: hypr-set-scale <scale_factor>"
+          exit 1
+        fi
+        ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:scale" "$scale"
       '')
     ];
     programs.hyprland.enable = true;
@@ -170,6 +253,17 @@ in
           "org/gnome/desktop/interface".color-scheme = "prefer-dark";
         };
         services.hyprpolkitagent.enable = true;
+        home.file = {
+          ".config/hypr/xdph.conf" = lib.mkDefault {
+            text = ''
+              screencopy {
+                max_fps = 60
+                allow_token_by_default = true
+                custom_picker_binary = hyprland-share-picker
+              }
+            '';
+          };
+        };
       };
   };
 }
