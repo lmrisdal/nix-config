@@ -4,5 +4,6 @@
     ./desktop.nix
     ./gaming.nix
     ./packages.nix
+    ./work.nix
   ];
 }

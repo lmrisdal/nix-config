@@ -18,8 +18,7 @@
   # Custom modules
   desktop.enable = true;
   gaming.enable = true;
-  # streamcontroller.enable = true;
-  # vhs-decode.enable = true;
+  work.enable = true;
 
   boot = {
     initrd = {
@@ -41,6 +40,7 @@
       "amd_pstate=guided"
       "microcode.amd_sha_check=off"
     ];
+    # kernelPackages = pkgs.linuxPackages_cachyos.cachyOverride { mArch = "ZEN4"; };
     # loader = {
     #   systemd-boot = {
     #     windows = {

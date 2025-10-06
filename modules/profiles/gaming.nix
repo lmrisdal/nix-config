@@ -35,7 +35,6 @@ in
       kernelModules = [
         "ntsync"
       ];
-      # kernelPackages = lib.mkForce pkgs.linuxPackages_cachyos;
       kernelParams = [
         "tsc=reliable"
         "clocksource=tsc"
