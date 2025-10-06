@@ -32,13 +32,13 @@ in
       }:
       {
         home.file = {
-          wine-links-kron4ek-lutris-flatpak = {
-            enable = cfg.enableFlatpak;
-            source =
-              config.lib.file.mkOutOfStoreSymlink
-                inputs.nix-gaming.packages.${pkgs.system}.wine-tkg-ntsync;
-            target = ".var/app/net.lutris.Lutris/data/lutris/runners/wine/kron4ek";
-          };
+          # wine-links-kron4ek-lutris-flatpak = {
+          #   enable = cfg.enableFlatpak;
+          #   source =
+          #     config.lib.file.mkOutOfStoreSymlink
+          #       inputs.nix-gaming.packages.${pkgs.system}.wine-tkg-ntsync;
+          #   target = ".var/app/net.lutris.Lutris/data/lutris/runners/wine/kron4ek";
+          # };
           wine-links-proton-cachyos-flatpak-lutris = {
             enable = cfg.enableFlatpak;
             source = config.lib.file.mkOutOfStoreSymlink "${
@@ -62,12 +62,12 @@ in
             winetricks
           ];
           protonPackages = with pkgs; [
-            #inputs.chaotic.packages.${pkgs.system}.proton-cachyos
+            # inputs.chaotic.packages.${pkgs.system}.proton-cachyos_x86_64_v4
             proton-ge-bin
           ];
           steamPackage = osConfig.programs.steam.package;
           winePackages = with pkgs; [
-            inputs.nix-gaming.packages.${pkgs.system}.wine-tkg-ntsync
+            #inputs.nix-gaming.packages.${pkgs.system}.wine-tkg-ntsync
           ];
         };
         services.flatpak = lib.mkIf cfg.enableFlatpak {

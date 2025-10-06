@@ -206,8 +206,8 @@ in
           echo "Usage: hypr-set-resolution <width> <height> <refresh_rate>"
           exit 1
         fi
+        ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:scale" 1.0
         ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:mode" "''${width}x''${height}@''${refresh}"
-        ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:scale" 1
       '')
       (pkgs.writeShellScriptBin "hypr-reset-resolution" ''
         monitor=$(${pkgs.hyprland}/bin/hyprctl monitors -j | ${pkgs.jq}/bin/jq -r '.[] | select(.focused==true).name')
