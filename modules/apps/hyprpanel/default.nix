@@ -16,14 +16,12 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      python313Packages.gpustat
-    ];
     home-manager.users.${username} =
       { config, pkgs, ... }:
       {
         programs.hyprpanel = {
           enable = true;
+          dontAssertNotificationDaemons = false;
           systemd.enable = true;
           settings = {
             bar = {
@@ -47,6 +45,8 @@ in
                     "media"
                   ];
                   right = [
+                    "custom/recording-active"
+                    "custom/is_screen_sharing"
                     "volume"
                     "systray"
                     "clock"
@@ -112,6 +112,69 @@ in
             scalingPriority = "hyprland";
           };
         };
+        xdg.configFile."hyprpanel/modules.json".source = pkgs.writeText "modules.json" (
+          builtins.toJSON {
+            "custom/is_screen_sharing" = {
+              icon = "󱒃";
+              label = "Sharing screen";
+              execute = ''
+                set -euo pipefail
+                ${pkgs.pipewire}/bin/pw-dump 2>/dev/null | ${pkgs.jq}/bin/jq -r 'map(.info?.props?) | map(select(.["media.name"]? == "webrtc-consume-stream")) | map(.["stream.is-live"]? == true | "LIVE") | .[]?' 2>/dev/null || true
+              '';
+              interval = 2000;
+              hideOnEmpty = true;
+            };
+            "custom/recording-active" = {
+              icon = "";
+              label = "{}";
+              execute = ''
+                if ${pkgs.procps}/bin/pgrep -x wf-recorder > /dev/null; then
+                  echo "REC"
+                else
+                  echo ""
+                fi
+              '';
+              interval = 1000;
+              hideOnEmpty = true;
+              actions = {
+                onLeftClick = "stop-screen-recording";
+              };
+            };
+          }
+        );
+        xdg.configFile."hyprpanel/modules.scss".text = ''
+          @include styleModule(
+            'cmodule-is_screen_sharing',
+            (
+              'icon-color': #CDD6F4, // Catppuccin Text
+              'text-color': #CDD6F4 // Catppuccin Text
+            )
+          );
+          @include styleModule(
+            'cmodule-recording-active',
+            (
+              'text-color': #F38BA8, // Catppuccin Red
+              'icon-color': #F38BA8
+            )
+          );
+        '';
+        # home.file = {
+        #   custom-modules = {
+        #     enable = true;
+        #     text = ''
+        #       {
+        #         "custom/is_screen_sharing": {
+        #           "icon": "󱒃",
+        #           "execute": "is-screen-sharing",
+        #           "interval": 2000,
+        #           "hideOnEmpty": true,
+        #           "label": "Sharing screen"
+        #         }
+        #       }
+        #     '';
+        #     target = "${config.xdg.configHome}/hyprpanel/modules.json";
+        #   };
+        # };
       };
   };
 }
