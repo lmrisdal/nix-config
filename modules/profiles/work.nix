@@ -36,6 +36,7 @@ in
           pulumi-bin
           redisinsight
           jetbrains.rider
+          dapr-cli
           (pkgs.writeShellScriptBin "pulumi-env-dt" ''
             _pulumi_read() { tr -d '\n' < "$1"; }
             export AZURE_STORAGE_ACCOUNT="$(_pulumi_read ${

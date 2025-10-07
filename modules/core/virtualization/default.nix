@@ -51,6 +51,9 @@ in
           cores = 3;
         };
       };
+      docker = {
+        enable = true;
+      };
     };
 
     programs.virt-manager.enable = true;
@@ -61,7 +64,6 @@ in
           extraGroups = [
             "docker"
             "kvm"
-            "podman"
             "libvirtd"
           ];
         };
