@@ -32,13 +32,11 @@ in
       }:
       {
         home.file = {
-          # wine-links-kron4ek-lutris-flatpak = {
-          #   enable = cfg.enableFlatpak;
-          #   source =
-          #     config.lib.file.mkOutOfStoreSymlink
-          #       inputs.nix-gaming.packages.${pkgs.system}.wine-tkg-ntsync;
-          #   target = ".var/app/net.lutris.Lutris/data/lutris/runners/wine/kron4ek";
-          # };
+          wine-links-kron4ek-lutris-flatpak = {
+            enable = cfg.enableFlatpak;
+            source = config.lib.file.mkOutOfStoreSymlink inputs.nix-gaming.packages.${pkgs.system}.wine-tkg;
+            target = ".var/app/net.lutris.Lutris/data/lutris/runners/wine/kron4ek";
+          };
           wine-links-proton-cachyos-flatpak-lutris = {
             enable = cfg.enableFlatpak;
             source = config.lib.file.mkOutOfStoreSymlink "${
@@ -67,7 +65,7 @@ in
           ];
           steamPackage = osConfig.programs.steam.package;
           winePackages = with pkgs; [
-            #inputs.nix-gaming.packages.${pkgs.system}.wine-tkg-ntsync
+            inputs.nix-gaming.packages.${pkgs.system}.wine-tkg
           ];
         };
         services.flatpak = lib.mkIf cfg.enableFlatpak {
@@ -75,7 +73,6 @@ in
             "net.lutris.Lutris" = {
               Context = {
                 filesystems = [
-                  #"/mnt/crusader/Games"
                   "${config.home.homeDirectory}/Games"
                   "${config.xdg.dataHome}/applications"
                   "${config.xdg.dataHome}/games"

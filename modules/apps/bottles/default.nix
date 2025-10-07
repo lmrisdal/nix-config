@@ -29,16 +29,12 @@ in
         home.file = {
           wine-links-kron4ek-bottles = {
             enable = false;
-            source =
-              config.lib.file.mkOutOfStoreSymlink
-                inputs.nix-gaming.packages.${pkgs.system}.wine-tkg-ntsync;
+            source = config.lib.file.mkOutOfStoreSymlink inputs.nix-gaming.packages.${pkgs.system}.wine-tkg;
             target = "${config.xdg.dataHome}/bottles/runners/kron4ek";
           };
           wine-links-kron4ek-bottles-flatpak = {
             enable = false;
-            source =
-              config.lib.file.mkOutOfStoreSymlink
-                inputs.nix-gaming.packages.${pkgs.system}.wine-tkg-ntsync;
+            source = config.lib.file.mkOutOfStoreSymlink inputs.nix-gaming.packages.${pkgs.system}.wine-tkg;
             target = ".var/app/com.usebottles.bottles/data/bottles/runners/kron4ek";
           };
           wine-links-proton-cachyos-bottles = {

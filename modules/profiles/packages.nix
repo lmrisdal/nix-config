@@ -37,6 +37,7 @@ in
         killall
         btop
         cmatrix
+        inputs.nix-gaming.packages.${system}.wine-tkg
       ];
     };
     programs = {

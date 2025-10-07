@@ -58,7 +58,6 @@ in
             "com.heroicgameslauncher.hgl" = {
               Context = {
                 filesystems = [
-                  #"/mnt/crusader/Games"
                   "${config.home.homeDirectory}/Games"
                   "${config.xdg.dataHome}/applications"
                   "${config.xdg.dataHome}/games"

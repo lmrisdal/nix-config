@@ -86,7 +86,10 @@
       package = config.boot.kernelPackages.nvidiaPackages.beta;
     };
   };
-  environment.sessionVariables.GSK_RENDERER = "ngl";
+  environment.sessionVariables = {
+    GSK_RENDERER = "ngl";
+    __GL_SHADER_DISK_CACHE_SIZE = "12000000000";
+  };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   networking.useDHCP = lib.mkDefault true;
@@ -124,7 +127,6 @@
     { pkgs, ... }:
     {
       home = {
-        packages = with pkgs; [ ];
         sessionVariables = {
           WAYLANDDRV_PRIMARY_MONITOR = "HDMI-A-1"; # https://reddit.com/r/linux_gaming/comments/1louxm2/fix_for_wine_wayland_using_wrong_monitor/
         };
