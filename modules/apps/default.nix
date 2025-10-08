@@ -45,5 +45,6 @@
     ./hypridle
     ./greetd
     ./wf-recorder
+    ./dotnet
   ];
 }
