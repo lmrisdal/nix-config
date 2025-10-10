@@ -26,9 +26,10 @@ in
     rofi.enable = true;
     artifacts-credprovider.enable = true;
     coolercontrol.enable = true;
-    #vesktop.enable = true;
+    vesktop.enable = false;
     vicinae.enable = true;
     wf-recorder.enable = true;
+    wl-ocr.enable = true;
 
     # System
     base.enable = true;

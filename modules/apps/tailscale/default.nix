@@ -31,10 +31,10 @@ in
         status=$(tailscale status | grep -o 'active')
         if [ "$status" = "active" ]; then
           tailscale down
-          notify-send "Tailscale disconnected"
+          notify-send "Tailscale disconnected" -t 1000
         else
           tailscale up
-          notify-send "Tailscale connected"
+          notify-send "Tailscale connected" -t 1000
         fi
       '')
     ];

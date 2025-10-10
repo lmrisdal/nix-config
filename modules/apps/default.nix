@@ -46,5 +46,6 @@
     ./greetd
     ./wf-recorder
     ./dotnet
+    ./wl-ocr
   ];
 }
