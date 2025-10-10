@@ -44,19 +44,17 @@ in
         ...
       }:
       {
-        # services.tailscale-systray.enable = true;
         home.packages = with pkgs; [
           trayscale
-          tailscale-systray
         ];
         home.file = {
-          trayscale-autostart = {
+          tailscale-systray = {
             enable = true;
             text = ''
               [Desktop Entry]
               Name=Tailscale
               Comment=Tailscale system tray
-              Exec=tailscale-systray
+              Exec=tailscale systray
               StartupNotify=false
               Terminal=false
               Type=Application
