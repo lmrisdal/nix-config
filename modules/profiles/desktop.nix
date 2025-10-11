@@ -20,7 +20,7 @@ in
   config = lib.mkIf cfg.enable {
     # vscode.enable = true;
     kitty.enable = true;
-    ghostty.enable = true;
+    ghostty.enable = false;
     zen-browser.enable = true;
     ulauncher.enable = false;
     rofi.enable = true;
@@ -30,6 +30,7 @@ in
     vicinae.enable = true;
     wf-recorder.enable = true;
     wl-ocr.enable = true;
+    localsend.enable = true;
 
     # System
     base.enable = true;

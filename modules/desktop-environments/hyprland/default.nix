@@ -58,6 +58,8 @@ in
       pavucontrol # volume control
       wiremix # volume control
       nautilus # file manager
+      code-nautilus # vscode integration
+      nautilus-python # nautilus plugin support
       ddcutil # control monitor brightness
       brightnessctl # control monitor brightness
       kdePackages.xwaylandvideobridge
@@ -106,22 +108,24 @@ in
           echo "HDR support detected on $monitor"
 
           enable_hdr() {
-            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:bitdepth" 10
-            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:cm" hdr
-            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:sdrbrightness" hdr
-            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:sdrsaturation" hdr
-            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:sdr_min_luminance" 0.005
-            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:sdr_max_luminance" 200
-            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:min_luminance" 0
-            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:max_luminance" 1000
-            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:max_avg_luminance" 200
-            ${pkgs.hyprland}/bin/hyprctl keyword "decoration:blur:enabled" true # without this, blur turns off when toggling hdr
+            ${pkgs.hyprland}/bin/hyprctl --batch \
+              "keyword monitorv2[$monitor]:bitdepth 10 ; \
+              keyword monitorv2[$monitor]:cm hdr ; \
+              keyword monitorv2[$monitor]:sdrbrightness 1 ; \
+              keyword monitorv2[$monitor]:sdrsaturation 1 ; \
+              keyword monitorv2[$monitor]:sdr_min_luminance 0.005 ; \
+              keyword monitorv2[$monitor]:sdr_max_luminance 200 ; \
+              keyword monitorv2[$monitor]:min_luminance 0.005 ; \
+              keyword monitorv2[$monitor]:max_luminance 1200 ; \
+              keyword monitorv2[$monitor]:max_avg_luminance 200 ; \
+              keyword decoration:blur:enabled true"
           }
 
           disable_hdr() {
-            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:bitdepth" 8
-            ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:cm" srgb
-            ${pkgs.hyprland}/bin/hyprctl keyword "decoration:blur:enabled" true # without this, blur turns off when toggling hdr
+            ${pkgs.hyprland}/bin/hyprctl --batch \
+              "keyword monitorv2[$monitor]:bitdepth 8 ; \
+              keyword monitorv2[$monitor]:cm srgb ; \
+              keyword decoration:blur:enabled true"
           }
 
           # Query monitor state
@@ -206,8 +210,9 @@ in
           echo "Usage: hypr-set-resolution <width> <height> <refresh_rate>"
           exit 1
         fi
-        ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:scale" 1.0
-        ${pkgs.hyprland}/bin/hyprctl keyword "monitorv2[$monitor]:mode" "''${width}x''${height}@''${refresh}"
+        ${pkgs.hyprland}/bin/hyprctl --batch \
+          "keyword monitorv2[$monitor]:scale 1.0 ; \
+          keyword monitorv2[$monitor]:mode ''${width}x''${height}@''${refresh}"
       '')
       (pkgs.writeShellScriptBin "hypr-reset-resolution" ''
         monitor=$(${pkgs.hyprland}/bin/hyprctl monitors -j | ${pkgs.jq}/bin/jq -r '.[] | select(.focused==true).name')

@@ -47,5 +47,6 @@
     ./wf-recorder
     ./dotnet
     ./wl-ocr
+    ./localsend
   ];
 }

@@ -72,6 +72,7 @@ in
             "com.usebottles.bottles" = {
               Context = {
                 filesystems = [
+                  "/run/media/${username}"
                   "${config.xdg.dataHome}/bottles"
                   "${config.xdg.dataHome}/Steam"
                   "${config.home.homeDirectory}/Games/Bottles"

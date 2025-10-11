@@ -34,7 +34,7 @@ in
       home.file = {
         ".config/interception/dual-function-keys.yaml".text = ''
           TIMING:
-            TAP_MILLISEC: 50
+            TAP_MILLISEC: 200
 
           MAPPINGS:
             - KEY: KEY_CAPSLOCK
