@@ -23,14 +23,11 @@
       tldr # Help
       wget # Download
       nixfmt-rfc-style # Nix formatter
-      whatsapp-for-mac
-      dotnet-sdk
       raycast
       discord
       monitorcontrol
       rectangle
       spotify
-      azure-functions-core-tools
       chatgpt
       google-chrome
       syncthing
@@ -64,6 +61,10 @@
     };
     brews = [
       "azure-cli"
+      "azure-functions-core-tools@4"
+    ];
+    taps = [
+      "azure/functions"
     ];
     casks = [
       "linearmouse"
@@ -77,6 +78,9 @@
       "alt-tab"
       "rustdesk"
       "libreoffice"
+      "arc"
+      "postman"
+      "dotnet-sdk@8"
     ];
     masApps = {
       "1Password for Safari" = 1569813296;
