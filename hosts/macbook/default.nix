@@ -30,27 +30,7 @@
       spotify
       chatgpt
       google-chrome
-      syncthing
-      aerospace
-      kitty
-      autoraise
     ];
-  };
-
-  launchd = {
-    user = {
-      agents = {
-        syncthing = {
-          command = "${pkgs.syncthing}/bin/syncthing";
-          serviceConfig = {
-            KeepAlive = true;
-            RunAtLoad = true;
-            StandardOutPath = "/tmp/syncthing_lars.out.log";
-            StandardErrorPath = "/tmp/syncthing_lars.err.log";
-          };
-        };
-      };
-    };
   };
 
   homebrew = {
