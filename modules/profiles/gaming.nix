@@ -61,11 +61,6 @@ in
       };
     };
 
-    environment.systemPackages = with pkgs; [
-      # star citizen
-      inputs.nix-citizen.packages.${system}.star-citizen
-    ];
-
     hardware = {
       uinput.enable = true;
       xpadneo.enable = true;
@@ -451,6 +446,13 @@ in
               restore = {
                 path = "/mnt/vault101/lars/saves/ludusavi";
               };
+              redirects = [
+                {
+                  kind = "restore";
+                  source = "C:/Users";
+                  target = "/home";
+                }
+              ];
               roots = [
                 {
                   path = "${config.xdg.configHome}/heroic";
@@ -468,22 +470,10 @@ in
                   path = "${config.home.homeDirectory}/Games/Lutris";
                   store = "lutris";
                 }
-                # {
-                #   path = "${config.home.homeDirectory}/Games/Bottles/Battle.net";
-                #   store = "otherWine";
-                # }
-                # {
-                #   path = "${config.home.homeDirectory}/Games/Bottles/GOG-Galaxy";
-                #   store = "otherWine";
-                # }
-                # {
-                #   path = "${config.home.homeDirectory}/Games/Bottles/itch.io";
-                #   store = "otherWine";
-                # }
-                # {
-                #   path = "${config.home.homeDirectory}/Games/Bottles/Uplay";
-                #   store = "otherWine";
-                # }
+                {
+                  path = "${config.home.homeDirectory}/Games/Bottles";
+                  store = "otherWine";
+                }
                 {
                   path = "${config.xdg.dataHome}/Steam";
                   store = "steam";

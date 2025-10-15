@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # https://nixpkgs-tracker.ocfox.me/?pr=449946
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; # https://nixpkgs-tracker.ocfox.me/?pr=449946
     chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";

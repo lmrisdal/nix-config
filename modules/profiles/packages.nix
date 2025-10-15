@@ -31,6 +31,8 @@ in
         xdg-user-dirs
         ntfs3g
         nixfmt-rfc-style
+        nixd
+        nil
         libdbusmenu
         edid-decode
         lsof
@@ -51,7 +53,6 @@ in
     };
     home-manager.users.${username} =
       {
-        lib,
         pkgs,
         config,
         ...
