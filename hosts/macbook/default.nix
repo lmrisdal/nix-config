@@ -30,6 +30,7 @@
       spotify
       chatgpt
       google-chrome
+      the-unarchiver
     ];
   };
 
@@ -42,6 +43,7 @@
     brews = [
       "azure-cli"
       "azure-functions-core-tools@4"
+      "p7zip"
     ];
     taps = [
       "azure/functions"
