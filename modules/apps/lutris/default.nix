@@ -64,7 +64,7 @@ in
             proton-ge-bin
           ];
           steamPackage = osConfig.programs.steam.package;
-          winePackages = with pkgs; [
+          winePackages = [
             inputs.nix-gaming.packages.${pkgs.system}.wine-tkg
           ];
         };

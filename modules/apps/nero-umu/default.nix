@@ -33,15 +33,7 @@ in
           };
         };
         home.packages = with pkgs; [
-          (nero-umu.overrideAttrs {
-            version = "0-unstable-2025-07-19";
-            src = fetchFromGitHub {
-              owner = "SeongGino";
-              repo = "Nero-umu";
-              rev = "c4301703275b30ecf526116253ef85802ef2548d";
-              hash = "sha256-vSynh1Xsbv8OKkOZwMzI0+V6IlIyGJWQDPW4FCMNhbk=";
-            };
-          })
+          nero-umu
         ];
       };
   };

@@ -293,6 +293,9 @@ in
         ...
       }:
       {
+        home.packages = with pkgs; [
+          faugus-launcher
+        ];
         services = {
           flatpak = {
             overrides = {
@@ -366,16 +369,6 @@ in
                   ];
                 };
               };
-              "io.github.Faugus.faugus-launcher" = {
-                Context = {
-                  filesystems = [
-                    "!home"
-                    "${config.home.homeDirectory}/Games"
-                    "xdg-data/Steam"
-                    "/mnt/vault101/data/Games"
-                  ];
-                };
-              };
               "org.easyrpg.player" = {
                 Context = {
                   filesystems = [
@@ -400,7 +393,6 @@ in
               "org.DolphinEmu.dolphin-emu"
               "org.duckstation.DuckStation"
               "org.easyrpg.player"
-              "io.github.Faugus.faugus-launcher"
               "net.pcsx2.PCSX2"
               "net.shadps4.shadPS4"
             ];

@@ -47,7 +47,9 @@ in
         ];
       };
     };
-
+    programs.nix-ld = {
+      enable = true;
+    };
     services.xserver.xkb = {
       layout = "no";
       variant = "";
