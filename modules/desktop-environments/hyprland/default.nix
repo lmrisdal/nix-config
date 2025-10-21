@@ -41,6 +41,7 @@ in
       enable = true;
       terminal = "kitty";
     };
+    services.gnome.gnome-keyring.enable = true;
     environment.systemPackages = with pkgs; [
       pyprland # plugin system
       hyprpicker # color picker

@@ -16,7 +16,7 @@ in
   config = lib.mkIf cfg.enable {
     programs.ssh = {
       enableAskPassword = true;
-      startAgent = true;
+      startAgent = !(config.services.gnome.gnome-keyring.enable or false);
     };
     services.openssh = {
       enable = true;

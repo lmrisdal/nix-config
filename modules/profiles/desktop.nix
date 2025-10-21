@@ -123,7 +123,7 @@ in
           chromium
           discord
           godot
-          unityhub
+          nextcloud-client
         ];
       };
   };

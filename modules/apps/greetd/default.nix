@@ -34,6 +34,7 @@ in
       };
       greeterManagesPlymouth = true;
     };
+    security.pam.services.greetd.enableGnomeKeyring = true;
     services.getty.autologinUser = username;
     systemd.services.plymouth-quit.enable = false;
     users.users.greeter = {
