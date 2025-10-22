@@ -399,7 +399,7 @@ in
           };
           ludusavi = {
             enable = true;
-            backupNotification = true;
+            backupNotification = false;
             settings = {
               backup = {
                 path = "/mnt/vault101/lars/saves/ludusavi";

@@ -87,7 +87,8 @@
     };
   };
   environment.sessionVariables = {
-    GSK_RENDERER = "ngl";
+    # GSK_RENDERER = "ngl";
+    GDK_GL = "gles";
     __GL_SHADER_DISK_CACHE_SIZE = "12000000000";
   };
 

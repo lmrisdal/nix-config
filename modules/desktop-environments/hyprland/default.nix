@@ -233,6 +233,15 @@ in
     programs.hyprland.enable = true;
     programs.hyprland.package = pkgs.hyprland;
     programs.hyprland.withUWSM = true;
+    environment.sessionVariables.GST_PLUGIN_SYSTEM_PATH_1_0 =
+      lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0"
+        [
+          pkgs.gst_all_1.gst-plugins-good
+          pkgs.gst_all_1.gst-plugins-bad
+          pkgs.gst_all_1.gst-plugins-ugly
+          pkgs.gst_all_1.gst-libav
+          pkgs.gst_all_1.gst-plugins-base
+        ];
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
     environment.sessionVariables.WLR_NO_HARDWARE_CURSORS = "1";
     home-manager.users.${username} =
