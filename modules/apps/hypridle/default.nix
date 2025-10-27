@@ -3,7 +3,6 @@
   config,
   pkgs,
   username,
-  fullname,
   ...
 }:
 let
@@ -28,19 +27,23 @@ in
             general = {
               after_sleep_cmd = "playerctl stop; hyprctl dispatch dpms on";
               ignore_dbus_inhibit = false;
-              lock_cmd = "hyprlock";
+              lock_cmd = "pidof hyprlock || hyprlock";
               on_lock_cmd = "playerctl stop";
             };
 
             listener = [
               {
-                timeout = 900;
-                on-timeout = "hyprlock";
+                timeout = 300;
+                on-timeout = "loginctl lock-session";
               }
               {
-                timeout = 1200;
+                timeout = 330;
                 on-timeout = "hyprctl dispatch dpms off";
                 on-resume = "hyprctl dispatch dpms on";
+              }
+              {
+                timeout = 1800;
+                on-timeout = "systemctl suspend";
               }
             ];
           };

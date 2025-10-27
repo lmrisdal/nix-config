@@ -24,7 +24,6 @@ in
       {
         programs.hyprpanel = {
           enable = true;
-          dontAssertNotificationDaemons = false;
           systemd.enable = true;
           settings = {
             bar = {

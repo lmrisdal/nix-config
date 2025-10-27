@@ -54,7 +54,7 @@
     # };
     tmp.tmpfsSize = "100%";
     extraModprobeConfig =
-      "options nvidia "
+      "options nvidia_modeset vblank_sem_control=0 nvidia "
       + lib.concatStringsSep " " [
         # nvidia assume that by default your CPU does not support PAT,
         # but this is effectively never the case in 2023
@@ -71,15 +71,16 @@
         # settings
         "NVreg_InitializeSystemMemoryAllocations=0"
         "NVreg_RegistryDwords=RMIntrLockingMode=1"
-        "NVreg_PreserveVideoMemoryAllocations=1"
+        #"NVreg_PreserveVideoMemoryAllocations=1" # not needed with modesetting = true
+        "NVreg_TemporaryFilePath=/var/tmp"
       ];
   };
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware = {
     nvidia = {
       modesetting.enable = true;
-      nvidiaPersistenced = true; # https://github.com/NixOS/nixpkgs/pull/439514
-      powerManagement.enable = false;
+      nvidiaPersistenced = true;
+      powerManagement.enable = true;
       powerManagement.finegrained = false;
       open = true;
       nvidiaSettings = true;
@@ -113,6 +114,11 @@
     services = {
       # NetworkManager-wait-online.wantedBy = lib.mkForce [ ];
       plymouth-quit-wait.enable = false;
+    };
+    services."systemd-suspend" = {
+      serviceConfig = {
+        Environment = ''"SYSTEMD_SLEEP_FREEZE_USER_SESSIONS=false"'';
+      };
     };
     targets = {
       hibernate.enable = false;

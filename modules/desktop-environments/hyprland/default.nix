@@ -63,7 +63,7 @@ in
       nautilus-python # nautilus plugin support
       ddcutil # control monitor brightness
       brightnessctl # control monitor brightness
-      kdePackages.xwaylandvideobridge
+      # kdePackages.xwaylandvideobridge
       gnome-control-center # env XDG_CURRENT_DESKTOP=GNOME gnome-control-center
       rose-pine-cursor
       rose-pine-hyprcursor
