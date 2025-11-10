@@ -63,6 +63,10 @@
       "arc"
       "postman"
       "dotnet-sdk@8"
+      "cyberduck"
+      "nextcloud"
+      "iina"
+      "docker"
     ];
     masApps = {
       "1Password for Safari" = 1569813296;
