@@ -50,6 +50,9 @@ in
       iotop = {
         enable = true;
       };
+      java = {
+        enable = true;
+      };
     };
     home-manager.users.${username} =
       {

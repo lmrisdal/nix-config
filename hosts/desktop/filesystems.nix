@@ -42,14 +42,4 @@
   };
 
   swapDevices = lib.mkForce [ ];
-
-  fileSystems."/home/${username}/Games" = {
-    depends = [ "/home" ];
-    device = "/dev/disk/by-uuid/4361f6a9-6cc2-45c5-b347-9982a949b959";
-    fsType = "btrfs";
-    options = [
-      "compress=zstd:3"
-    ];
-    neededForBoot = false;
-  };
 }

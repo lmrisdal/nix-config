@@ -44,6 +44,9 @@ in
               nrt = "sudo nixos-rebuild test --flake ~/.config/nix-config";
               pulumilogindt = "source \"$(command -v pulumi-env-dt)\"";
               pulumiloginqp = "source \"$(command -v pulumi-env-qp)\"";
+              pulumiloginip = "source \"$(command -v pulumi-env-ip)\"";
+              pulumiloginuxuat = "source \"$(command -v pulumi-env-uxuat)\"";
+              pulumiloginuxprod = "source \"$(command -v pulumi-env-uxprod)\"";
             })
             (lib.mkIf (pkgs.stdenv.isDarwin) {
               drs = "sudo darwin-rebuild switch --flake ~/.config/nix-config";

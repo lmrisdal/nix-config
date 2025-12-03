@@ -20,7 +20,6 @@ in
       {
         programs.git = {
           enable = true;
-          package = pkgs.gitAndTools.gitFull;
           settings = {
             user.email = "larsrisdal@gmail.com";
             user.name = "${fullname}";

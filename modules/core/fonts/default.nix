@@ -95,11 +95,10 @@ in
         nerd-fonts.fira-code
         nerd-fonts.noto
         source-han-sans
-        source-han-sans-japanese
-        source-han-serif-japanese
+        source-han-serif
         wqy_zenhei
         jetbrains-mono
-        noto-fonts-emoji
+        noto-fonts-color-emoji
         (makeAppleFont "sf-pro" "SF Pro Fonts.pkg" fontSources.sf-pro)
         (makeAppleFont "sf-compact" "SF Compact Fonts.pkg" fontSources.sf-compact)
         (makeAppleFont "sf-mono" "SF Mono Fonts.pkg" fontSources.sf-mono)

@@ -19,6 +19,7 @@
   desktop.enable = true;
   gaming.enable = true;
   work.enable = true;
+  llm.enable = true;
 
   boot = {
     initrd = {

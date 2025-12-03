@@ -73,7 +73,6 @@ in
             "net.lutris.Lutris" = {
               Context = {
                 filesystems = [
-                  "${config.home.homeDirectory}/Games"
                   "${config.xdg.dataHome}/applications"
                   "${config.xdg.dataHome}/games"
                   "${config.xdg.dataHome}/Steam"

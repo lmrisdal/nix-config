@@ -67,6 +67,7 @@
   };
   environment.systemPackages = with pkgs; [
     sbctl
+    efibootmgr
     (writeShellScriptBin "switch-to-windows11" ''
       #!/bin/bash
       yad --title="Reboot into Windows" \
@@ -75,10 +76,10 @@
           --width=300 --center
 
       if [[ $? -eq 0 ]]; then
-          if sudo set-windows-one-shot; then
+          if sudo set-windows-boot-priority; then
               systemctl reboot
           else
-              yad --title="Error" --text="Failed to set one-shot entry." --button=OK
+              yad --title="Error" --text="Failed to change boot priority." --button=OK
           fi
       fi
       #sudo set-windows-one-shot
@@ -88,6 +89,10 @@
       #!/bin/bash
       sudo bootctl set-oneshot auto-windows
     '')
+    (writeShellScriptBin "set-windows-boot-priority" ''
+      #!/bin/bash
+      sudo efibootmgr -o 0000,0005
+    '')
   ];
   security.sudo.extraRules = [
     {
@@ -95,6 +100,13 @@
       commands = [
         {
           command = "/run/current-system/sw/bin/set-windows-one-shot";
+          options = [
+            "SETENV"
+            "NOPASSWD"
+          ];
+        }
+        {
+          command = "/run/current-system/sw/bin/set-windows-boot-priority";
           options = [
             "SETENV"
             "NOPASSWD"

@@ -48,21 +48,21 @@ in
       { pkgs, config, ... }:
       {
         home.packages = with pkgs; [ moondeck-buddy ];
-        xdg.autostart.entries = with pkgs; [ "${moondeck-buddy}/share/applications/MoonDeckBuddy.desktop" ];
+        # xdg.autostart.entries = with pkgs; [ "${moondeck-buddy}/share/applications/MoonDeckBuddy.desktop" ];
         home.file = {
-          sunshine-autostart = {
-            enable = true;
-            text = ''
-              [Desktop Entry]
-              Name=sunshine
-              Comment=sunshine Service
-              Exec=sunshine
-              StartupNotify=false
-              Terminal=false
-              Type=Application
-            '';
-            target = "${config.xdg.configHome}/autostart/sunshine.desktop";
-          };
+          # sunshine-autostart = {
+          #   enable = true;
+          #   text = ''
+          #     [Desktop Entry]
+          #     Name=sunshine
+          #     Comment=sunshine Service
+          #     Exec=sunshine
+          #     StartupNotify=false
+          #     Terminal=false
+          #     Type=Application
+          #   '';
+          #   target = "${config.xdg.configHome}/autostart/sunshine.desktop";
+          # };
           sunshine-conf = {
             enable = true;
             text = ''

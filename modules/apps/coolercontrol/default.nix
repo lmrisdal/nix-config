@@ -17,7 +17,6 @@ in
   config = lib.mkIf cfg.enable {
     programs.coolercontrol = {
       enable = true;
-      nvidiaSupport = true;
     };
     environment.systemPackages = with pkgs; [ liquidctl ];
 

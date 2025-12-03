@@ -58,7 +58,6 @@ in
             "com.heroicgameslauncher.hgl" = {
               Context = {
                 filesystems = [
-                  "${config.home.homeDirectory}/Games"
                   "${config.xdg.dataHome}/applications"
                   "${config.xdg.dataHome}/games"
                   "${config.xdg.dataHome}/Steam"

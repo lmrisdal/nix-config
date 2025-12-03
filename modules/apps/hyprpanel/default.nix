@@ -3,7 +3,6 @@
   config,
   pkgs,
   username,
-  fullname,
   ...
 }:
 let
@@ -160,23 +159,6 @@ in
             )
           );
         '';
-        # home.file = {
-        #   custom-modules = {
-        #     enable = true;
-        #     text = ''
-        #       {
-        #         "custom/is_screen_sharing": {
-        #           "icon": "󱒃",
-        #           "execute": "is-screen-sharing",
-        #           "interval": 2000,
-        #           "hideOnEmpty": true,
-        #           "label": "Sharing screen"
-        #         }
-        #       }
-        #     '';
-        #     target = "${config.xdg.configHome}/hyprpanel/modules.json";
-        #   };
-        # };
       };
   };
 }

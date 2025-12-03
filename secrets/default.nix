@@ -41,6 +41,18 @@ in
           secrets."pulumi_qp_storage_key" = { };
           secrets."pulumi_qp_passphrase" = { };
           secrets."pulumi_qp_subscription_id" = { };
+          secrets."pulumi_ip_storage_account" = { };
+          secrets."pulumi_ip_storage_key" = { };
+          secrets."pulumi_ip_passphrase" = { };
+          secrets."pulumi_ip_subscription_id" = { };
+          secrets."pulumi_uxuat_storage_account" = { };
+          secrets."pulumi_uxuat_storage_key" = { };
+          secrets."pulumi_uxuat_passphrase" = { };
+          secrets."pulumi_uxuat_subscription_id" = { };
+          secrets."pulumi_uxprod_storage_account" = { };
+          secrets."pulumi_uxprod_storage_key" = { };
+          secrets."pulumi_uxprod_passphrase" = { };
+          secrets."pulumi_uxprod_subscription_id" = { };
         };
       };
   };

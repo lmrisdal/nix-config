@@ -1,4 +1,12 @@
-{ lib, stdenv, python3, plymouth, shellcheck, nodePackages, rustPlatform }:
+{
+  lib,
+  stdenv,
+  python3,
+  plymouth,
+  shellcheck,
+  nodePackages,
+  rustPlatform,
+}:
 
 stdenv.mkDerivation {
   name = "jovian-greeter";
@@ -7,7 +15,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ python3.pkgs.wrapPython ];
   buildInputs = [ python3 ];
-  pythonPath = [ python3.pkgs.systemd ];
+  pythonPath = [ python3.pkgs.systemd-python ];
 
   nativeCheckInputs = [
     shellcheck
