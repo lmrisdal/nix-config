@@ -67,6 +67,7 @@
       "nextcloud"
       "iina"
       "docker"
+      "ollama"
     ];
     masApps = {
       "1Password for Safari" = 1569813296;
@@ -74,6 +75,10 @@
       "Wireguard" = 1451685025;
       "Adobe Lightroom" = 1451544217;
     };
+  };
+
+  environment.variables = {
+    DOTNET_ROOT = "/usr/local/share/dotnet";
   };
 
   nix = {
