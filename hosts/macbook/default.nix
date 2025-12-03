@@ -66,8 +66,8 @@
       "cyberduck"
       "nextcloud"
       "iina"
-      "docker"
-      "ollama"
+      "docker-desktop"
+      "ollama-app"
     ];
     masApps = {
       "1Password for Safari" = 1569813296;
