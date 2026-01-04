@@ -29,7 +29,14 @@ in
     home-manager.users.${username} = {
       services.vicinae = {
         enable = true;
-        autoStart = true;
+        # autoStart = true;
+        systemd = {
+          enable = true; # default: false
+          autoStart = true; # default: false
+          environment = {
+            USE_LAYER_SHELL = 1;
+          };
+        };
       };
       home.file = {
         ".config/interception/dual-function-keys.yaml".text = ''

@@ -40,10 +40,12 @@ in
         extra-substituters = [
           "https://nix-community.cachix.org"
           "https://nix-gaming.cachix.org/"
+          "https://vicinae.cachix.org"
         ];
         extra-trusted-public-keys = [
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
           "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
+          "vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc="
         ];
         download-buffer-size = 524288000;
         keep-derivations = true;

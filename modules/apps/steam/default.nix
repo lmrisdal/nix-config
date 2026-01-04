@@ -91,23 +91,22 @@ in
               '';
               target = "${config.xdg.dataHome}/Steam/steam_dev.cfg";
             };
-            steam-autostart = {
-              enable = cfg.autostart;
-              # -steamos3 -steampal -steamdeck
-              text = ''
-                [Desktop Entry]
-                Name=Steam
-                Exec=steam -silent
-                Icon=steam
-                Terminal=false
-                Type=Application
-                MimeType=x-scheme-handler/steam;x-scheme-handler/steamlink;
-                Actions=Store;Community;Library;Servers;Screenshots;News;Settings;BigPicture;Friends;
-                PrefersNonDefaultGPU=true
-                X-KDE-RunOnDiscreteGpu=true
-              '';
-              target = "${config.xdg.configHome}/autostart/steam.desktop";
-            };
+            # steam-autostart = {
+            #   enable = cfg.autostart;
+            #   text = ''
+            #     [Desktop Entry]
+            #     Name=Steam
+            #     Exec=steam -silent
+            #     Icon=steam
+            #     Terminal=false
+            #     Type=Application
+            #     MimeType=x-scheme-handler/steam;x-scheme-handler/steamlink;
+            #     Actions=Store;Community;Library;Servers;Screenshots;News;Settings;BigPicture;Friends;
+            #     PrefersNonDefaultGPU=true
+            #     X-KDE-RunOnDiscreteGpu=true
+            #   '';
+            #   target = "${config.xdg.configHome}/autostart/steam.desktop";
+            # };
           };
           packages = with pkgs; [
             steamcmd

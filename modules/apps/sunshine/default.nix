@@ -47,7 +47,7 @@ in
     home-manager.users.${username} =
       { pkgs, config, ... }:
       {
-        home.packages = with pkgs; [ moondeck-buddy ];
+        # home.packages = with pkgs; [ moondeck-buddy ];
         # xdg.autostart.entries = with pkgs; [ "${moondeck-buddy}/share/applications/MoonDeckBuddy.desktop" ];
         home.file = {
           # sunshine-autostart = {
@@ -76,22 +76,6 @@ in
           };
           sunshine-apps =
             let
-              getWaylandDisplay = pkgs.writeShellScript "getWaylandDisplay" ''
-                if [ -z "$WAYLAND_DISPLAY" ]; then
-                # Get WAYLAND_DISPLAY from a running process
-                for pid in $(${pkgs.procps}/bin/pgrep -u "$(${pkgs.coreutils}/bin/whoami)"); do
-                  envfile="/proc/$pid/environ"
-                  [ -r "$envfile" ] || continue
-                  
-                  wayland_display=$(${pkgs.coreutils}/bin/tr '\0' '\n' < "$envfile" 2>/dev/null | ${pkgs.gnugrep}/bin/grep '^WAYLAND_DISPLAY=' | ${pkgs.coreutils}/bin/cut -d= -f2-)
-                  if [ -n "$wayland_display" ]; then
-                    echo "$wayland_display"
-                    exit 0
-                  fi
-                done
-                fi
-                echo $WAYLAND_DISPLAY
-              '';
               configureDisplay = (
                 pkgs.writeShellScript "configureDisplay" ''
                   # Configure display to match client
@@ -217,19 +201,19 @@ in
                         }
                       ],
                       "image-path": "steam.png"
-                    },
-                    {
-                      "name": "MoonDeckStream",
-                      "cmd": "${pkgs.moondeck-buddy}/bin/MoonDeckStream",
-                      "exclude-global-prep-cmd": "false",
-                      "elevated": "false",
-                      "prep-cmd": [
-                        {
-                          "do": "${configureDisplay}",
-                          "undo": "${revertDisplay}"
-                        }
-                      ]
                     }
+                    # {
+                    #   "name": "MoonDeckStream",
+                    #   "cmd": "${pkgs.moondeck-buddy}/bin/MoonDeckStream",
+                    #   "exclude-global-prep-cmd": "false",
+                    #   "elevated": "false",
+                    #   "prep-cmd": [
+                    #     {
+                    #       "do": "${configureDisplay}",
+                    #       "undo": "${revertDisplay}"
+                    #     }
+                    #   ]
+                    # }
                   ]
                 }
               '';

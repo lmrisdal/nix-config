@@ -48,7 +48,7 @@ in
       swww # wallpaper util
       hyprshot # screenshot util
       satty # screenshot annotation
-      xfce.mousepad # txt editor
+      mousepad # txt editor
       zathura # pdf viewer
       mpv # media player
       imv # image viewer

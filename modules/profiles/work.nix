@@ -1,8 +1,6 @@
 {
-  inputs,
   config,
   lib,
-  pkgs,
   username,
   ...
 }:
@@ -29,6 +27,7 @@ in
         home = {
           packages = with pkgs; [
             vscode.fhs
+            antigravity.fhs
             nodejs_24
             teams-for-linux
             python313Packages.azure-multiapi-storage
@@ -36,7 +35,6 @@ in
             postman
             pulumi-bin
             redisinsight
-            jetbrains.rider
             extism-cli
             azure-functions-core-tools
             (pkgs.writeShellScriptBin "pulumi-env-dt" ''
