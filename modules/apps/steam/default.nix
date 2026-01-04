@@ -68,9 +68,9 @@ in
         "com.github.Matoking.protontricks"
       ];
     };
-    environment.systemPackages = with pkgs; [
-      sgdboop
-    ];
+    # environment.systemPackages = with pkgs; [
+    #   sgdboop
+    # ];
 
     home-manager.users.${username} =
       { pkgs, config, ... }:
