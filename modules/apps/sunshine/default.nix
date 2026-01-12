@@ -202,18 +202,6 @@ in
                       ],
                       "image-path": "steam.png"
                     }
-                    # {
-                    #   "name": "MoonDeckStream",
-                    #   "cmd": "${pkgs.moondeck-buddy}/bin/MoonDeckStream",
-                    #   "exclude-global-prep-cmd": "false",
-                    #   "elevated": "false",
-                    #   "prep-cmd": [
-                    #     {
-                    #       "do": "${configureDisplay}",
-                    #       "undo": "${revertDisplay}"
-                    #     }
-                    #   ]
-                    # }
                   ]
                 }
               '';
@@ -223,3 +211,16 @@ in
       };
   };
 }
+
+# {
+#   "name": "MoonDeckStream",
+#   "cmd": "${pkgs.moondeck-buddy}/bin/MoonDeckStream",
+#   "exclude-global-prep-cmd": "false",
+#   "elevated": "false",
+#   "prep-cmd": [
+#     {
+#       "do": "${configureDisplay}",
+#       "undo": "${revertDisplay}"
+#     }
+#   ]
+# }

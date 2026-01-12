@@ -180,7 +180,6 @@
                     };
                   };
                   sharedModules = with inputs; [
-                    impermanence.homeManagerModules.impermanence
                     nix-flatpak.homeManagerModules.nix-flatpak
                     nur.modules.homeManager.default
                     wayland-pipewire-idle-inhibit.homeModules.default
