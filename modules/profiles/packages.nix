@@ -30,7 +30,7 @@ in
         xdg-dbus-proxy
         xdg-user-dirs
         ntfs3g
-        nixfmt-rfc-style
+        nixfmt
         nixd
         nil
         libdbusmenu
@@ -84,6 +84,7 @@ in
           p7zip
           libnotify
           dig
+          libation
           # darktable
         ];
       };

@@ -122,6 +122,7 @@ in
           google-chrome
           chromium
           discord
+          fluxer
           godot
           nextcloud-client
         ];

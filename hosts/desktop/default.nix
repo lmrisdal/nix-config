@@ -1,8 +1,8 @@
 {
   lib,
   username,
+  inputs,
   config,
-  pkgs,
   ...
 }:
 {
@@ -85,7 +85,18 @@
       powerManagement.finegrained = false;
       open = true;
       nvidiaSettings = true;
-      package = config.boot.kernelPackages.nvidiaPackages.beta;
+      # package = config.boot.kernelPackages.nvidiaPackages.beta;
+
+      # only needed for 590.48.01
+      package =
+        let
+          nvidia-fixed-pkgs = import inputs.nixpkgs-nvidia {
+            system = "x86_64-linux";
+            config.allowUnfree = true;
+          };
+          fixedKernelPackages = nvidia-fixed-pkgs.linuxKernel.packagesFor config.boot.kernelPackages.kernel;
+        in
+        fixedKernelPackages.nvidiaPackages.beta;
     };
   };
   environment.sessionVariables = {

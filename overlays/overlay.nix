@@ -1,5 +1,8 @@
+{ inputs }:
+
 (final: prev: {
   # moondeck-buddy = prev.callPackage ./moondeck-buddy { };
+  fluxer = prev.callPackage ./fluxer { };
   plymouth = prev.plymouth.overrideAttrs (
     { src, ... }:
     {
@@ -12,4 +15,6 @@
     }
   );
   jovian-greeter = final.callPackage ./jovian-greeter { };
+  proton-cachyos-x86_64_v4 =
+    inputs.nix-gaming-edge.packages.${final.stdenv.hostPlatform.system}.proton-cachyos-x86_64_v4;
 })

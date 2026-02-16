@@ -3,6 +3,7 @@
   config,
   username,
   vars,
+  inputs,
   ...
 }:
 let
@@ -65,7 +66,8 @@ in
         allowUnfree = true;
       };
       overlays = [
-        (import ../../../overlays/overlay.nix)
+        (import ../../../overlays/overlay.nix { inherit inputs; })
+        inputs.nix-cachyos-kernel.overlays.pinned
       ];
     };
     system = {
@@ -102,7 +104,8 @@ in
             allowUnfree = true;
           };
           overlays = [
-            (import ../../../overlays/overlay.nix)
+            (import ../../../overlays/overlay.nix { inherit inputs; })
+            inputs.nix-cachyos-kernel.overlays.pinned
           ];
         };
         xdg = {
