@@ -125,6 +125,7 @@ in
           fluxer
           godot
           nextcloud-client
+          feishin
         ];
       };
   };
