@@ -116,7 +116,7 @@ in
       }:
       {
         home.packages = with pkgs; [
-          gearlever
+          # gearlever
           libreoffice-qt
           rustdesk-flutter
           google-chrome

@@ -45,7 +45,7 @@ in
               previousAttrs.src.overrideAttrs (
                 finalAttrs: previousAttrs: {
 
-                  postBuild = (previousAttrs.postBuild or '''') + script;
+                  postBuild = (previousAttrs.postBuild or "") + script;
                 }
               )
             );
@@ -58,6 +58,7 @@ in
             combinePackages [
               # (sdk_9_0.overrideAttrs sdkOverride)
               (sdk_8_0.overrideAttrs sdkOverride)
+              sdk_10_0
             ]
           );
       in
