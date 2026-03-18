@@ -123,7 +123,6 @@ in
           chromium
           discord
           fluxer
-          nextcloud-client
           feishin
         ];
       };

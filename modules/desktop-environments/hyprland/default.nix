@@ -52,7 +52,7 @@ in
       zathura # pdf viewer
       mpv # media player
       imv # image viewer
-      blueberry # bluetooth
+      blueman # bluetooth manager
       bluetui # bluetooth tui
       pavucontrol # volume control
       wiremix # volume control
