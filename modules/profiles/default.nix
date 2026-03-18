@@ -5,6 +5,5 @@
     ./gaming.nix
     ./packages.nix
     ./work.nix
-    ./llm.nix
   ];
 }

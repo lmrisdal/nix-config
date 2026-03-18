@@ -28,6 +28,7 @@ in
           packages = with pkgs; [
             vscode.fhs
             antigravity.fhs
+            claude-code
             nodejs_24
             teams-for-linux
             python313Packages.azure-multiapi-storage
