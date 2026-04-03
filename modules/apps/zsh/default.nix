@@ -51,6 +51,7 @@ in
             (lib.mkIf (pkgs.stdenv.isDarwin) {
               drs = "sudo darwin-rebuild switch --flake ~/.config/nix-config";
               nixfmt = "fmt";
+              vp = "~/.vite-plus/bin/vp";
             })
             {
               c = "clear";

@@ -22,15 +22,7 @@
       mas # Mac App Store $ mas search <app>
       tldr # Help
       wget # Download
-      nixfmt-rfc-style # Nix formatter
-      raycast
-      discord
-      monitorcontrol
-      rectangle
-      spotify
-      chatgpt
-      google-chrome
-      the-unarchiver
+      nixfmt # Nix formatter
     ];
   };
 
@@ -44,30 +36,44 @@
       "azure-cli"
       "azure-functions-core-tools@4"
       "p7zip"
+      "rust"
+      "innoextract"
+      "rustup"
+      "gemini-cli"
+      "opencode"
     ];
     taps = [
       "azure/functions"
     ];
     casks = [
+      "spotify"
+      "chatgpt"
+      "raycast"
+      "discord"
+      "rectangle"
+      "monitorcontrol"
+      "the-unarchiver"
+      "keka"
       "linearmouse"
       "visual-studio-code"
       "1password"
       "zen"
       "pearcleaner"
       "redis-insight"
-      "warp"
       "parallels"
       "alt-tab"
       "rustdesk"
       "libreoffice"
-      "arc"
       "postman"
-      "dotnet-sdk@8"
       "cyberduck"
-      "nextcloud"
       "iina"
       "docker-desktop"
-      "ollama-app"
+      "antigravity"
+      "google-chrome"
+      "claude-code"
+      "dotnet-sdk"
+      "lm-studio"
+      "codex"
     ];
     masApps = {
       "1Password for Safari" = 1569813296;
