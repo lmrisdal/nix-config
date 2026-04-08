@@ -31,6 +31,11 @@ in
           enable = true;
           autosuggestion.enable = true;
           dotDir = "${config.xdg.configHome}/zsh";
+          initExtra = ''
+            if [ -f "$HOME/.zshrc" ]; then
+              source "$HOME/.zshrc"
+            fi
+          '';
           enableCompletion = true;
           history = {
             path = "${config.xdg.dataHome}/zsh/zsh_history";
@@ -51,7 +56,6 @@ in
             (lib.mkIf (pkgs.stdenv.isDarwin) {
               drs = "sudo darwin-rebuild switch --flake ~/.config/nix-config";
               nixfmt = "fmt";
-              vp = "~/.vite-plus/bin/vp";
             })
             {
               c = "clear";

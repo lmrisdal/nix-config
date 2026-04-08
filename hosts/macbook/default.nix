@@ -38,9 +38,13 @@
       "p7zip"
       "rust"
       "innoextract"
+      "llvm"
       "rustup"
       "gemini-cli"
       "opencode"
+      "nano"
+      "gh"
+      "tree"
     ];
     taps = [
       "azure/functions"
@@ -74,6 +78,8 @@
       "dotnet-sdk"
       "lm-studio"
       "codex"
+      "cursor"
+      "cursor-cli"
     ];
     masApps = {
       "1Password for Safari" = 1569813296;
