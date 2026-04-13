@@ -31,7 +31,7 @@ in
           enable = true;
           autosuggestion.enable = true;
           dotDir = "${config.xdg.configHome}/zsh";
-          initExtra = ''
+          initContent = ''
             if [ -f "$HOME/.zshrc" ]; then
               source "$HOME/.zshrc"
             fi
@@ -54,8 +54,9 @@ in
               pulumiloginuxprod = "source \"$(command -v pulumi-env-uxprod)\"";
             })
             (lib.mkIf (pkgs.stdenv.isDarwin) {
-              drs = "sudo darwin-rebuild switch --flake ~/.config/nix-config";
+              nrs = "sudo darwin-rebuild switch --flake ~/.config/nix-config";
               nixfmt = "fmt";
+              apps = "nano ${config.xdg.configHome}/nix-config/hosts/macbook/homebrew.nix";
             })
             {
               c = "clear";

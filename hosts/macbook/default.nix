@@ -26,71 +26,15 @@
     ];
   };
 
-  homebrew = {
-    enable = true;
-    onActivation = {
-      upgrade = false;
-      cleanup = "zap";
-    };
-    brews = [
-      "azure-cli"
-      "azure-functions-core-tools@4"
-      "p7zip"
-      "rust"
-      "innoextract"
-      "llvm"
-      "rustup"
-      "gemini-cli"
-      "opencode"
-      "nano"
-      "gh"
-      "tree"
-    ];
-    taps = [
-      "azure/functions"
-    ];
-    casks = [
-      "spotify"
-      "chatgpt"
-      "raycast"
-      "discord"
-      "rectangle"
-      "monitorcontrol"
-      "the-unarchiver"
-      "keka"
-      "linearmouse"
-      "visual-studio-code"
-      "1password"
-      "zen"
-      "pearcleaner"
-      "redis-insight"
-      "parallels"
-      "alt-tab"
-      "rustdesk"
-      "libreoffice"
-      "postman"
-      "cyberduck"
-      "iina"
-      "docker-desktop"
-      "antigravity"
-      "google-chrome"
-      "claude-code"
-      "dotnet-sdk"
-      "lm-studio"
-      "codex"
-      "cursor"
-      "cursor-cli"
-    ];
-    masApps = {
-      "1Password for Safari" = 1569813296;
-      "Tailscale" = 1475387142;
-      "Wireguard" = 1451685025;
-      "Adobe Lightroom" = 1451544217;
-    };
-  };
-
   environment.variables = {
     DOTNET_ROOT = "/usr/local/share/dotnet";
+  };
+
+  fonts = {
+    packages = with pkgs; [
+      nerd-fonts.jetbrains-mono
+      nerd-fonts.fira-code
+    ];
   };
 
   nix = {
