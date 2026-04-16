@@ -18,7 +18,7 @@ in
   config = lib.mkIf cfg.enable {
     documentation = {
       man = {
-        generateCaches = true;
+        cache.enable = true;
       };
     };
     nix = {

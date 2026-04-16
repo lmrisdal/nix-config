@@ -45,7 +45,7 @@ in
       hyprpicker # color picker
       hyprcursor # cursor format
       hyprpaper # wallpaper util
-      swww # wallpaper util
+      awww # wallpaper util
       hyprshot # screenshot util
       satty # screenshot annotation
       mousepad # txt editor

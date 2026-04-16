@@ -136,6 +136,13 @@
           terminal = false;
           icon = "${config.xdg.configHome}/icons/windows11.png";
         };
+        windowsVM = {
+          name = "Windows 11 VM";
+          genericName = "Windows 11 VM";
+          exec = ''${pkgs.vmware-workstation}/bin/vmplayer "${config.home.homeDirectory}/vmware/Windows 11 x64/Windows 11 x64.vmx"'';
+          terminal = false;
+          icon = "${config.xdg.configHome}/icons/windows11.png";
+        };
       };
     };
 }

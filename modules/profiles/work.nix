@@ -29,6 +29,7 @@ in
             vscode.fhs
             antigravity.fhs
             claude-code
+            github-copilot-cli
             nodejs_24
             teams-for-linux
             python313Packages.azure-multiapi-storage

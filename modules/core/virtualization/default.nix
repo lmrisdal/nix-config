@@ -31,6 +31,8 @@ in
         virtiofsd
         virtio-win
         win-spice
+        vmware-workstation
+        open-vm-tools
       ];
     };
     networking.firewall.trustedInterfaces = [ "virbr0" ];
@@ -43,6 +45,9 @@ in
         };
       };
       spiceUSBRedirection.enable = true;
+      vmware = {
+        host.enable = true;
+      };
       vmVariant = {
         virtualisation = {
           memorySize = 4096;

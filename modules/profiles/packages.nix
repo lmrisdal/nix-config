@@ -40,7 +40,7 @@ in
         btop
         cmatrix
         inputs.nix-gaming.packages.${system}.wine-tkg
-        protonvpn-gui
+        proton-vpn
       ];
     };
     programs = {
