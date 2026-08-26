@@ -35,6 +35,7 @@ in
         "gh"
         "tree"
         "exiftool"
+        "just"
       ];
       taps = [
         "azure/functions"
@@ -43,8 +44,11 @@ in
           name = "sbarex/SourceCodeSyntaxHighlight";
           clone_target = "git@github.com:sbarex/SourceCodeSyntaxHighlight.git";
         }
+        "kgarner7/feishin"
       ];
       casks = [
+        "rider"
+        "feishin"
         "betterdisplay"
         "sbarex/SourceCodeSyntaxHighlight/syntax-highlight"
         "quicklook-video"
@@ -56,7 +60,6 @@ in
         "discord"
         "rectangle"
         "monitorcontrol"
-        "the-unarchiver"
         "keka"
         "linearmouse"
         "visual-studio-code"
@@ -80,13 +83,11 @@ in
         "codex-app"
         "cursor"
         "cursor-cli"
-        "zed"
       ];
       masApps = {
         "1Password for Safari" = 1569813296;
         "Tailscale" = 1475387142;
         "Wireguard" = 1451685025;
-        "Adobe Lightroom" = 1451544217;
       };
     };
   };

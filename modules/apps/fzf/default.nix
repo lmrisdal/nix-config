@@ -20,7 +20,7 @@ in
         defaultCommand = "fd --type f";
         enableBashIntegration = true;
         enableZshIntegration = true;
-        fileWidgetOptions = [ "--preview bat -pp --color=always {}" ];
+        fileWidget.options = [ "--preview bat -pp --color=always {}" ];
       };
     };
   };
